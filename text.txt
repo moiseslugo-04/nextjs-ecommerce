@@ -1,0 +1,19 @@
+💬 6. First Commit
+
+Once it’s running, make your first commit:
+
+git add .
+git commit -m "chore: migrate project base from React to Next.js with Tailwind setup"
+
+📢 7. First LinkedIn Post
+
+Here’s a simple, professional post you can share:
+
+🚀 Today I started rebuilding my old e-commerce project using Next.js 14!
+I decided to migrate my React app to Next.js to improve performance, SEO, and scalability.
+This is just the beginning, but I’m excited to document each step of the journey.
+#Nextjs #Frontend #WebDevelopment #LearningJourney
+
+
+
+

@@ -1,0 +1,251 @@
+@import 'tailwindcss';
+/* 
+@plugin 'tailwindcss-animate';
+@import "tw-animate-css"; */
+
+@custom-variant dark (&:is(.dark *));
+
+@import 'tailwindcss';
+
+/* Optional animations plugin if you want to use shadcn animations */
+/* @plugin 'tailwindcss-animate'; */
+
+/* --- Custom Variants --- */
+@custom-variant dark (&:is(.dark *));
+
+/* --------------------------------------------------------- */
+/* 🌈 THEME VARIABLES (GLOBAL COLOR SYSTEM) */
+/* --------------------------------------------------------- */
+
+@theme {
+  /* --- G-Echis Brand Colors --- */
+  --color-gechis-blue: #0f172a;
+  --color-gechis-blue-light: #1e293b;
+  --color-gechis-blue-dark: #020617;
+
+  --color-gechis-gold: #f59e0b;
+  --color-gechis-gold-light: #fbbf24;
+  --color-gechis-gold-dark: #d97706;
+
+  --color-gechis-accent: #4f46e5;
+  --color-gechis-accent-light: #6366f1;
+  --color-gechis-accent-dark: #4338ca;
+
+  /* --- Semantic Colors --- */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  /* --- Fonts --- */
+  --font-sans: 'Inter var', sans-serif;
+  --font-display: 'Lexend', sans-serif;
+
+  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+/* --------------------------------------------------------- */
+/* 🌗 LIGHT & DARK THEMES (SHADCN STYLE) */
+/* --------------------------------------------------------- */
+
+:root {
+  /* Base radius */
+  --radius: 0.625rem;
+
+  /* --- LIGHT THEME --- */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.147 0.004 49.25);
+
+  --primary: var(--color-gechis-gold);
+  --primary-foreground: white;
+
+  --secondary: var(--color-gechis-blue-light);
+  --secondary-foreground: white;
+
+  --accent: var(--color-gechis-accent);
+  --accent-foreground: white;
+
+  --muted: oklch(0.97 0.001 106.424);
+  --muted-foreground: oklch(0.553 0.013 58.071);
+
+  --card: white;
+  --card-foreground: var(--foreground);
+
+  --border: oklch(0.9 0.003 48.717);
+  --ring: var(--color-gechis-gold-light);
+
+  --success: var(--color-success);
+  --warning: var(--color-warning);
+  --error: var(--color-error);
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(240 5.3% 26.1%);
+  --sidebar-primary: hsl(240 5.9% 10%);
+  --sidebar-primary-foreground: hsl(0 0% 98%);
+  --sidebar-accent: hsl(240 4.8% 95.9%);
+  --sidebar-accent-foreground: hsl(240 5.9% 10%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+.dark {
+  /* --- DARK THEME --- */
+  --background: var(--color-gechis-blue-dark);
+  --foreground: oklch(0.985 0.001 106.423);
+
+  --primary: var(--color-gechis-gold);
+  --primary-foreground: black;
+
+  --secondary: var(--color-gechis-blue-light);
+  --secondary-foreground: white;
+
+  --accent: var(--color-gechis-accent-light);
+  --accent-foreground: black;
+
+  --muted: var(--color-gechis-blue);
+  --muted-foreground: oklch(0.7 0.01 56.259);
+
+  --card: var(--color-gechis-blue);
+  --card-foreground: var(--foreground);
+
+  --border: oklch(1 0 0 / 15%);
+  --ring: var(--color-gechis-gold);
+
+  --success: #34d399;
+  --warning: #fbbf24;
+  --error: #f87171;
+  --sidebar: hsl(240 5.9% 10%);
+  --sidebar-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-primary: hsl(224.3 76.3% 48%);
+  --sidebar-primary-foreground: hsl(0 0% 100%);
+  --sidebar-accent: hsl(240 3.7% 15.9%);
+  --sidebar-accent-foreground: hsl(240 4.8% 95.9%);
+  --sidebar-border: hsl(240 3.7% 15.9%);
+  --sidebar-ring: hsl(217.2 91.2% 59.8%);
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------- */
+/* 🧱 BASE LAYER */
+/* --------------------------------------------------------- */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply font-sans text-gray-800 bg-gray-50;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-semibold;
+  }
+}
+
+/* --------------------------------------------------------- */
+/* 🧩 COMPONENT UTILITIES */
+/* --------------------------------------------------------- */
+@utility btn {
+  @apply px-6 py-2.5 font-medium rounded-md transition duration-300 inline-flex items-center justify-center;
+}
+
+.btn-primary {
+  @apply btn bg-amber-500 hover:bg-amber-600 text-white;
+}
+
+.btn-secondary {
+  @apply btn bg-indigo-600 hover:bg-indigo-700 text-white;
+}
+
+.btn-outline {
+  @apply btn border border-gray-300 hover:bg-gray-100 text-gray-700;
+}
+
+.card {
+  @apply bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg;
+}
+
+.container-custom {
+  @apply container mx-auto px-4 sm:px-6 lg:px-8;
+}
+
+.section {
+  @apply py-16 md:py-24;
+}
+
+.input-field {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent;
+}
+
+@utility animateFadeIn {
+  animation: fade-in 0.5s ease-out;
+}
+
+@utility animateSlideUp {
+  animation: slide-up 0.5s ease-out;
+}
+
+/* --------------------------------------------------------- */
+/* ✨ ANIMATIONS */
+/* --------------------------------------------------------- */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.5s ease-in-out;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------- */
+/* 📱 RESPONSIVE UTILITIES */
+/* --------------------------------------------------------- */
+@media (max-width: 817px) {
+  .hide-at-817 {
+    display: none;
+  }
+}
+/* 
+---break--- */
+@theme inline {
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
