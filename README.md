@@ -48,6 +48,6 @@ pnpm run dev
 This project is **still in development (WIP)**.\
 I will continue updating the repository with new features.
 
-## 📸 How to Add Images in the README
+## 📸 Products
 
 ![Product List](./public/readme/productList.png)
