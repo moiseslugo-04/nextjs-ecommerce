@@ -19,19 +19,19 @@ Right now, the project includes:
 
 These features are coming soon:
 
-- User dashboard\
-- Admin dashboard\
-- More filters (price, category, etc.)\
+- User dashboard
+- Admin dashboard
+- More filters (price, category, etc.)
 
 ## 🛠️ Tech Stack
 
-- **Next.js 16**\
-- **React**\
-- **TypeScript**\
-- **Tailwind CSS**\
-- **shadcn.**\
-- **Prisma**\
-- **PostgreSQL**\
+- **Next.js 16**
+- **React**
+- **TypeScript**
+- **Tailwind CSS**
+- **shadcn.**
+- **Prisma**
+- **PostgreSQL**
 - **Vercel** (deployment)
 
 ## 📦 Installation
@@ -45,7 +45,7 @@ pnpm run dev
 
 ## 📁 Project Status
 
-This project is **still in development (WIP)**.\
+This project is **still in development (WIP)**.
 I will continue updating the repository with new features.
 
 ## 📸 Products
