@@ -1,4 +1,4 @@
-import { Category } from '../prisma/generated/client'
+import { Category } from '@prisma/client'
 import prisma from '@lib/client'
 export interface Breadcrumbs {
   name: string

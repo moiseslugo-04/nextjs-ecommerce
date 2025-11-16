@@ -1,9 +1,8 @@
 import { Filters, SerializedProduct } from '@/types/product'
-import { PrismaClient } from '../prisma/generated/client'
-import {
-  ProductOrderByWithRelationInput,
-  ProductWhereInput,
-} from '../prisma/generated/models'
+import { PrismaClient, Prisma } from '@prisma/client'
+
+// ProductOrderByWithRelationInput,
+//  ProductWhereInput
 import {
   serializedProduct,
   serializedProductList,
@@ -49,14 +48,14 @@ export class ProductRepository {
     take,
   }: GetProductsLists): Promise<ProductListRes> {
     // Base conditions
-    const baseConditions: ProductWhereInput = {
+    const baseConditions: Prisma.ProductWhereInput = {
       OR: [{ category: { slug } }, { category: { department: { slug } } }],
     }
     //Filter Conditions
     const filterConditions = this.buildFilterConditions(filters)
 
     //Combine Conditions
-    const productsWhere: ProductWhereInput = filterConditions
+    const productsWhere: Prisma.ProductWhereInput = filterConditions
       ? { AND: [baseConditions, filterConditions] }
       : baseConditions
 
@@ -79,14 +78,14 @@ export class ProductRepository {
       totalCount,
     }
   }
-  private async getTotalPages(where: ProductWhereInput) {
+  private async getTotalPages(where: Prisma.ProductWhereInput) {
     return this.db.product.count({ where })
   }
   // Filters
   private buildFilterConditions(
     filters: Filters
-  ): ProductWhereInput | undefined {
-    const conditions: ProductWhereInput[] = []
+  ): Prisma.ProductWhereInput | undefined {
+    const conditions: Prisma.ProductWhereInput[] = []
     //Filter by query
     if (filters.query) {
       conditions.push({
@@ -106,8 +105,8 @@ export class ProductRepository {
     return conditions.length > 0 ? { AND: conditions } : undefined
   }
   //Sort
-  buildOrderBy(filters: Filters): ProductOrderByWithRelationInput {
-    const orderMap: Record<string, ProductOrderByWithRelationInput> = {
+  buildOrderBy(filters: Filters): Prisma.ProductOrderByWithRelationInput {
+    const orderMap: Record<string, Prisma.ProductOrderByWithRelationInput> = {
       name_asc: { name: 'asc' },
       name_desc: { name: 'desc' },
       price_asc: { name: 'asc' },
