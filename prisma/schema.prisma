@@ -1,6 +1,7 @@
 generator client {
   provider = "prisma-client"
   output   = "../src/lib/prisma/generated"
+    binaryTargets = ["native", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
   
 }
 
