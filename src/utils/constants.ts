@@ -1,15 +1,5 @@
 import { ShoppingBag, Sparkles, Shirt } from 'lucide-react'
 
-export const InitialLoginState = {
-  identifier: '',
-  password: '',
-}
-export const InitialLoginErrors = {
-  identifier: null,
-  password: null,
-  login: null,
-}
-
 export const InitialRegisterState = {
   fullName: '',
   lastName: '',

@@ -1,35 +1,39 @@
 import React, { useState } from 'react'
-import { InitialLoginErrors, InitialLoginState } from '../utils/constants'
-import type { LoginErrorsProps } from '../types'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { loginSchema, LoginSchema } from '@/schemas/user'
 
 export function useLogin() {
-  const [formData, setFormData] = useState(InitialLoginState)
+  const { handleSubmit, control, formState } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  })
   const [showPassword, setShowPassword] = useState(false)
-  const [errors, setErrors] = useState<LoginErrorsProps>(InitialLoginErrors)
-
-  const handleSubmit = async (event: React.FormEvent) => {
-    event.preventDefault()
-    setErrors(InitialLoginErrors)
-  }
 
   const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
     const { name, value } = event.currentTarget
     console.log(name, value)
   }
 
-  const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.currentTarget
-    setFormData((data) => ({ ...data, [name]: value }))
-    setErrors((errors) => ({ ...errors, [name]: null }))
-  }
   const handleShowPassword = () => setShowPassword(!showPassword)
+  const onSubmit = handleSubmit((data: LoginSchema) => {
+    toast('You submitted the following values:', {
+      description: JSON.stringify(data, null, 2),
+      position: 'bottom-right',
+      classNames: {
+        content: 'flex flex-col gap-2',
+      },
+      style: {
+        '--border-radius': 'calc(var(--radius)  + 4px)',
+      } as React.CSSProperties,
+    })
+  })
+
   return {
-    formData,
-    errors,
-    isLoading: false,
+    isLoading: formState.isLoading,
     showPassword,
-    onChange,
-    handleSubmit,
+    control,
+    onSubmit,
     handleShowPassword,
     handleBlur,
   }
