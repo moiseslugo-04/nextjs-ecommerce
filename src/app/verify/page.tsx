@@ -56,7 +56,7 @@ export default async function VerifyPage({
   }
 
   await prisma.user.update({
-    where: { email: record.identifier },
+    where: { id: record.userId },
     data: { emailVerified: true },
   })
 
