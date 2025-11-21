@@ -7,7 +7,7 @@ import {
 import { Field, FieldLabel, FieldError } from './ui/field'
 import { Input } from './ui/input'
 
-type FieldControlProps<T extends FieldValues> = {
+export type FieldControlProps<T extends FieldValues> = {
   label: string
   placeholder?: string
   type?: string

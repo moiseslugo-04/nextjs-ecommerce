@@ -21,6 +21,7 @@ export default async function Home() {
       href: '/beauty',
     },
   ]
+
   return (
     <section className='grow'>
       <div className='relative bg-gechis-blue text-white overflow-hidden'>

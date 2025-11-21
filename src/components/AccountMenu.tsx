@@ -31,7 +31,7 @@ export function AccountMenu() {
           <Link href='#'>Settings</Link>
         </DropdownMenuItem>
         <DropdownMenuLabel>
-          <Link href='/auth/login'>Login</Link>
+          <Link href='/auth'>Login</Link>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
       </DropdownMenuContent>

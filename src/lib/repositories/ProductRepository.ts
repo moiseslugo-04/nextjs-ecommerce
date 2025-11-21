@@ -1,8 +1,6 @@
 import { Filters, SerializedProduct } from '@/types/product'
 import { PrismaClient, Prisma } from '@prisma/client'
 
-// ProductOrderByWithRelationInput,
-//  ProductWhereInput
 import {
   serializedProduct,
   serializedProductList,

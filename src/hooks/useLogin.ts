@@ -1,40 +1,51 @@
-import React, { useState } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { loginSchema, LoginSchema } from '@/schemas/user'
-
-export function useLogin() {
+import { useRouter } from 'next/navigation'
+import { loginAction } from '@/lib/actions/user/login'
+export function useLogin(email: string) {
+  const { replace, refresh } = useRouter()
   const { handleSubmit, control, formState } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
+    mode: 'onChange',
+    defaultValues: {
+      identifier: email ?? '',
+    },
   })
-  const [showPassword, setShowPassword] = useState(false)
 
-  const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
-    const { name, value } = event.currentTarget
-    console.log(name, value)
-  }
-
-  const handleShowPassword = () => setShowPassword(!showPassword)
-  const onSubmit = handleSubmit((data: LoginSchema) => {
-    toast('You submitted the following values:', {
-      description: JSON.stringify(data, null, 2),
-      position: 'bottom-right',
-      classNames: {
-        content: 'flex flex-col gap-2',
-      },
-      style: {
-        '--border-radius': 'calc(var(--radius)  + 4px)',
-      } as React.CSSProperties,
-    })
+  const onSubmit = handleSubmit(async (data: LoginSchema) => {
+    try {
+      const formData = new FormData()
+      Object.entries(data).forEach(([k, v]) => formData.set(k, v))
+      const res = await loginAction(formData)
+      if (!res.success) {
+        if (res.error === 'Email not verified') {
+          toast.warning(res.error, {
+            description: 'you need to verified you email',
+            action: {
+              label: 'verify',
+              onClick: () => replace('/verify/resend'),
+            },
+          })
+          return
+        }
+        return toast.error(res.error)
+      }
+      toast.success('Login successful')
+      refresh()
+      replace('/dashboard')
+    } catch (err) {
+      console.log(err)
+      toast.error('Unexpected error', {
+        className: '!bg-red-600 !text-white',
+      })
+    }
   })
 
   return {
     isLoading: formState.isLoading,
-    showPassword,
     control,
     onSubmit,
-    handleShowPassword,
-    handleBlur,
   }
 }

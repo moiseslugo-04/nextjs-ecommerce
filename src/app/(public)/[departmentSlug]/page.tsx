@@ -15,13 +15,14 @@ interface DepartmentPageProps {
   params: Promise<{ departmentSlug: string }>
   searchParams: Promise<Record<string, string>>
 }
-
+const departments = ['market', 'clothes', 'beauty']
 export default async function DepartmentPage({
   params,
   searchParams,
 }: DepartmentPageProps) {
   const { departmentSlug: slug } = await params
-  if (!slug) return <NotFound />
+  console.log(departments.includes(slug), 'lola')
+  if (!slug || !departments.includes(slug)) return <NotFound />
   const filters = (await searchParams) as Filters
   const [breadcrumbs, data] = await Promise.all([
     generateBreadcrumbs(slug),
