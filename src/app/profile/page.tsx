@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 export default function ProfilePage() {
   return (
     <main className='flex items-center justify-center min-h-screen bg-neutral-100 p-6'>
@@ -15,10 +17,19 @@ export default function ProfilePage() {
         </p>
 
         <div className='flex flex-col items-center mt-8'>
-          <div className='w-12 h-12 rounded-full border-4 border-neutral-300 border-t-transparent animate-spin'></div>
+          <div className='w-12 h-12 rounded-full border-4 border-neutral-300 border-t-transparent animate-spin' />
           <span className='text-neutral-500 text-sm mt-3'>
             Loading profile features…
           </span>
+        </div>
+
+        <div className='flex justify-center mt-8'>
+          <Link
+            href='/'
+            className='px-5 py-2 rounded-xl border border-neutral-300 hover:bg-neutral-100 transition'
+          >
+            Back to Home
+          </Link>
         </div>
       </section>
     </main>

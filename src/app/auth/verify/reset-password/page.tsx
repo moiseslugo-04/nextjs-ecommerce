@@ -1,6 +1,6 @@
 import { validateVerificationToken } from '@features/verificationToken/verification-token.service'
 import InvalidTokenCard from '@/components/InvalidTokenCard'
-import { ResetPasswordPage } from '@/components/ResetPasswordPage'
+import { SetPassword } from '@/components/SetPassword'
 import { Suspense } from 'react'
 export default async function VerifyEmailPage({
   searchParams,
@@ -25,7 +25,7 @@ export default async function VerifyEmailPage({
     <section className='min-w-screen min-h-screen flex justify-center items-center'>
       <div className='min-h-screen w-full flex items-center justify-center bg-linear-to-b from-gray-200 to-blue-200 py-10 px-4'>
         <Suspense fallback={<p>loading...</p>}>
-          <ResetPasswordPage userId={record.token.userId} />
+          <SetPassword userId={record.token.userId} />
         </Suspense>
       </div>
     </section>

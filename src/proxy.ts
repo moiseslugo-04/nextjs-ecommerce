@@ -5,34 +5,40 @@ import {
   isAuthRoute,
   isAdminRoute,
 } from './lib/utils/server.utils'
-import { refreshSession } from './lib/features/auth/refresh-token.action'
+import { refreshSession } from './lib/features/auth/credentials/actions/refresh-token.action'
 import {
   deleteManyCookies,
   getCookies,
   setCookies,
 } from './lib/services/cookiesServices'
+import { headers } from 'next/headers'
+
 interface Payload {
-  userId: string
+  id: string
   role: string
   email: string
 }
+
 export function redirectTo(url: URL) {
   return NextResponse.redirect(url)
 }
+
 export function userHeaders(payload: Payload) {
   return {
-    'X-user-id': payload.userId,
+    'X-user-id': payload.id,
     'X-user-role': payload.role,
-    'X-user-email': payload.email,
   }
 }
+
 export function clearSession(res: NextResponse) {
   return deleteManyCookies(res, [
     'access_token',
     'refresh_token',
+    'refresh_token_jti',
     'is_authenticated',
   ])
 }
+
 export function setHeaders(
   response: NextResponse,
   headers: Record<string, string>
@@ -42,39 +48,67 @@ export function setHeaders(
   }
 }
 export async function proxy(request: NextRequest) {
-  const pathname = request.nextUrl.pathname
-  const accessToken = await getCookies('access_token')
   const response = NextResponse.next()
+  const accessToken = request.cookies.get('access_token')?.value
+  const pathname = request.nextUrl.pathname
 
+  if (!isPrivateRoute(pathname) && !isAuthRoute(pathname)) return response
+
+  //URL to redirect secure never allow external callbacks
   const loginUrl = new URL('/auth', request.url)
-  loginUrl.searchParams.set('callback', request.nextUrl.toString())
-
-  if (isPrivateRoute(pathname) && !accessToken) {
-    return refreshSession(response, request, loginUrl)
-  }
-
-  if (accessToken) {
-    try {
-      const payload = verifyAccessToken(accessToken)
-      if (isAdminRoute(pathname) && payload.role !== 'ADMIN') {
-        console.log('rund')
-        const redirect = new URL('/', request.url)
-        redirect.searchParams.set('error', 'no-admin')
-        return redirectTo(redirect)
-      }
-      // If user is already logged and tries to access /auth
-      if (isAuthRoute(pathname)) {
-        const redirectPath = payload.role === 'ADMIN' ? '/dashboard' : '/'
-        return redirectTo(new URL(redirectPath, request.url))
-      }
-
-      setHeaders(response, userHeaders(payload))
-      setCookies({ response, name: 'user-role', value: payload.role })
-      return response
-    } catch {
-      return refreshSession(response, request, loginUrl)
+  let callback = request.nextUrl.pathname + request.nextUrl.search
+  if (!callback.startsWith('/')) callback = '/'
+  loginUrl.searchParams.set('callback', callback)
+  if (!accessToken) {
+    const isAtAuth = isAuthRoute(pathname)
+    if (!isAtAuth) {
+      const refreshed = await refreshSession(response, request)
+      if (refreshed.ok) return refreshed.response
+      clearSession(response)
+      return redirectTo(loginUrl)
     }
+    const refreshed = await refreshSession(response, request)
+    if (refreshed.ok && refreshed.response) {
+      const redirect = NextResponse.redirect(new URL('/', request.url))
+
+      refreshed.response.cookies.getAll().forEach((cookie) => {
+        redirect.cookies.set(cookie)
+      })
+      return redirect
+    }
+    return response
   }
 
-  return response // for non private routes
+  try {
+    const payload = verifyAccessToken(accessToken)
+    const expiresIn = payload.exp - Math.floor(Date.now() / 1000)
+    // Refresh 3 minutes before expiry
+    if (expiresIn < 3 * 60) {
+      const refreshed = await refreshSession(response, request)
+      if (refreshed.ok) return refreshed.response
+      clearSession(response)
+      return redirectTo(loginUrl)
+    }
+
+    // Admin routes
+    if (isAdminRoute(pathname) && payload.role !== 'ADMIN') {
+      const redirect = new URL('/', request.url)
+      redirect.searchParams.set('error', 'no-admin')
+      return redirectTo(redirect)
+    }
+
+    // Prevent logged users from accessing /auth
+    if (isAuthRoute(pathname)) return redirectTo(new URL('/', request.url))
+
+    // Set user headers
+    setHeaders(response, userHeaders(payload))
+    return response
+  } catch {
+    const refreshed = await refreshSession(response, request)
+
+    if (refreshed.ok) return refreshed.response
+
+    clearSession(response)
+    return redirectTo(loginUrl)
+  }
 }

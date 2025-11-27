@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { RegisterSchema, registerSchema } from '@/schemas/user'
 import { useTransition } from 'react'
-import { registerAction } from '@/lib/features/auth/register.action'
+import { registerAction } from '@/lib/features/auth/credentials/actions/register.action'
 export function useRegister(email: string) {
   const [isPending, startTransition] = useTransition()
   const [success, setSuccess] = useState(false)

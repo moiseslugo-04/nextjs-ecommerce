@@ -7,7 +7,7 @@ import { FieldControl } from './FieldControl'
 import { Button } from '@components/ui/button'
 import { useTransition, useState } from 'react'
 import { VerificationTokenTypes } from '@/lib/features/userVerificationServices/user-verification.service'
-import { resendVerificationTokenByEmail } from '@features/auth/resend-verification-token.action'
+import { resendVerificationTokenByEmail } from '@/lib/features/auth/credentials/actions/resend-verification-token.action'
 import Link from 'next/link'
 interface InvalidCardProps {
   type: VerificationTokenTypes

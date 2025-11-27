@@ -1,5 +1,5 @@
 'use server'
-import { registerUser } from '@lib/features/auth/auth.service'
+import { registerUser } from '@lib/features/auth/services/auth.service'
 export async function registerAction(formData: FormData) {
   try {
     return await registerUser(formData)

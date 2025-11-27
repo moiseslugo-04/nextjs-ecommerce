@@ -2,13 +2,14 @@ import {
   saveVerificationToken,
   findVerificationTokenByToken,
   deleteVerificationTokenByToken,
+  deleteExistingTokes,
 } from '@lib/features/verificationToken/verification-token-repository'
 import { generatorRandomToken } from '@lib/utils/tokenGenerator'
 interface CreateToken {
-  type: 'email_verification' | 'reset_password'
+  type: 'email_verification' | 'reset_password' | 'set_password'
   identifier?: string
   expiresInHours: number
-  userId: number
+  userId: string
 }
 
 export async function generateVerificationToken({
@@ -17,8 +18,13 @@ export async function generateVerificationToken({
   identifier,
   expiresInHours = 24,
 }: CreateToken) {
-  const token = generatorRandomToken(32)
+  // remove existing tokens of the same type
+  await deleteExistingTokes(userId, type)
+  //Generate new token
   const expiresAt = new Date(Date.now() + expiresInHours * 60 * 60 * 1000)
+  const token = generatorRandomToken(32)
+
+  //Save token in the DB
   return saveVerificationToken({
     userId,
     type,
@@ -29,6 +35,7 @@ export async function generateVerificationToken({
 }
 
 export async function validateVerificationToken(token: string) {
+  //Look for the token in the DB
   const record = await findVerificationTokenByToken(token)
   const now = new Date()
   if (!record)
@@ -38,7 +45,7 @@ export async function validateVerificationToken(token: string) {
       error: 'Token not Found',
       expired: false,
     }
-
+  //Check if expired
   const expired = record.expiresAt < now
   await deleteVerificationTokenByToken(record.token)
 

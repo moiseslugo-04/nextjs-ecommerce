@@ -1,18 +1,26 @@
 import prisma from '@/lib/client'
-import { RegisterSchema } from '@/schemas/user'
-import { RefreshToken, Role, VerificationToken } from '@prisma/client'
-
+import { RefreshToken, Role, VerificationToken, Account } from '@prisma/client'
 export type UserDTO = {
-  id: number
-  username: string
+  id: string
+  email: string
+  emailVerified: Date | null
+  role: Role
+  username: string | null
+  name?: string
+  verificationTokens: VerificationToken[]
+  refreshTokens: RefreshToken[]
+  accounts: Account[]
+}
+
+interface SaveUser {
   name: string
   email: string
-  emailVerified: boolean
-  role: Role
-  refreshTokens: RefreshToken[]
-  verificationTokens: VerificationToken[]
+  username?: string
+  password?: string
+  image?: string
+  emailVerified?: Date
 }
-export type UserDTOWithPassword = UserDTO & { password: string }
+export type UserDTOWithPassword = UserDTO & { password: string | null }
 export function findUserByEmail(email: string): Promise<UserDTO | null> {
   return prisma.user.findFirst({
     where: { email },
@@ -25,6 +33,7 @@ export function findUserByEmail(email: string): Promise<UserDTO | null> {
       refreshTokens: true,
       verificationTokens: true,
       id: true,
+      accounts: true,
     },
   })
 }
@@ -33,7 +42,7 @@ export function findUserByIdentifier(
   identifier: string
 ): Promise<UserDTOWithPassword | null> {
   return prisma.user.findFirst({
-    where: { OR: [{ username: identifier }, { email: identifier }] },
+    where: { email: identifier },
     select: {
       username: true,
       name: true,
@@ -42,24 +51,21 @@ export function findUserByIdentifier(
       role: true,
       refreshTokens: true,
       verificationTokens: true,
+      accounts: true,
       id: true,
       password: true,
     },
   })
 }
 
-export function updateVerifiedEmail(id: number) {
+export function updateVerifiedEmail(id: string) {
   return prisma.user.update({
     where: { id },
-    data: {
-      emailVerified: true,
-    },
+    data: { emailVerified: new Date() },
   })
 }
 
-export function saveUser(
-  data: Omit<RegisterSchema, 'confirmPassword'>
-): Promise<UserDTO | null> {
+export function saveUser(data: SaveUser): Promise<UserDTO | null> {
   return prisma.user.create({
     data: {
       ...data,
@@ -72,18 +78,19 @@ export function saveUser(
       role: true,
       refreshTokens: true,
       verificationTokens: true,
+      accounts: true,
       id: true,
     },
   })
 }
 
-export function updateUserPassword(password: string, id: number) {
+export function updateUserPassword(password: string, id: string) {
   return prisma.user.update({ where: { id }, data: { password } })
 }
-export function deleteUserById(id: number) {
+export function deleteUserById(id: string) {
   return prisma.user.delete({ where: { id } })
 }
 
-export function findUserById(id: number) {
+export function findUserById(id: string) {
   return prisma.user.findFirst({ where: { id } })
 }

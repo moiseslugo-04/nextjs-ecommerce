@@ -1,12 +1,11 @@
 generator client {
   provider = "prisma-client-js"
-    binaryTargets = ["native", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
+  binaryTargets = ["native", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
   
 }
 
 datasource db {
   provider = "postgresql"
-  url   = env("DATABASE_URL")
 }
 
 
@@ -73,7 +72,7 @@ model Product {
 model Cart {
   id      Int       @id @default(autoincrement())
   user    User      @relation(fields: [userId], references: [id],onDelete: Cascade)
-  userId  Int       @unique @map("user_id")
+  userId  String       @unique @map("user_id")
   items   CartItem[]
 
   @@map("carts")
@@ -97,7 +96,7 @@ model Order {
   id         Int       @id @default(autoincrement())
   items     OrderItem[]
   user       User      @relation(fields: [userId], references: [id])
-  userId     Int       @map("user_id")
+  userId     String       @map("user_id")
   totalPrice Decimal   @db.Decimal(10,2) @map("total_price")
   status     OrderStatus    @default(PENDING)
   createdAt  DateTime  @default(now()) @map("created_at")
@@ -140,13 +139,17 @@ enum Role {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String    @id @default(cuid())
   name      String
-  username  String   @unique
   email     String   @unique
-  emailVerified Boolean @default(false)
+  emailVerified DateTime?  @map("email_verified")
+  username  String?
   image     String?
-  password  String
+  password  String?
+  address       String?
+  phoneNumber   String? @map("phone_number")
+  country       String?
+  birthdate     DateTime?
   role      Role     @default(USER)
   refreshTokens RefreshToken[]
   verificationTokens VerificationToken[]
@@ -164,29 +167,34 @@ model User {
 
 // Authentication models
 
-model Account{
-  id Int @id @default(autoincrement())
-  provider String
-  providerAccountId String @unique @map("provider_account_id")
-  accessToken String? @map("access_token")
-  refreshToken String? @map("refresh_token")
-  accessTokenExpiresAt  DateTime? @map("access_token_expires_at")
-  refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
-
-  userId Int @map("user_id")
-  user User @relation(fields: [userId], references: [id],onDelete: Cascade)
-
+model Account {
+  id                     String  @id @default(cuid())
+  userId                 String       @map("user_id")
+  type                   String
+  provider               String
+  providerAccountId      String    @map("provider_account_id")
+  refresh_token          String?   @db.Text 
+  access_token           String?   @db.Text 
+  token_type             String?   
+  expires_at             Int?      
+  scope                  String?
+  id_token               String? 
+  session_state          String?  
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @map("updated_at")
 
- @@map("account")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  updatedAt DateTime @default(now()) @updatedAt @map("updated_at")
+
+
+  @@unique([provider, providerAccountId])
+  @@map("account")
 }
 
 model Session{
-  id Int @id @default(autoincrement())
+  id           String  @id @default(cuid())
   sessionToken String @unique @map("session_token")
   expiresAt DateTime
-  userId Int @map("user_id")
+  userId String @map("user_id")
   user User @relation(fields: [userId], references: [id],onDelete: Cascade)
   updatedAt DateTime @map("updated_at")
   createdAt DateTime @default(now()) @map("created_at")
@@ -194,9 +202,9 @@ model Session{
 }
 
 model VerificationToken {
-  id Int @id @default(autoincrement())
+  id  String  @id @default(cuid())
   identifier String? 
-  userId Int
+  userId String
   user User @relation(fields: [userId], references: [id])
   type  String 
   token String   @unique  
@@ -207,10 +215,11 @@ model VerificationToken {
 
 
 model RefreshToken {
-  id        Int      @id @default(autoincrement())
+  id        String  @id @default(cuid())
   token     String   @unique
   jti       String      @unique
-  userId    Int
+  revoked   Boolean  @default(false)
+  userId    String
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")

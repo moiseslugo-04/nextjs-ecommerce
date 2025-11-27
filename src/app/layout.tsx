@@ -1,10 +1,11 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
-import { SessionProvider } from 'next-auth/react'
 import './globals.css'
 import { Toaster } from 'sonner'
 import { ErrorHandler } from '@/components/ErrorHandler'
 import { Suspense } from 'react'
+import { auth } from '@/lib/features/auth/oAuth/auth'
+import { SessionSynchronizer } from '@/components/SessionSyncer'
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -23,7 +24,7 @@ export const metadata: Metadata = {
   },
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -37,8 +38,8 @@ export default function RootLayout({
         <Suspense>
           <ErrorHandler />
         </Suspense>
-        <SessionProvider>{children}</SessionProvider>
         <Toaster />
+        <SessionSynchronizer>{children}</SessionSynchronizer>
       </body>
     </html>
   )

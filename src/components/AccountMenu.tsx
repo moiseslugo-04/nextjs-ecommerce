@@ -11,9 +11,14 @@ import {
   DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu'
 import Link from 'next/link'
-import { Role } from '@prisma/client'
-export function AccountMenu({ role }: { role: Role | null }) {
-  const isAdmin = role === 'ADMIN'
+import { Button } from '@components/ui/button'
+import { useSession } from '@features/auth/hook/useSession'
+import { useLogout } from '@/lib/features/auth/hook/useLogout'
+export function AccountMenu() {
+  const { status: isLoading, data: session } = useSession()
+  const { closeSession, isPending } = useLogout()
+  const isAdmin = session?.payload.role === 'ADMIN'
+  const isLoggedIn = session?.payload.id ? true : false
   const [open, setOpen] = useState(false)
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -41,8 +46,13 @@ export function AccountMenu({ role }: { role: Role | null }) {
         )}
 
         <DropdownMenuLabel>
-          {role ? (
-            <Link href='/'>Logout</Link>
+          {isLoggedIn ? (
+            <Button
+              className='cursor-pointer text-red-300 hover:text-red-500 ease-in'
+              onClick={closeSession}
+            >
+              {isPending ? 'Closing...' : 'Logout'}
+            </Button>
           ) : (
             <Link href='/auth'>Login</Link>
           )}

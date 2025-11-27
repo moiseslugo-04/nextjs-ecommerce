@@ -7,6 +7,7 @@ import { RegisterForm } from '@components/RegisterForm'
 import { useAuth } from '@/hooks/useAuth'
 import { FieldControl } from '@/components/FieldControl'
 import { Controller } from 'react-hook-form'
+import { signIn } from 'next-auth/react'
 export default function AuthPage() {
   const {
     onSubmit,
@@ -18,6 +19,7 @@ export default function AuthPage() {
     isPending,
     email,
   } = useAuth()
+
   return (
     <section className='min-h-screen flex flex-col   items-center bg-linear-to-b from-gray-200 to-blue-200 py-10 px-4'>
       {/* Top Navigation */}
@@ -91,6 +93,7 @@ export default function AuthPage() {
 
               {/* Google Button */}
               <Button
+                onClick={() => signIn('google', { redirectTo: '/' })}
                 variant='outline'
                 className='w-full py-6 flex items-center justify-center gap-3'
               >

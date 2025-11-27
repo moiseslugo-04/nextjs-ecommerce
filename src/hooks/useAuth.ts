@@ -5,12 +5,12 @@ import { emailSchema, EmailSchema } from '@/schemas/user'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { checkEmailAction } from '@/lib/features/auth/emailCheck.action'
+import { checkEmailAction } from '@/lib/features/auth/credentials/actions/emailCheck.action'
 export type Steps = 'email' | 'login' | 'register'
 export function useAuth() {
   const searchParams = useSearchParams()
-  const stepParma = searchParams.get('step') as Steps
-  const [step, setStep] = useState<Steps>(stepParma || 'email')
+  const stepParam = searchParams.get('step') as Steps | null
+  const [step, setStep] = useState<Steps>(stepParam ?? 'email')
   const { control, handleSubmit } = useForm<EmailSchema>({
     resolver: zodResolver(emailSchema),
   })

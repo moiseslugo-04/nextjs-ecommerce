@@ -2,7 +2,7 @@ import prisma from '@lib/client'
 interface CreateTokenProps {
   token: string
   expiresAt: Date
-  userId: number
+  userId: string
   type: string
   identifier?: string
 }
@@ -30,17 +30,14 @@ export async function findVerificationTokenByToken(token: string) {
   return prisma.verificationToken.findFirst({ where: { token } })
 }
 export async function getUserTokenByIdentifier(
-  userId: number,
+  userId: string,
   identifier: string
 ) {
   return prisma.verificationToken.findFirst({
     where: { userId, identifier },
   })
 }
-export async function deleteVerificationTokenByUserId(
-  userId: number,
-  type: string
-) {
+export async function deleteExistingTokes(userId: string, type: string) {
   return prisma.verificationToken.deleteMany({
     where: {
       userId,
@@ -48,7 +45,7 @@ export async function deleteVerificationTokenByUserId(
     },
   })
 }
-export async function deleteVerificationTokenById(id: number) {
+export async function deleteVerificationTokenById(id: string) {
   return prisma.verificationToken.delete({ where: { id } })
 }
 export async function deleteExpired() {

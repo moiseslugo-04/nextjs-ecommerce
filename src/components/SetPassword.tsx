@@ -7,9 +7,9 @@ import { Button } from '@components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import { useTransition } from 'react'
-import { resetPasswordAction } from '@/lib/features/auth/reset-password.action'
+import { setPasswordAction } from '@/lib/features/auth/credentials/actions/reset-password.action'
 import { toast } from 'sonner'
-export function ResetPasswordPage({ userId }: { userId: number }) {
+export function SetPassword({ userId }: { userId: string }) {
   const [isPending, startTransition] = useTransition()
   const { handleSubmit, control } = useForm<ResetPasswordSchema>({
     resolver: zodResolver(resetPasswordSchema),
@@ -18,7 +18,7 @@ export function ResetPasswordPage({ userId }: { userId: number }) {
   const onSubmit = handleSubmit((data: ResetPasswordSchema) => {
     startTransition(async () => {
       try {
-        const result = await resetPasswordAction(data.password, userId)
+        const result = await setPasswordAction(data.password, userId)
         if (result?.success) {
           toast('Password update with success')
         }
