@@ -1,58 +1,95 @@
 'use client'
 
-import { resendEmailVerificationAction } from '@/lib/actions/resend/resendEmailVericationAction'
-import { useState, useTransition } from 'react'
-interface InvalidTokenProps {
-  defaultEmail?: string
+import { emailSchema, EmailSchema } from '@/schemas/user'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Controller, useForm } from 'react-hook-form'
+import { FieldControl } from './FieldControl'
+import { Button } from '@components/ui/button'
+import { useTransition, useState } from 'react'
+import { VerificationTokenTypes } from '@/lib/features/userVerificationServices/user-verification.service'
+import { resendVerificationTokenByEmail } from '@features/auth/resend-verification-token.action'
+import Link from 'next/link'
+interface InvalidCardProps {
+  type: VerificationTokenTypes
+  title?: string
+  description?: string
 }
-export default function InvalidTokenCard({ defaultEmail }: InvalidTokenProps) {
-  const [email, setEmail] = useState(defaultEmail ?? '')
+export default function InvalidTokenCard({
+  type,
+  title = 'Invalid or expired link',
+  description = 'Your verification link is invalid or has expired. Enter your email and we’ll send you a new verification link.',
+}: InvalidCardProps) {
+  const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
-  const [success, setSuccess] = useState('')
   const [isPending, startTransition] = useTransition()
-  async function onSubmit() {
-    setError('')
-    setSuccess('')
-    try {
-      startTransition(async () => {
-        const res = await resendEmailVerificationAction(email)
-        if (!res.success) throw new Error(res.message)
-        setSuccess(res.message)
-      })
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  const { control, handleSubmit } = useForm<EmailSchema>({
+    resolver: zodResolver(emailSchema),
+    mode: 'onChange',
+  })
 
+  const onSubmit = handleSubmit(async (data: EmailSchema) => {
+    setError('')
+    setSent(false)
+    startTransition(async () => {
+      try {
+        const result = await resendVerificationTokenByEmail(data.email, type)
+
+        if (result?.code === 'USER_NOT_FOUND') {
+          setError('User not found, please check your email and try again')
+          return
+        }
+        setSent(true)
+      } catch (error) {
+        console.log(error)
+      }
+    })
+  })
   return (
     <div className='max-w-md mx-auto mt-20 bg-white shadow-lg p-8 rounded-xl border'>
-      <h2 className='text-2xl font-semibold text-gray-800 mb-3'>
-        Invalid or expired link
-      </h2>
+      <Link href={'/'} className='text-blue-500'>
+        {'<-'} Go home
+      </Link>
+      <h2 className='text-2xl font-semibold text-gray-800 my-3'>{title}</h2>
 
-      <p className='text-gray-600 mb-6'>
-        Your verification link is invalid or has expired.
-      </p>
+      <p className='text-gray-600 mb-6'>{description}</p>
+      {sent && (
+        <div className='rounded-md border-l-4 pt-4 border-green-500 bg-green-50 p-3'>
+          <p className='text-sm font-medium'>Sent — check your inbox</p>
+          <p className='text-xs text-muted-foreground'>
+            If you still do not see it, wait a few minutes.
+          </p>
+        </div>
+      )}
+      {error && (
+        <div className='rounded-md border-l-4 border-red-500 bg-red-50 p-3'>
+          <p className='text-sm font-medium'>Error</p>
+          <p className='text-xs text-muted-foreground'>{error}</p>
+        </div>
+      )}
 
-      <div className='space-y-4'>
-        <input
-          type='email'
-          value={email}
-          placeholder='Enter your email'
-          onChange={(e) => setEmail(e.target.value)}
-          className='w-full border rounded-lg px-4 py-2'
+      <form onSubmit={onSubmit} className='space-y-2'>
+        <Controller
+          name='email'
+          control={control}
+          render={(input) => (
+            <FieldControl {...input} placeholder='example@gmial.com' />
+          )}
         />
 
-        {error && <p className='text-red-600 text-sm'>{error}</p>}
-        {success && <p className='text-green-600 text-sm'>{success}</p>}
-
-        <button
-          onClick={onSubmit}
-          className='w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800'
+        <Button
+          disabled={isPending}
+          type='submit'
+          className='w-full text-center bg-black text-white py-3 rounded-sm hover:bg-gray-800'
         >
-          {isPending ? 'Sending.....' : 'Send new verification email'}
-        </button>
-      </div>
+          {isPending ? (
+            <>
+              <p>Sending email..</p>
+            </>
+          ) : (
+            'Send new verification email'
+          )}
+        </Button>
+      </form>
     </div>
   )
 }

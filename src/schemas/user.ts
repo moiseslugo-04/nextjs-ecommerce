@@ -7,7 +7,23 @@ const passwordSchema = z
   .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
   .regex(/[0-9]/, 'Password must contain at least one number')
   .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character')
+export const emailSchema = z.object({
+  email: z.email('Invalid email address').trim(),
+})
+export type EmailSchema = z.infer<typeof emailSchema>
 
+export const resetPasswordSchema = z
+  .object({
+    password: passwordSchema,
+    confirmPassword: z.string('Confirm Password Please').trim(),
+  })
+  .refine(({ password, confirmPassword }) => password === confirmPassword, {
+    path: ['confirmPassword'],
+    message: 'Passwords do not match',
+  })
+  .strict()
+
+export type ResetPasswordSchema = z.infer<typeof resetPasswordSchema>
 export const loginSchema = z
   .object({
     identifier: z
@@ -38,7 +54,7 @@ export const registerSchema = z
         'Username can only contain letters, numbers, and underscores'
       )
       .trim(),
-    email: z.email('Email invalid').trim(),
+    email: z.email('Invalid email address').trim(),
     password: passwordSchema,
     confirmPassword: z.string('Confirm Password Please').trim(),
   })

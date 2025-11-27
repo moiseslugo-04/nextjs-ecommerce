@@ -3,7 +3,7 @@ import { NotFound } from '@components/NotFound'
 import { ProductDetails } from '@components/ProductDetail'
 import { ProductServices } from '@/lib/services/productService'
 import { Suspense } from 'react'
-import ProductDetailSkeleton from '@/components/skeletons/ProductDetailSkeleton'
+import ProductDetailSkeleton from '@components/skeletons/ProductDetailSkeleton'
 interface ProductPageProps {
   params: Promise<{ productSlug: string }>
 }

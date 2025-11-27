@@ -1,14 +1,14 @@
 import { Suspense } from 'react'
-import { BreadCrumbs } from '@/components/Breadcrumbs'
-import { NotFound } from '@/components/NotFound'
-import { ProductList } from '@/components/Products/ProductList'
-import { SearchResultsHeader } from '@/components/SearchResultsHeader'
-import { PaginationBar } from '@/components/PaginationBar'
+import { BreadCrumbs } from '@components/Breadcrumbs'
+import { NotFound } from '@components/NotFound'
+import { ProductList } from '@components/Products/ProductList'
+import { SearchResultsHeader } from '@components/SearchResultsHeader'
+import { PaginationBar } from '@components/PaginationBar'
 
-import { generateBreadcrumbs } from '@/lib/utils/generatedBreadcrumbs'
+import { generateBreadcrumbs } from '@lib/utils/generatedBreadcrumbs'
 import { ProductServices } from '@/lib/services/productService'
 import { Filters } from '@/types/product'
-import ProductListSkeleton from '@/components/skeletons/ProductListSkeleton'
+import ProductListSkeleton from '@components/skeletons/ProductListSkeleton'
 
 interface DepartmentPageProps {
   params: Promise<{ departmentSlug: string }>

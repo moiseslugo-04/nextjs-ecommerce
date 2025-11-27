@@ -1,15 +1,15 @@
-import { generateBreadcrumbs } from '@/lib/utils/generatedBreadcrumbs'
-import { NotFound } from '@/components/NotFound'
+import { generateBreadcrumbs } from '@lib/utils/generatedBreadcrumbs'
+import { NotFound } from '@components/NotFound'
 import { ProductServices } from '@/lib/services/productService'
 import type { Filters } from '@/types/product'
 import { Sparkles } from 'lucide-react'
-import { capitalizeWord } from '@/lib/utils/capitalizeWord'
-import { BreadCrumbs } from '@/components/Breadcrumbs'
-import { SearchResultsHeader } from '@/components/SearchResultsHeader'
-import { PaginationBar } from '@/components/PaginationBar'
-import { ProductList } from '@/components/Products/ProductList'
+import { capitalizeWord } from '@lib/utils/ui/utils'
+import { BreadCrumbs } from '@components/Breadcrumbs'
+import { SearchResultsHeader } from '@components/SearchResultsHeader'
+import { PaginationBar } from '@components/PaginationBar'
+import { ProductList } from '@components/Products/ProductList'
 import { Suspense } from 'react'
-import ProductsSkeleton from '@/components/skeletons/ProductListSkeleton'
+import ProductsSkeleton from '@components/skeletons/ProductListSkeleton'
 
 interface DepartmentPageProps {
   params: Promise<{ departmentSlug: string }>

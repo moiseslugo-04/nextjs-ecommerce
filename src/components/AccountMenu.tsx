@@ -1,3 +1,5 @@
+'use client'
+
 import { useState } from 'react'
 import { UserRound } from 'lucide-react'
 import {
@@ -7,9 +9,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+} from '@components/ui/dropdown-menu'
 import Link from 'next/link'
-export function AccountMenu() {
+import { Role } from '@prisma/client'
+export function AccountMenu({ role }: { role: Role | null }) {
+  const isAdmin = role === 'ADMIN'
   const [open, setOpen] = useState(false)
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -25,13 +29,23 @@ export function AccountMenu() {
         className='bg-gechis-blue-dark text-white'
       >
         <DropdownMenuItem>
-          <Link href='#'>My orders</Link>
+          <Link href='/orders'>My orders</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href='#'>Settings</Link>
+          <Link href='/profile'>Profile</Link>
         </DropdownMenuItem>
+        {isAdmin && (
+          <DropdownMenuItem>
+            <Link href='/dashboard'>Dashboard</Link>
+          </DropdownMenuItem>
+        )}
+
         <DropdownMenuLabel>
-          <Link href='/auth'>Login</Link>
+          {role ? (
+            <Link href='/'>Logout</Link>
+          ) : (
+            <Link href='/auth'>Login</Link>
+          )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
       </DropdownMenuContent>

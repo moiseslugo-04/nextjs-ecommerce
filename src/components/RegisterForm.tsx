@@ -1,13 +1,13 @@
 import { ArrowRight } from 'lucide-react'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
-import { FieldControl } from '@/components/FieldControl'
+import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card'
+import { FieldControl } from '@components/FieldControl'
 import { Controller } from 'react-hook-form'
-import { FieldGroup } from '@/components/ui/field'
-import { Button } from '@/components/ui/button'
+import { FieldGroup } from '@components/ui/field'
+import { Button } from '@components/ui/button'
 import { useRegister } from '@/hooks/useRegister'
-import EmailConfirmationCard from '@/components/EmailConfirmationCard'
+import EmailConfirmationCard from '@components/EmailConfirmationCard'
 import { PasswordInput } from './PasswordInput'
-import { cn } from '@/lib/utils'
+import { cn } from '@lib/utils/ui/utils'
 export function RegisterForm({
   changeStep,
   email,

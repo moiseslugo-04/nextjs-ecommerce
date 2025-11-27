@@ -23,7 +23,8 @@
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@lib/*": ["src/lib/*"],
-      "@prisma/*": ["src/lib/prisma/*"]
+      "@prisma/*": ["src/lib/prisma/*"],
+      "@features/*": ["src/lib/features/*"]
     }
   },
   "include": [

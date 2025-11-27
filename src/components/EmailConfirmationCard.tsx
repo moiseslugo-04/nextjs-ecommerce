@@ -1,6 +1,6 @@
 'use client'
 import { useState, useTransition } from 'react'
-
+import { resendVerificationTokenByEmail } from '@features/auth/resend-verification-token.action'
 import {
   Card,
   CardHeader,
@@ -8,13 +8,13 @@ import {
   CardDescription,
   CardContent,
   CardFooter,
-} from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+} from '@components/ui/card'
+import { Button } from '@components/ui/button'
+import { Separator } from '@components/ui/separator'
 import { Badge } from '@components/ui/badge'
 import { Input } from '@components/ui/input'
 import { toast } from 'sonner'
-import { resendEmailVerificationAction } from '@/lib/actions/resend/resendEmailVericationAction'
+import Link from 'next/link'
 
 type Props = {
   email: string
@@ -29,7 +29,7 @@ export default function EmailConfirmationCard({ email, confirmUrl }: Props) {
     setError(null)
     try {
       startTransition(async () => {
-        await resendEmailVerificationAction(email)
+        await resendVerificationTokenByEmail(email, 'email_verification')
       })
       toast.success('Email sent', {
         description: `Confirmation sent to ${email}`,
@@ -111,13 +111,9 @@ export default function EmailConfirmationCard({ email, confirmUrl }: Props) {
 
         <CardFooter className='flex items-center justify-between'>
           <div className='flex items-center gap-3'>
-            <Button
-              variant='ghost'
-              size='sm'
-              onClick={() => (window.location.href = '/login')}
-            >
-              Back to login
-            </Button>
+            <Link href={'/auth?step=login'} className='text-blue-500'>
+              {'<-'} Back to login
+            </Link>
           </div>
 
           <div className='flex items-center gap-2'>

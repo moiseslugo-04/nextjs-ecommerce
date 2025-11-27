@@ -1,12 +1,12 @@
-import ProductsSkeleton from '@/components/skeletons/ProductListSkeleton'
-import { generateBreadcrumbs } from '@/lib/utils/generatedBreadcrumbs'
+import ProductsSkeleton from '@components/skeletons/ProductListSkeleton'
+import { generateBreadcrumbs } from '@lib/utils/generatedBreadcrumbs'
 import { Suspense } from 'react'
-import { NotFound } from '@/components/NotFound'
+import { NotFound } from '@components/NotFound'
 import { ProductServices } from '@/lib/services/productService'
 import { Filters } from '@/types/product'
-import { BreadCrumbs } from '@/components/Breadcrumbs'
-import { PaginationBar } from '@/components/PaginationBar'
-import { ProductList } from '@/components/Products/ProductList'
+import { BreadCrumbs } from '@components/Breadcrumbs'
+import { PaginationBar } from '@components/PaginationBar'
+import { ProductList } from '@components/Products/ProductList'
 
 interface DepartmentPageProps {
   params: Promise<{ categoriesSlug: string[] }>

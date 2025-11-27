@@ -1,0 +1,16 @@
+'use server'
+import {
+  resendVerificationToken,
+  VerificationTokenTypes,
+} from '../userVerificationServices/user-verification.service'
+
+export async function resendVerificationTokenByEmail(
+  email: string,
+  type: VerificationTokenTypes
+) {
+  try {
+    return await resendVerificationToken(email, type)
+  } catch (error) {
+    console.log(error)
+  }
+}

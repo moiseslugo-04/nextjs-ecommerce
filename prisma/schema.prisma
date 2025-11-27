@@ -148,8 +148,8 @@ model User {
   image     String?
   password  String
   role      Role     @default(USER)
-
   refreshTokens RefreshToken[]
+  verificationTokens VerificationToken[]
   cart      Cart?
   orders    Order[]
   sessions  Session[]
@@ -195,9 +195,11 @@ model Session{
 
 model VerificationToken {
   id Int @id @default(autoincrement())
+  identifier String? 
   userId Int
-  identifier String 
-  value String   @unique  
+  user User @relation(fields: [userId], references: [id])
+  type  String 
+  token String   @unique  
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
   @@map("verification")
@@ -207,6 +209,7 @@ model VerificationToken {
 model RefreshToken {
   id        Int      @id @default(autoincrement())
   token     String   @unique
+  jti       String      @unique
   userId    Int
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime @map("expires_at")

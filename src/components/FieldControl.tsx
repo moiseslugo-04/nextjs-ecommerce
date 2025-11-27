@@ -8,7 +8,7 @@ import { Field, FieldLabel, FieldError } from './ui/field'
 import { Input } from './ui/input'
 
 export type FieldControlProps<T extends FieldValues> = {
-  label: string
+  label?: string
   placeholder?: string
   type?: string
   required?: boolean

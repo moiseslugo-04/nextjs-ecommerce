@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useRef, useEffect } from 'react'
 import { useLanguageStore } from '../stores/languageStore'
 import { LanguagesIcon } from 'lucide-react'

@@ -1,5 +1,5 @@
-import Header from '@/components/Header'
-import Footer from '@/components/layouts/Footer'
+import Header from '@components/Header'
+import Footer from '@components/layouts/Footer'
 export default function PublicLayout({
   children,
 }: Readonly<{

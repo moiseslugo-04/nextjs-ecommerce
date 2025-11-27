@@ -1,106 +1,80 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { generateToken, verifyToken } from './lib/utils/token'
-import 'dotenv'
-import { refreshTokenRepository } from './lib/repositories/RefreshTokenRepository'
+import { verifyAccessToken } from '@lib/features/jwt/jwt.service'
+import {
+  isPrivateRoute,
+  isAuthRoute,
+  isAdminRoute,
+} from './lib/utils/server.utils'
+import { refreshSession } from './lib/features/auth/refresh-token.action'
+import {
+  deleteManyCookies,
+  getCookies,
+  setCookies,
+} from './lib/services/cookiesServices'
+interface Payload {
+  userId: string
+  role: string
+  email: string
+}
+export function redirectTo(url: URL) {
+  return NextResponse.redirect(url)
+}
+export function userHeaders(payload: Payload) {
+  return {
+    'X-user-id': payload.userId,
+    'X-user-role': payload.role,
+    'X-user-email': payload.email,
+  }
+}
+export function clearSession(res: NextResponse) {
+  return deleteManyCookies(res, [
+    'access_token',
+    'refresh_token',
+    'is_authenticated',
+  ])
+}
+export function setHeaders(
+  response: NextResponse,
+  headers: Record<string, string>
+) {
+  for (const key in headers) {
+    response.headers.set(key, headers[key])
+  }
+}
+export async function proxy(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+  const accessToken = await getCookies('access_token')
+  const response = NextResponse.next()
 
-const protectedRoutes = ['/dashboard', '/profile', '/payment', '/orders']
-// const authRoutes = ['/auth/login', '/auth/register']
+  const loginUrl = new URL('/auth', request.url)
+  loginUrl.searchParams.set('callback', request.nextUrl.toString())
 
-export async function proxy(req: NextRequest) {
-  const pathname = req.nextUrl.pathname
-  const isProtectedRoute = checkProtectedRoute(pathname)
-  //  const isAuthRoute = checkAuthRoute(pathname)
-
-  // If it's not a protected route, continue.
-  if (!isProtectedRoute) {
-    return NextResponse.next()
+  if (isPrivateRoute(pathname) && !accessToken) {
+    return refreshSession(response, request, loginUrl)
   }
 
-  const accessToken = req.cookies.get('access_token')?.value
-  const refreshToken = req.cookies.get('refresh_token')?.value
-
-  // Caso 1: Access token válido
   if (accessToken) {
     try {
-      const payload = verifyToken(accessToken)
+      const payload = verifyAccessToken(accessToken)
+      if (isAdminRoute(pathname) && payload.role !== 'ADMIN') {
+        console.log('rund')
+        const redirect = new URL('/', request.url)
+        redirect.searchParams.set('error', 'no-admin')
+        return redirectTo(redirect)
+      }
+      // If user is already logged and tries to access /auth
+      if (isAuthRoute(pathname)) {
+        const redirectPath = payload.role === 'ADMIN' ? '/dashboard' : '/'
+        return redirectTo(new URL(redirectPath, request.url))
+      }
 
-      // Agregar headers con info del usuario
-      const headers = new Headers(req.headers)
-      headers.set('x-user-id', payload.userId.toString())
-      headers.set('x-user-role', payload.role)
-
-      return NextResponse.next({ headers })
-    } catch (error) {
-      console.log(error)
-      console.log('Access token expired, trying to renew...')
-      // Continue to the refresh token case
+      setHeaders(response, userHeaders(payload))
+      setCookies({ response, name: 'user-role', value: payload.role })
+      return response
+    } catch {
+      return refreshSession(response, request, loginUrl)
     }
   }
 
-  // Refresh valid token
-  if (refreshToken) {
-    try {
-      const storedToken = await refreshTokenRepository.finByToken(refreshToken)
-
-      if (!storedToken) {
-        throw new Error('Refresh token not found')
-      }
-
-      if (storedToken.expiresAt < new Date()) {
-        await refreshTokenRepository.deleteById(storedToken.id)
-        throw new Error('Refresh token expired')
-      }
-
-      // Generate new access token
-      const newAccessToken = generateToken({
-        id: storedToken.userId,
-        email: storedToken.user.email,
-        role: storedToken.user.role,
-      })
-
-      //Create response
-      const headers = new Headers(req.headers)
-      headers.set('x-user-id', storedToken.userId.toString())
-      headers.set('x-user-role', storedToken.user.role)
-
-      const response = NextResponse.next({ headers })
-
-      //Set new access token
-      response.cookies.set('access_token', newAccessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 60 * 60, // 1 hora
-        path: '/',
-      })
-
-      return response
-    } catch (error) {
-      console.log(error)
-      console.log('Refresh token invalid, redirecting to login')
-      // Clear cookies and redirect
-      const response = NextResponse.redirect(new URL('/auth/login', req.url))
-      response.cookies.delete('access_token')
-      response.cookies.delete('refresh_token')
-      response.cookies.delete('is_authenticated')
-      return response
-    }
-  }
-
-  // Case 3: No valid tokens - redirect to login
-  const loginUrl = new URL('/auth/login', req.url)
-  loginUrl.searchParams.set('callbackUrl', req.url)
-  return NextResponse.redirect(loginUrl)
-}
-
-function checkProtectedRoute(pathname: string): boolean {
-  return protectedRoutes.some((route) => pathname.startsWith(route))
-}
-
-/* function checkAuthRoute(pathname: string): boolean {
-  return authRoutes.some((route) => pathname.startsWith(route))
-} */
-
-export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|.*\\.png$).*)'],
+  return response // for non private routes
 }

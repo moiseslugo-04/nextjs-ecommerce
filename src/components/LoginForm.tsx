@@ -1,11 +1,12 @@
 import { ArrowRight } from 'lucide-react'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card'
 import { FieldGroup } from '@components/ui/field'
 import { useLogin } from '@/hooks/useLogin'
 import { Controller } from 'react-hook-form'
-import { Button } from '@/components/ui/button'
-import { FieldControl } from '@/components/FieldControl'
+import { Button } from '@components/ui/button'
+import { FieldControl } from '@components/FieldControl'
 import { PasswordInput } from './PasswordInput'
+import Link from 'next/link'
 interface LoginFormProps {
   changeStep: () => void
   email: string
@@ -67,16 +68,24 @@ export function LoginForm({ changeStep, email }: LoginFormProps) {
             )}
           </Button>
 
-          <p className='text-center text-sm text-neutral-600'>
-            Don’t have an account?{' '}
-            <button
-              type='button'
-              className='text-gechis-gold hover:underline font-medium'
-              onClick={changeStep}
+          <div className='flex flex-col justify-center items-center'>
+            <p className='text-center text-sm text-neutral-600'>
+              Don’t have an account?{' '}
+              <button
+                type='button'
+                className='text-gechis-gold hover:underline font-medium'
+                onClick={changeStep}
+              >
+                Sign up
+              </button>
+            </p>
+            <Link
+              href={'/verify/reset-password'}
+              className='text-center text-sm underline text-blue-700'
             >
-              Sign up
-            </button>
-          </p>
+              Forget my password
+            </Link>
+          </div>
         </CardFooter>
       </form>
     </Card>

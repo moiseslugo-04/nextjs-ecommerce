@@ -1,5 +1,5 @@
 'use client'
-import { ProductCardSkeleton } from '@/components/skeletons/ProductCardSkeleton'
+import { ProductCardSkeleton } from '@components/skeletons/ProductCardSkeleton'
 
 export default function ProductListSkeleton() {
   return (

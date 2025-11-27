@@ -1,5 +1,5 @@
 import { ShoppingBag, Shirt, Sparkles } from 'lucide-react'
-import { DepartmentCard } from '@/components/DepartmentCard'
+import { DepartmentCard } from '@components/DepartmentCard'
 export default async function Home() {
   const departments = [
     {

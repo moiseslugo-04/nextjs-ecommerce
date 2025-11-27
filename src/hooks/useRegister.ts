@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
 import { RegisterSchema, registerSchema } from '@/schemas/user'
 import { useTransition } from 'react'
-import { registerAction } from '@/lib/actions/user/register'
+import { registerAction } from '@/lib/features/auth/register.action'
 export function useRegister(email: string) {
   const [isPending, startTransition] = useTransition()
   const [success, setSuccess] = useState(false)
@@ -12,6 +12,7 @@ export function useRegister(email: string) {
     handleSubmit,
     control,
     getValues,
+    setError,
     formState: { isSubmitting },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
@@ -26,7 +27,21 @@ export function useRegister(email: string) {
         const formData = new FormData()
         Object.entries(data).forEach(([Key, value]) => formData.set(Key, value))
         const res = await registerAction(formData)
-        if (!res.success) throw new Error(res.error?.toString())
+        if (!res.success) {
+          if (res.field && res.error) {
+            setError(
+              res.field as keyof RegisterSchema,
+              {
+                type: 'manual',
+                message: res.error.toString(),
+              },
+              { shouldFocus: true }
+            )
+          } else {
+            throw new Error(res.error?.toString())
+          }
+          return
+        }
         toast.success('user create with success')
         setSuccess(true)
       } catch (error) {
