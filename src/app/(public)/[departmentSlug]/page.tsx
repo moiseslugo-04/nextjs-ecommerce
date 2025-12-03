@@ -1,6 +1,6 @@
 import { generateBreadcrumbs } from '@lib/utils/generatedBreadcrumbs'
 import { NotFound } from '@components/NotFound'
-import { ProductServices } from '@/lib/services/productService'
+import { getAllProducts } from '@features/products/products.service'
 import type { Filters } from '@/types/product'
 import { Sparkles } from 'lucide-react'
 import { capitalizeWord } from '@lib/utils/ui/utils'
@@ -21,19 +21,18 @@ export default async function DepartmentPage({
   searchParams,
 }: DepartmentPageProps) {
   const { departmentSlug: slug } = await params
-  console.log(departments.includes(slug), 'lola')
   if (!slug || !departments.includes(slug)) return <NotFound />
   const filters = (await searchParams) as Filters
   const [breadcrumbs, data] = await Promise.all([
     generateBreadcrumbs(slug),
-    ProductServices.getAllProducts({ slug, filters }),
+    getAllProducts({ slug, filters }),
   ])
-  //grow min-h-full flex flex-col
+
   const query = filters.query?.trim()
   const { products, totalPages, totalProducts, hasNext, hasPrev, page } = data
   const hasProducts = totalProducts > 0
   return (
-    <section className='grow flex-col'>
+    <section className='grow flex-col max-w-5xl'>
       <header className='relative bg-gechis-blue text-white py-10 mb-8 rounded-b-3xl shadow-lg overflow-hidden'>
         <div className='absolute inset-0 bg-linear-to-b from-gechis-blue/80 to-gechis-blue/40 pointer-events-none' />
         <div className='container-custom relative z-10 text-center max-w-3xl mx-auto px-6'>

@@ -6,7 +6,7 @@ import { SearchResultsHeader } from '@components/SearchResultsHeader'
 import { PaginationBar } from '@components/PaginationBar'
 
 import { generateBreadcrumbs } from '@lib/utils/generatedBreadcrumbs'
-import { ProductServices } from '@/lib/services/productService'
+import { getAllProducts } from '@features/products/products.service'
 import { Filters } from '@/types/product'
 import ProductListSkeleton from '@components/skeletons/ProductListSkeleton'
 
@@ -27,7 +27,7 @@ export default async function SearchPage({
 
   const [breadcrumbs, result] = await Promise.all([
     generateBreadcrumbs(departmentSlug),
-    ProductServices.getAllProducts({
+    getAllProducts({
       slug: departmentSlug,
       filters,
     }),

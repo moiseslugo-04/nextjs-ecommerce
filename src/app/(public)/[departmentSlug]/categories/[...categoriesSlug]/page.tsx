@@ -2,7 +2,7 @@ import ProductsSkeleton from '@components/skeletons/ProductListSkeleton'
 import { generateBreadcrumbs } from '@lib/utils/generatedBreadcrumbs'
 import { Suspense } from 'react'
 import { NotFound } from '@components/NotFound'
-import { ProductServices } from '@/lib/services/productService'
+import { getAllProducts } from '@features/products/products.service'
 import { Filters } from '@/types/product'
 import { BreadCrumbs } from '@components/Breadcrumbs'
 import { PaginationBar } from '@components/PaginationBar'
@@ -23,7 +23,7 @@ export default async function CategoryPages({
   const filters = (await searchParams) as Filters
   const [breadcrumbs, data] = await Promise.all([
     generateBreadcrumbs(slug),
-    ProductServices.getAllProducts({ slug, filters }),
+    getAllProducts({ slug, filters }),
   ])
   const { products, totalPages, totalProducts, hasNext, hasPrev, page } = data
   const hasProducts = totalProducts > 0
