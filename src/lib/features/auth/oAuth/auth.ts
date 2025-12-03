@@ -22,9 +22,4 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return session
     },
   },
-  events: {
-    async createUser({ user }) {
-      user.emailVerified = new Date()
-    },
-  },
 })

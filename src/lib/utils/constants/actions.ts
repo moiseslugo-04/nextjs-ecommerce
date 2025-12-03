@@ -4,7 +4,7 @@ export const ACTION_MESSAGES = {
   CREATE_ACCOUNT: {
     title: "You don't have an account",
     description: 'Would you like to create one now?',
-    route: '/auth?step=email',
+    route: '/auth/identify',
   },
   SET_PASSWORD: {
     title: 'Password missing',
@@ -19,6 +19,6 @@ export const ACTION_MESSAGES = {
   LOGIN: {
     title: 'Account found',
     description: 'Continue to login.',
-    route: '/auth?step=login',
+    route: '/auth/login',
   },
 } as const

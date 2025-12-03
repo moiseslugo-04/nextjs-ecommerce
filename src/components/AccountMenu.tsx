@@ -15,7 +15,7 @@ import { Button } from '@components/ui/button'
 import { useSession } from '@features/auth/hook/useSession'
 import { useLogout } from '@/lib/features/auth/hook/useLogout'
 export function AccountMenu() {
-  const { status: isLoading, data: session } = useSession()
+  const { data: session } = useSession()
   const { closeSession, isPending } = useLogout()
   const isAdmin = session?.payload.role === 'ADMIN'
   const isLoggedIn = session?.payload.id ? true : false
@@ -48,13 +48,13 @@ export function AccountMenu() {
         <DropdownMenuLabel>
           {isLoggedIn ? (
             <Button
-              className='cursor-pointer text-red-300 hover:text-red-500 ease-in'
+              className='cursor-pointer text-red-300 text-start hover:text-red-500 ease-in'
               onClick={closeSession}
             >
               {isPending ? 'Closing...' : 'Logout'}
             </Button>
           ) : (
-            <Link href='/auth'>Login</Link>
+            <Link href='/auth/identify'>Login</Link>
           )}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />

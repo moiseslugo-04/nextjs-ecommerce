@@ -89,7 +89,7 @@ export async function registerUser(data: FormData) {
   const rawData = Object.fromEntries(data) as Record<string, string>
   const result = registerSchema.safeParse(rawData)
   if (!result.success)
-    return { success: false, error: result.error.issues.flat() }
+    return { success: false, error: 'invalid data', code: 'INVALID_DATA' }
 
   // hash password and omit the confirm password
   const { confirmPassword, password, ...userData } = result.data

@@ -1,56 +1,42 @@
 'use client'
-import { useState, useTransition } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useState } from 'react'
 import { emailSchema, EmailSchema } from '@/schemas/user'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { checkEmailAction } from '@/lib/features/auth/credentials/actions/emailCheck.action'
-export type Steps = 'email' | 'login' | 'register'
+import { useMutation } from '@tanstack/react-query'
+import { useRouter } from 'next/navigation'
 export function useAuth() {
-  const searchParams = useSearchParams()
-  const stepParam = searchParams.get('step') as Steps | null
-  const [step, setStep] = useState<Steps>(stepParam ?? 'email')
+  const { replace } = useRouter()
+  const { isPending, mutateAsync } = useMutation({
+    mutationFn: checkEmailAction,
+    mutationKey: ['authSession'],
+  })
   const { control, handleSubmit } = useForm<EmailSchema>({
     resolver: zodResolver(emailSchema),
   })
   const [email, setEmail] = useState('')
-  const [isPending, startTransition] = useTransition()
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       setEmail(data.email)
-      startTransition(async () => {
-        const result = await checkEmailAction(data.email)
-        if (result.exists) {
-          toast.warning('Email already exists. Please login.')
-          setStep('login')
-          return
-        }
-        setStep('register')
-      })
+      const result = await mutateAsync(data.email)
+      if (result.exists) {
+        toast.warning('Email already exists. Please login.')
+        replace(`/auth/login?email=${data.email}`, { scroll: false })
+        return
+      }
+      replace(`/auth/register?email=${data.email}`, { scroll: false })
     } catch (error) {
       console.log(error, 'error in server action')
     }
   })
 
-  const setLoginStep = () => {
-    setEmail('')
-    setStep('login')
-  }
-  const setRegisterStep = () => {
-    setEmail('')
-    setStep('email')
-  }
-
   return {
-    setLoginStep,
-    setRegisterStep,
-    step,
     onSubmit,
     email,
     isPending,
-    setStep,
     control,
   }
 }

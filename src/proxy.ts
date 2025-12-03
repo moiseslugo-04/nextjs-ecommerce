@@ -55,7 +55,7 @@ export async function proxy(request: NextRequest) {
   if (!isPrivateRoute(pathname) && !isAuthRoute(pathname)) return response
 
   //URL to redirect secure never allow external callbacks
-  const loginUrl = new URL('/auth', request.url)
+  const loginUrl = new URL('/auth/login', request.url)
   let callback = request.nextUrl.pathname + request.nextUrl.search
   if (!callback.startsWith('/')) callback = '/'
   loginUrl.searchParams.set('callback', callback)
