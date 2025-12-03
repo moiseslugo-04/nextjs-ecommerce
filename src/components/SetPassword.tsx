@@ -5,27 +5,30 @@ import { Controller, useForm } from 'react-hook-form'
 import { resetPasswordSchema, ResetPasswordSchema } from '@/schemas/user'
 import { Button } from '@components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
-import Link from 'next/link'
-import { useTransition } from 'react'
 import { setPasswordAction } from '@/lib/features/auth/credentials/actions/reset-password.action'
 import { toast } from 'sonner'
+import { useMutation } from '@tanstack/react-query'
+import { redirect } from 'next/navigation'
 export function SetPassword({ userId }: { userId: string }) {
-  const [isPending, startTransition] = useTransition()
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (payload: { password: string; userId: string }) =>
+      setPasswordAction(payload.password, payload.userId),
+    mutationKey: ['reset-password'],
+  })
   const { handleSubmit, control } = useForm<ResetPasswordSchema>({
     resolver: zodResolver(resetPasswordSchema),
     mode: 'onChange',
   })
-  const onSubmit = handleSubmit((data: ResetPasswordSchema) => {
-    startTransition(async () => {
-      try {
-        const result = await setPasswordAction(data.password, userId)
-        if (result?.success) {
-          toast('Password update with success')
-        }
-      } catch (error) {
-        console.log(error, 'unexpected error')
+  const onSubmit = handleSubmit(async (data: ResetPasswordSchema) => {
+    try {
+      const result = await mutateAsync({ password: data.password, userId })
+      if (result?.success) {
+        toast.success('Password update with success')
+        redirect('/auth/login')
       }
-    })
+    } catch (error) {
+      console.log(error, 'unexpected error')
+    }
   })
   return (
     <Card className='max-w-md w-full bg-white rounded-2xl shadow-lg border border-neutral-200'>
@@ -72,12 +75,6 @@ export function SetPassword({ userId }: { userId: string }) {
           >
             {isPending ? 'Resetting...' : 'Reset password'}
           </Button>
-
-          <Link href='/auth/login' className='w-full'>
-            <Button variant='outline' className='w-full'>
-              Back to login
-            </Button>
-          </Link>
         </CardFooter>
       </form>
     </Card>

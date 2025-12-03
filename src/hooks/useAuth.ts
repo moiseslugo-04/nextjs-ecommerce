@@ -32,7 +32,6 @@ export function useAuth() {
       console.log(error, 'error in server action')
     }
   })
-
   return {
     onSubmit,
     email,

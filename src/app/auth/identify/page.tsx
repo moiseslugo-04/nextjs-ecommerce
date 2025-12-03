@@ -7,8 +7,16 @@ import { useAuth } from '@/hooks/useAuth'
 import { FieldControl } from '@/components/FieldControl'
 import { Controller } from 'react-hook-form'
 import { signIn } from 'next-auth/react'
+import { useState } from 'react'
+import { toast } from 'sonner'
 export default function IdentifyPage() {
   const { onSubmit, control, isPending } = useAuth()
+  const [googleLoading, setGoogleLoading] = useState(false)
+  const handleGoogleLogin = async () => {
+    setGoogleLoading(true)
+    await signIn('google', { redirectTo: '/' })
+    toast.success('Successful session')
+  }
   return (
     <>
       <div className='w-full max-w-4xl flex justify-between items-center px-2 pb-10  pt-5'>
@@ -68,8 +76,9 @@ export default function IdentifyPage() {
 
           {/* Google Button */}
           <Button
-            onClick={() => signIn('google', { redirectTo: '/' })}
+            onClick={handleGoogleLogin}
             variant='outline'
+            disabled={googleLoading}
             className='w-full py-6 flex items-center justify-center gap-3'
           >
             <svg width='22' height='22' viewBox='0 0 24 24' fill='none'>
@@ -90,7 +99,7 @@ export default function IdentifyPage() {
                 fill='#EA4335'
               />
             </svg>
-            Continue with Google
+            {googleLoading ? ' Loading....' : ' Continue with Google'}
           </Button>
         </CardContent>
 
