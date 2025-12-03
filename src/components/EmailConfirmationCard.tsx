@@ -111,7 +111,7 @@ export default function EmailConfirmationCard({ email, confirmUrl }: Props) {
 
         <CardFooter className='flex items-center justify-between'>
           <div className='flex items-center gap-3'>
-            <Link href={'/auth?step=login'} className='text-blue-500'>
+            <Link href={'/auth/login'} className='text-blue-500'>
               {'<-'} Back to login
             </Link>
           </div>

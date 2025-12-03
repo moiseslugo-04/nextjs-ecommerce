@@ -5,9 +5,12 @@ import { loginSchema, LoginSchema } from '@/schemas/user'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { loginAction } from '@/lib/features/auth/credentials/actions/login.action'
 import { ACTION_MESSAGES } from '@/lib/utils/constants/actions'
-import { useTransition } from 'react'
+import { useMutation } from '@tanstack/react-query'
 export function useLogin(email: string) {
-  const [isPending, startTransition] = useTransition()
+  const { mutateAsync, isPending } = useMutation({
+    mutationKey: ['login'],
+    mutationFn: loginAction,
+  })
   const params = useSearchParams()
   const { replace, refresh } = useRouter()
   const { handleSubmit, control } = useForm<LoginSchema>({
@@ -18,37 +21,36 @@ export function useLogin(email: string) {
     },
   })
   const onSubmit = handleSubmit(async (data: LoginSchema) => {
-    startTransition(async () => {
-      try {
-        const formData = new FormData()
-        Object.entries(data).forEach(([k, v]) => formData.set(k, v))
-        const res = await loginAction(formData)
-        if (!res.success) {
-          const action = res.action && ACTION_MESSAGES[res.action]
+    try {
+      //transform the data into formData Obj
+      const formData = new FormData()
+      Object.entries(data).forEach(([k, v]) => formData.set(k, v))
+      const res = await mutateAsync(formData)
 
-          toast.error(res.error, {
-            description: action?.description,
-            action: action
-              ? {
-                  label: action.title,
-                  onClick: () => {
-                    replace(action.route, { scroll: false })
-                  },
-                }
-              : undefined,
-          })
-          return
-        }
-        toast.success('Login successful')
-        const callback = params.get('callback')
-        const safe = callback?.startsWith('/') ? callback : '/'
-        refresh()
-        replace(safe)
-      } catch (error) {
-        console.log(error, 'server error')
-        toast.error('Unexpected error')
+      if (!res.success) {
+        const action = res.action && ACTION_MESSAGES[res.action]
+        toast.error(res.error, {
+          description: action?.description,
+          action: action
+            ? {
+                label: action.title,
+                onClick: () => {
+                  replace(action.route, { scroll: false })
+                },
+              }
+            : undefined,
+        })
+        return
       }
-    })
+      toast.success('Login successful')
+      const callback = params.get('callback')
+      const safe = callback?.startsWith('/') ? callback : '/'
+      refresh()
+      replace(safe)
+    } catch (error) {
+      console.log(error, 'server error')
+      toast.error('Unexpected error')
+    }
   })
 
   return {

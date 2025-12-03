@@ -13,7 +13,7 @@ interface EmailOptions {
 
 async function sendEmail({ to, subject, react }: EmailOptions) {
   await resend.emails.send({
-    from: 'Gechis <onboarding@resend.dev>',
+    from: 'Gechis <onboarding@gechis.com>',
     to,
     subject,
     react,
