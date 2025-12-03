@@ -24,7 +24,7 @@ export default async function VerifyEmailPage({
         </h1>
         <p className='mt-2 text-gray-700'>You can now log in.</p>
 
-        <RedirectWithCountdown to='/auth?step=login' seconds={5} />
+        <RedirectWithCountdown to='/auth/login' seconds={5} />
       </div>
     </section>
   )

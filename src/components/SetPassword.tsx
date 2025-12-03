@@ -73,7 +73,7 @@ export function SetPassword({ userId }: { userId: string }) {
             {isPending ? 'Resetting...' : 'Reset password'}
           </Button>
 
-          <Link href='/auth' className='w-full'>
+          <Link href='/auth/login' className='w-full'>
             <Button variant='outline' className='w-full'>
               Back to login
             </Button>
