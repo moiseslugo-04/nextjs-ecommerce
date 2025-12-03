@@ -7,17 +7,12 @@ import { Button } from '@components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { setPasswordAction } from '@/lib/features/auth/credentials/actions/reset-password.action'
 import { toast } from 'sonner'
-import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import { redirect } from 'next/navigation'
 export function SetPassword({ userId }: { userId: string }) {
   const { replace } = useRouter()
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: { password: string; userId: string }) =>
-      setPasswordAction(payload.password, payload.userId),
-    mutationKey: ['reset-password'],
-  })
+
   const { mutateAsync, isPending } = useMutation({
     mutationFn: (payload: { password: string; userId: string }) =>
       setPasswordAction(payload.password, payload.userId),
@@ -33,16 +28,6 @@ export function SetPassword({ userId }: { userId: string }) {
       if (result?.success) {
         toast.success('Password update with success')
         replace('/auth/login')
-      }
-    } catch (error) {
-      console.log(error, 'unexpected error')
-    }
-  const onSubmit = handleSubmit(async (data: ResetPasswordSchema) => {
-    try {
-      const result = await mutateAsync({ password: data.password, userId })
-      if (result?.success) {
-        toast.success('Password update with success')
-        redirect('/auth/login')
       }
     } catch (error) {
       console.log(error, 'unexpected error')
