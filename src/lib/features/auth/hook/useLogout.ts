@@ -12,7 +12,7 @@ export function useLogout() {
     startTransition(async () => {
       await logout()
       toast('Session closed')
-      replace('/auth')
+      replace('/auth/login')
     })
   }
   return { closeSession, isPending }

@@ -72,7 +72,7 @@ export function LoginForm({ email }: { email: string }) {
             </Link>
           </p>
           <Link
-            href={'/verify/reset-password'}
+            href={'/auth/verify/reset-password'}
             className='text-center text-sm underline text-blue-700'
           >
             Forget my password
