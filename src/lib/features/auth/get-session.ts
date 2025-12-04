@@ -21,14 +21,13 @@ export async function getSession() {
 
   //Get token from cookies
   const cookiesStore = await cookies()
-  const token = cookiesStore.get('access_token')?.value
+  const accessToken = cookiesStore.get('access_token')?.value
 
   // if there's not cookie return null
-  if (!token) return null // => not session
-
+  if (!accessToken) return null // => not session
   try {
     //validate token and return payload and provider
-    const { id, email, role } = verifyAccessToken(token)
+    const { id, email, role } = verifyAccessToken(accessToken)
     return { provider: 'credentials', payload: { id, email, role } }
   } catch {
     // invalid or expired accessToken

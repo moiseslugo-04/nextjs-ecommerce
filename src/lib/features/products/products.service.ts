@@ -95,9 +95,7 @@ function buildFilterConditions(
   //Filter by category
   const category = filters.category?.trim()
   if (category) {
-    conditions.push({
-      category: { name: { contains: category, mode: 'insensitive' } },
-    })
+    conditions.push({ category: { slug: category } }) // just match with with categories slug
   }
   //others Filter if is necessary
 

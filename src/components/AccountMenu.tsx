@@ -19,6 +19,7 @@ export function AccountMenu() {
   const { closeSession, isPending } = useLogout()
   const isAdmin = session?.payload.role === 'ADMIN'
   const isLoggedIn = session?.payload.id ? true : false
+
   const [open, setOpen] = useState(false)
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>

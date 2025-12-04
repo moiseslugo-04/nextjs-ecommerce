@@ -6,12 +6,7 @@ import {
   isAdminRoute,
 } from './lib/utils/server.utils'
 import { refreshSession } from './lib/features/auth/credentials/actions/refresh-token.action'
-import {
-  deleteManyCookies,
-  getCookies,
-  setCookies,
-} from './lib/services/cookiesServices'
-import { headers } from 'next/headers'
+import { deleteManyCookies } from './lib/services/cookiesServices'
 
 interface Payload {
   id: string
@@ -23,13 +18,6 @@ export function redirectTo(url: URL) {
   return NextResponse.redirect(url)
 }
 
-export function userHeaders(payload: Payload) {
-  return {
-    'X-user-id': payload.id,
-    'X-user-role': payload.role,
-  }
-}
-
 export function clearSession(res: NextResponse) {
   return deleteManyCookies(res, [
     'access_token',
@@ -37,6 +25,13 @@ export function clearSession(res: NextResponse) {
     'refresh_token_jti',
     'is_authenticated',
   ])
+}
+
+export function userHeaders(payload: Payload) {
+  return {
+    'X-user-id': payload.id,
+    'X-user-role': payload.role,
+  }
 }
 
 export function setHeaders(
@@ -52,7 +47,7 @@ export async function proxy(request: NextRequest) {
   const accessToken = request.cookies.get('access_token')?.value
   const pathname = request.nextUrl.pathname
 
-  if (!isPrivateRoute(pathname) && !isAuthRoute(pathname)) return response
+  // if (!isPrivateRoute(pathname) && !isAuthRoute(pathname)) return response
 
   //URL to redirect secure never allow external callbacks
   const loginUrl = new URL('/auth/login', request.url)
@@ -61,24 +56,31 @@ export async function proxy(request: NextRequest) {
   loginUrl.searchParams.set('callback', callback)
   if (!accessToken) {
     const isAtAuth = isAuthRoute(pathname)
-    if (!isAtAuth) {
-      const refreshed = await refreshSession(response, request)
-      if (refreshed.ok) return refreshed.response
-      clearSession(response)
-      return redirectTo(loginUrl)
-    }
-    const refreshed = await refreshSession(response, request)
-    if (refreshed.ok && refreshed.response) {
-      const redirect = NextResponse.redirect(new URL('/', request.url))
+    const isPrivate = isPrivateRoute(pathname)
+    const shouldTryRefresh = isPrivate || pathname === '/'
 
-      refreshed.response.cookies.getAll().forEach((cookie) => {
-        redirect.cookies.set(cookie)
-      })
-      return redirect
+    let refreshed
+    if (shouldTryRefresh) refreshed = await refreshSession(response, request)
+    console.log(refreshed)
+    // //Only force login if the route is private
+    if (isPrivate && !isAtAuth) {
+      if (refreshed?.ok) return refreshed.response
+      return clearSession(redirectTo(loginUrl))
+    }
+
+    //If I'm in /auth redirect to home
+    if (isAtAuth) {
+      if (refreshed?.ok && refreshed.response) {
+        const redirect = NextResponse.redirect(new URL('/', request.url))
+        refreshed.response.cookies.getAll().forEach((cookie) => {
+          redirect.cookies.set(cookie)
+        })
+        return redirect
+      }
     }
     return response
   }
-
+  // Handle global session
   try {
     const payload = verifyAccessToken(accessToken)
     const expiresIn = payload.exp - Math.floor(Date.now() / 1000)
@@ -86,8 +88,8 @@ export async function proxy(request: NextRequest) {
     if (expiresIn < 3 * 60) {
       const refreshed = await refreshSession(response, request)
       if (refreshed.ok) return refreshed.response
-      clearSession(response)
-      return redirectTo(loginUrl)
+
+      return clearSession(redirectTo(loginUrl))
     }
 
     // Admin routes
@@ -108,7 +110,6 @@ export async function proxy(request: NextRequest) {
 
     if (refreshed.ok) return refreshed.response
 
-    clearSession(response)
-    return redirectTo(loginUrl)
+    return clearSession(redirectTo(loginUrl))
   }
 }

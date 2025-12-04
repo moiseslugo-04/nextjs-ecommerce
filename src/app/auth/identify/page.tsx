@@ -8,14 +8,12 @@ import { FieldControl } from '@/components/FieldControl'
 import { Controller } from 'react-hook-form'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'
-import { toast } from 'sonner'
 export default function IdentifyPage() {
   const { onSubmit, control, isPending } = useAuth()
   const [googleLoading, setGoogleLoading] = useState(false)
   const handleGoogleLogin = async () => {
     setGoogleLoading(true)
     await signIn('google', { redirectTo: '/' })
-    toast.success('Successful session')
   }
   return (
     <>
