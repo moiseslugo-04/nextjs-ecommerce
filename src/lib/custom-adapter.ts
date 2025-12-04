@@ -8,6 +8,7 @@ export function CustomAdapter(p = prisma) {
   return {
     ...original,
     async createUser(data: AdapterUser) {
+      console.log(data, 'server adapter')
       if (!original.createUser) throw new Error('Adapter missing createUser')
       return original.createUser({
         ...data,

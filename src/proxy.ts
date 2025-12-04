@@ -54,6 +54,7 @@ export async function proxy(request: NextRequest) {
   let callback = request.nextUrl.pathname + request.nextUrl.search
   if (!callback.startsWith('/')) callback = '/'
   loginUrl.searchParams.set('callback', callback)
+
   if (!accessToken) {
     const isAtAuth = isAuthRoute(pathname)
     const isPrivate = isPrivateRoute(pathname)
@@ -61,7 +62,7 @@ export async function proxy(request: NextRequest) {
 
     let refreshed
     if (shouldTryRefresh) refreshed = await refreshSession(response, request)
-    
+
     // //Only force login if the route is private
     if (isPrivate && !isAtAuth) {
       if (refreshed?.ok) return refreshed.response
