@@ -61,7 +61,7 @@ export async function proxy(request: NextRequest) {
 
     let refreshed
     if (shouldTryRefresh) refreshed = await refreshSession(response, request)
-    console.log(refreshed)
+    
     // //Only force login if the route is private
     if (isPrivate && !isAtAuth) {
       if (refreshed?.ok) return refreshed.response
