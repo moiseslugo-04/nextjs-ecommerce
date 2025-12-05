@@ -7,7 +7,7 @@ import {
 } from './lib/utils/server.utils'
 import { refreshSession } from './lib/features/auth/credentials/actions/refresh-token.action'
 import { deleteManyCookies } from './lib/services/cookiesServices'
-import { auth } from './lib/features/auth/oAuth/auth'
+import { auth } from '@features/auth/oAuth/auth'
 
 interface Payload {
   id: string
