@@ -5,9 +5,9 @@ import {
   isAuthRoute,
   isAdminRoute,
 } from './lib/utils/server.utils'
-import { refreshSession } from './lib/features/auth/credentials/actions/refresh-token.action'
-import { deleteManyCookies } from './lib/services/cookiesServices'
-
+import { refreshSession } from '@features/auth/credentials/actions/refresh-token.action'
+import { deleteManyCookies } from '@lib/services/cookiesServices'
+import { auth } from '@features/auth/oAuth/auth'
 interface Payload {
   id: string
   role: string
@@ -42,75 +42,88 @@ export function setHeaders(
     response.headers.set(key, headers[key])
   }
 }
-export async function proxy(request: NextRequest) {
-  const response = NextResponse.next()
-  const accessToken = request.cookies.get('access_token')?.value
+ const response = NextResponse.next()
   const pathname = request.nextUrl.pathname
+  const accessToken = request.cookies.get('access_token')?.value
 
-  // if (!isPrivateRoute(pathname) && !isAuthRoute(pathname)) return response
+  if (
+    pathname.startsWith('/_next') ||
+    pathname.startsWith('/api') ||
+    pathname.includes('.')
+  ) {
+    return response
+  }
 
-  //URL to redirect secure never allow external callbacks
   const loginUrl = new URL('/auth/login', request.url)
-  let callback = request.nextUrl.pathname + request.nextUrl.search
+  let callback = pathname + request.nextUrl.search
   if (!callback.startsWith('/')) callback = '/'
   loginUrl.searchParams.set('callback', callback)
 
-  if (!accessToken) {
-    const isAtAuth = isAuthRoute(pathname)
-    const isPrivate = isPrivateRoute(pathname)
-    const shouldTryRefresh = isPrivate || pathname === '/'
+  let payload: Payload | null = null
 
-    let refreshed
-    if (shouldTryRefresh) refreshed = await refreshSession(response, request)
+  //Validate session using manual credentials (JWT)
+  if (accessToken) {
+    try {
+      const decoded = verifyAccessToken(accessToken)
 
-    // //Only force login if the route is private
-    if (isPrivate && !isAtAuth) {
+      const expiresIn = decoded.exp - Math.floor(Date.now() / 1000)
+      // Refresh token 3 minutes before expiration
+      if (expiresIn < 3 * 60) {
+        const refreshed = await refreshSession(response, request)
+        if (refreshed?.ok) return refreshed.response
+        return clearSession(redirectTo(loginUrl))
+      }
+
+      payload = {
+        id: decoded.id,
+        role: decoded.role,
+        email: decoded.email,
+      }
+    } catch {
+       // Token is invalid → try refresh
+      const refreshed = await refreshSession(response, request)
       if (refreshed?.ok) return refreshed.response
       return clearSession(redirectTo(loginUrl))
     }
+  }
 
-    //If I'm in /auth redirect to home
-    if (isAtAuth) {
-      if (refreshed?.ok && refreshed.response) {
-        const redirect = NextResponse.redirect(new URL('/', request.url))
-        refreshed.response.cookies.getAll().forEach((cookie) => {
-          redirect.cookies.set(cookie)
-        })
-        return redirect
+  // If no manual session, check OAuth session (Google / NextAuth)
+  if (!payload) {
+    const session = await auth()
+    if (session?.user) {
+      payload = {
+        id: session.user.id,
+        role: session.user.role,
+        email: session.user.email ?? '',
       }
     }
-    return response
   }
-  // Handle global session
-  try {
-    const payload = verifyAccessToken(accessToken)
-    const expiresIn = payload.exp - Math.floor(Date.now() / 1000)
-    // Refresh 3 minutes before expiry
-    if (expiresIn < 3 * 60) {
-      const refreshed = await refreshSession(response, request)
-      if (refreshed.ok) return refreshed.response
 
+  //If no session exists, protect private routes
+  if (!payload) {
+    const isPrivate = isPrivateRoute(pathname)
+    const isAtAuth = isAuthRoute(pathname)
+
+    if (isPrivate && !isAtAuth) {
       return clearSession(redirectTo(loginUrl))
     }
 
-    // Admin routes
-    if (isAdminRoute(pathname) && payload.role !== 'ADMIN') {
-      const redirect = new URL('/', request.url)
-      redirect.searchParams.set('error', 'no-admin')
-      return redirectTo(redirect)
-    }
-
-    // Prevent logged users from accessing /auth
-    if (isAuthRoute(pathname)) return redirectTo(new URL('/', request.url))
-
-    // Set user headers
-    setHeaders(response, userHeaders(payload))
     return response
-  } catch {
-    const refreshed = await refreshSession(response, request)
-
-    if (refreshed.ok) return refreshed.response
-
-    return clearSession(redirectTo(loginUrl))
   }
-}
+
+  // Admin route protection
+  if (isAdminRoute(pathname) && payload.role !== 'ADMIN') {
+    const redirect = new URL('/', request.url)
+    redirect.searchParams.set('error', 'no-admin')
+    return redirectTo(redirect)
+  }
+
+  //Prevent authenticated users from accessing auth routes
+  if (isAuthRoute(pathname)) {
+    return redirectTo(new URL('/', request.url))
+  }
+
+  // Inject global user headers
+  setHeaders(response, userHeaders(payload))
+
+  return response
