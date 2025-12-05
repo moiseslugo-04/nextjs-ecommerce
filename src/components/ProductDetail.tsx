@@ -1,4 +1,4 @@
-import { SerializedProduct } from '@/types/product'
+import { SerializedProduct } from '@/lib/features/products/product.types'
 import Image from 'next/image'
 import Link from 'next/link'
 

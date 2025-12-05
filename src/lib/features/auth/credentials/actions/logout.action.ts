@@ -1,6 +1,6 @@
 'use server'
 import { cookies } from 'next/headers'
-import { revokeRefreshToken } from '@features/refreshToken/refresh-token.repository'
+import { revokeRefreshToken } from '@/lib/features/auth/repository/refresh-token.repository'
 export async function logoutAction() {
   const cookiesStore = await cookies()
   const refreshTokenJti = cookiesStore.get('refresh_token_jti')?.value

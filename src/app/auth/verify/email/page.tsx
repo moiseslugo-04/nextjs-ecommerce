@@ -1,4 +1,4 @@
-import { validateVerificationToken } from '@features/verificationToken/verification-token.service'
+import { validateVerificationToken } from '@/lib/features/auth/services/verification-token.service'
 import { updateVerifiedEmail } from '@features/users/user.repository'
 import RedirectWithCountdown from '@/components/RedirectWithCountdown'
 import InvalidTokenCard from '@/components/InvalidTokenCard'

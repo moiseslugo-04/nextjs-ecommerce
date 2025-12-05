@@ -1,9 +1,9 @@
 import { setCookies } from '@lib/services/cookiesServices'
-import { createAccessToken } from '@lib/features/jwt/jwt.service'
+import { createAccessToken } from '@features/auth/services/jwt.service'
 import { NextRequest, NextResponse } from 'next/server'
 import { setHeaders, userHeaders } from '@/proxy'
-import { validateRefreshToken } from '@/lib/features/refreshToken/refresh-token.service'
-import { findUserById } from '@/lib/features/users/user.repository'
+import { validateRefreshToken } from '@features/auth/services/refresh-token.service'
+import { findUserById } from '@features/users/user.repository'
 export async function refreshSession(
   response: NextResponse,
   request: NextRequest

@@ -5,6 +5,7 @@ export type ProductWithRelations = Prisma.ProductGetPayload<{
 
 export type SerializedProduct = Omit<ProductWithRelations, 'price'> & {
   price: number
+  quantity?: number
 }
 export enum ProductTypes {
   CATEGORY = 'category',

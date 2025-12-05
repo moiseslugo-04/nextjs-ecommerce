@@ -2,7 +2,7 @@
 import { ArrowRight } from 'lucide-react'
 import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card'
 import { FieldGroup } from '@components/ui/field'
-import { useLogin } from '@/hooks/useLogin'
+import { useLogin } from '@/lib/features/auth/client/hooks/useLogin'
 import { Controller } from 'react-hook-form'
 import { Button } from '@components/ui/button'
 import { FieldControl } from '@components/FieldControl'

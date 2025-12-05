@@ -3,7 +3,7 @@ import {
   findVerificationTokenByToken,
   deleteVerificationTokenByToken,
   deleteExistingTokes,
-} from '@lib/features/verificationToken/verification-token-repository'
+} from '@/lib/features/auth/repository/verification-token-repository'
 import { generatorRandomToken } from '@lib/utils/tokenGenerator'
 interface CreateToken {
   type: 'email_verification' | 'reset_password' | 'set_password'

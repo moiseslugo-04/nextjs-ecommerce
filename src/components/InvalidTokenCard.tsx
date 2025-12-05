@@ -1,12 +1,12 @@
 'use client'
 
-import { emailSchema, EmailSchema } from '@/schemas/user'
+import { emailSchema, EmailSchema } from '@/lib/features/users/user'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { FieldControl } from './FieldControl'
 import { Button } from '@components/ui/button'
 import { useTransition, useState } from 'react'
-import { VerificationTokenTypes } from '@/lib/features/userVerificationServices/user-verification.service'
+import { VerificationTokenTypes } from '@/lib/features/auth/services/verification.service'
 import { resendVerificationTokenByEmail } from '@/lib/features/auth/credentials/actions/resend-verification-token.action'
 import Link from 'next/link'
 interface InvalidCardProps {

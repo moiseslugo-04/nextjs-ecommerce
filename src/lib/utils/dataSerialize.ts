@@ -1,4 +1,7 @@
-import { ProductWithRelations, SerializedProduct } from '@/types/product'
+import {
+  ProductWithRelations,
+  SerializedProduct,
+} from '@/lib/features/products/product.types'
 
 export function serializedProduct(
   product: ProductWithRelations | null

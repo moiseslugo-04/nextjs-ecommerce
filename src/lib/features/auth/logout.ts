@@ -1,6 +1,6 @@
 'use server'
 
-import { getSession } from '@features/auth/get-session'
+import { getSession } from '@/lib/features/auth/services/get-session.service'
 import { signOut } from '@features/auth/oAuth/auth'
 import { logoutAction } from './credentials/actions/logout.action'
 

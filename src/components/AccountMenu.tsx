@@ -12,8 +12,8 @@ import {
 } from '@components/ui/dropdown-menu'
 import Link from 'next/link'
 import { Button } from '@components/ui/button'
-import { useSession } from '@features/auth/hook/useSession'
-import { useLogout } from '@/lib/features/auth/hook/useLogout'
+import { useSession } from '@features/auth/client/hooks/useSession'
+import { useLogout } from '@features/auth/client/hooks/useLogout'
 export function AccountMenu() {
   const { data: session } = useSession()
   const { closeSession, isPending } = useLogout()

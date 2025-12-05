@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { loginSchema, LoginSchema } from '@/schemas/user'
+import { loginSchema, LoginSchema } from '@features/users/user.schema'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { loginAction } from '@/lib/features/auth/credentials/actions/login.action'
 import { ACTION_MESSAGES } from '@/lib/utils/constants/actions'

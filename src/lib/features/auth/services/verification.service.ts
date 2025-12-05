@@ -1,4 +1,4 @@
-import { ERROR_MESSAGE } from '@/lib/utils/constants'
+import { ERROR_MESSAGE } from '@/lib/utils/constants/constants'
 import { ServicesResponsePromise } from '@/types'
 import {
   sendEmailResetPassword,
@@ -6,8 +6,8 @@ import {
   sendEmailVerificationEmail,
 } from '@lib/features/email/email.service'
 import { findUserByEmail, UserDTO } from '@lib/features/users/user.repository'
-import { deleteExistingTokes } from '@lib/features/verificationToken/verification-token-repository'
-import { generateVerificationToken } from '@features/verificationToken/verification-token.service'
+import { deleteExistingTokes } from '@/lib/features/auth/repository/verification-token-repository'
+import { generateVerificationToken } from '@/lib/features/auth/services/verification-token.service'
 export type VerificationTokenTypes =
   | 'email_verification'
   | 'reset_password'

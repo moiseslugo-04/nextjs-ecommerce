@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'sonner'
-import { RegisterSchema, registerSchema } from '@/schemas/user'
+import { RegisterSchema, registerSchema } from '@/lib/features/users/user'
 import { registerAction } from '@/lib/features/auth/credentials/actions/register.action'
 import { useMutation } from '@tanstack/react-query'
 export function useRegister(email: string) {

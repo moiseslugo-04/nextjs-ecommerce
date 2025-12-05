@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { emailSchema, EmailSchema } from '@/schemas/user'
+import { emailSchema, EmailSchema } from '@features/users/user.schema'
 import { toast } from 'sonner'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'

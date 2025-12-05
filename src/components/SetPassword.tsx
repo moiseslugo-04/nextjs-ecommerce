@@ -2,7 +2,10 @@
 import { Card, CardHeader, CardContent, CardFooter } from '@components/ui/card'
 import { PasswordInput } from '@components/PasswordInput'
 import { Controller, useForm } from 'react-hook-form'
-import { resetPasswordSchema, ResetPasswordSchema } from '@/schemas/user'
+import {
+  resetPasswordSchema,
+  ResetPasswordSchema,
+} from '@/lib/features/users/user'
 import { Button } from '@components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { setPasswordAction } from '@/lib/features/auth/credentials/actions/reset-password.action'

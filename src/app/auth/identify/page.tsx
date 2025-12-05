@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { Card, CardContent, CardFooter, CardHeader } from '@components/ui/card'
 import { Button } from '@components/ui/button'
-import { useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/lib/features/auth/client/hooks/useAuth'
 import { FieldControl } from '@/components/FieldControl'
 import { Controller } from 'react-hook-form'
 import { signIn } from 'next-auth/react'

@@ -3,7 +3,7 @@ import {
   findRefreshTokenByJti,
   revokeRefreshToken,
   saveRefreshToken,
-} from './refresh-token.repository'
+} from '@features/auth/repository/refresh-token.repository'
 import { v4 as uuidv4 } from 'uuid'
 import bcrypt from 'bcryptjs'
 

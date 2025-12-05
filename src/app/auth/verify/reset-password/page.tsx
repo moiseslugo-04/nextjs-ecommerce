@@ -1,4 +1,4 @@
-import { validateVerificationToken } from '@features/verificationToken/verification-token.service'
+import { validateVerificationToken } from '@/lib/features/auth/services/verification-token.service'
 import InvalidTokenCard from '@/components/InvalidTokenCard'
 import { SetPassword } from '@/components/SetPassword'
 import { Suspense } from 'react'

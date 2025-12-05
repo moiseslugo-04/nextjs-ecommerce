@@ -1,7 +1,7 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { getSession } from '@features/auth/get-session'
+import { getSession } from '@/lib/features/auth/services/get-session.service'
 
 export function useSession() {
   return useQuery({

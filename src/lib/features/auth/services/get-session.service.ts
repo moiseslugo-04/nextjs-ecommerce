@@ -1,8 +1,8 @@
 'use server'
 
-import { verifyAccessToken } from '@/lib/features/jwt/jwt.service'
+import { verifyAccessToken } from '@/lib/features/auth/services/jwt.service'
 import { cookies } from 'next/headers'
-import { auth } from './oAuth/auth'
+import { auth } from '../oAuth/auth'
 
 export async function getSession() {
   // check if has session with oAuth

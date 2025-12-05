@@ -1,5 +1,5 @@
 import { ProductCard } from './ProductCard'
-import type { SerializedProduct } from '@/types/product'
+import type { SerializedProduct } from '@/lib/features/products/product.types'
 interface ProductListProps {
   products: SerializedProduct[]
   categories?: { name: string; slug: string }[]

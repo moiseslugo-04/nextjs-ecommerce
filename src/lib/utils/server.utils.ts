@@ -1,4 +1,8 @@
-import { PRIVATE_ROUTES, AUTH_ROUTES, ADMIN_ROUTES } from '@lib/utils/constants'
+import {
+  PRIVATE_ROUTES,
+  AUTH_ROUTES,
+  ADMIN_ROUTES,
+} from '@/lib/utils/constants/constants'
 
 export function isPrivateRoute(pathname: string) {
   return PRIVATE_ROUTES.some((route) => pathname.startsWith(route))

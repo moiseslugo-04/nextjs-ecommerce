@@ -1,4 +1,7 @@
-import { Filters, SerializedProduct } from '@/types/product'
+import {
+  Filters,
+  SerializedProduct,
+} from '@/lib/features/products/product.types'
 import {
   getProductList,
   getTotalPages,

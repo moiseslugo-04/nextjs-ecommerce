@@ -7,7 +7,7 @@ import { PaginationBar } from '@components/PaginationBar'
 
 import { generateBreadcrumbs } from '@lib/utils/generatedBreadcrumbs'
 import { getAllProducts } from '@features/products/products.service'
-import { Filters } from '@/types/product'
+import { Filters } from '@/lib/features/products/product.types'
 import ProductListSkeleton from '@components/skeletons/ProductListSkeleton'
 
 interface DepartmentPageProps {

@@ -18,7 +18,6 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   ])
   if (!product) return <NotFound />
   const productSerialize = serializedProduct(product)!
-  console.log(productSerialize)
   return (
     <Suspense fallback={<ProductDetailSkeleton />}>
       <div className='flex flex-col w-full'>

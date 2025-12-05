@@ -5,7 +5,7 @@ import { FieldControl } from '@components/FieldControl'
 import { Controller } from 'react-hook-form'
 import { FieldGroup } from '@components/ui/field'
 import { Button } from '@components/ui/button'
-import { useRegister } from '@/hooks/useRegister'
+import { useRegister } from '@/lib/features/auth/client/hooks/useRegister'
 import { PasswordInput } from './PasswordInput'
 import EmailConfirmationCard from '@components/EmailConfirmationCard'
 

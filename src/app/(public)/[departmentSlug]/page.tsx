@@ -1,7 +1,7 @@
 import { generateBreadcrumbs } from '@lib/utils/generatedBreadcrumbs'
 import { NotFound } from '@components/NotFound'
 import { getAllProducts } from '@features/products/products.service'
-import type { Filters } from '@/types/product'
+import type { Filters } from '@/lib/features/products/product.types'
 import { Sparkles } from 'lucide-react'
 import { capitalizeWord } from '@lib/utils/ui/utils'
 import { BreadCrumbs } from '@components/Breadcrumbs'
@@ -56,7 +56,7 @@ export default async function DepartmentPage({
               entityName='product'
             />
           )}
-          {hasProducts && <ProductList products={products} categories={[]} />}
+          {hasProducts && <ProductList products={products} />}
         </div>
         <PaginationBar
           currentPage={page}
