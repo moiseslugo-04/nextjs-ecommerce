@@ -41,19 +41,12 @@ export function setHeaders(
   for (const key in headers) {
     response.headers.set(key, headers[key])
   }
-}
- const response = NextResponse.next()
+}export async function proxy(request: NextRequest) {
+  const response = NextResponse.next()
   const pathname = request.nextUrl.pathname
   const accessToken = request.cookies.get('access_token')?.value
 
-  if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/api') ||
-    pathname.includes('.')
-  ) {
-    return response
-  }
-
+  // Build secure login redirect with callback
   const loginUrl = new URL('/auth/login', request.url)
   let callback = pathname + request.nextUrl.search
   if (!callback.startsWith('/')) callback = '/'
@@ -65,8 +58,8 @@ export function setHeaders(
   if (accessToken) {
     try {
       const decoded = verifyAccessToken(accessToken)
-
       const expiresIn = decoded.exp - Math.floor(Date.now() / 1000)
+
       // Refresh token 3 minutes before expiration
       if (expiresIn < 3 * 60) {
         const refreshed = await refreshSession(response, request)
@@ -80,14 +73,14 @@ export function setHeaders(
         email: decoded.email,
       }
     } catch {
-       // Token is invalid → try refresh
+      // Token is invalid → try refresh
       const refreshed = await refreshSession(response, request)
       if (refreshed?.ok) return refreshed.response
       return clearSession(redirectTo(loginUrl))
     }
   }
 
-  // If no manual session, check OAuth session (Google / NextAuth)
+  //If no manual session, check OAuth session (Google / NextAuth)
   if (!payload) {
     const session = await auth()
     if (session?.user) {
@@ -111,7 +104,7 @@ export function setHeaders(
     return response
   }
 
-  // Admin route protection
+  //Admin route protection
   if (isAdminRoute(pathname) && payload.role !== 'ADMIN') {
     const redirect = new URL('/', request.url)
     redirect.searchParams.set('error', 'no-admin')
@@ -123,7 +116,9 @@ export function setHeaders(
     return redirectTo(new URL('/', request.url))
   }
 
-  // Inject global user headers
+  //Inject global user headers
   setHeaders(response, userHeaders(payload))
 
   return response
+}
+
