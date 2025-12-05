@@ -5,10 +5,9 @@ import {
   isAuthRoute,
   isAdminRoute,
 } from './lib/utils/server.utils'
-import { refreshSession } from './lib/features/auth/credentials/actions/refresh-token.action'
-import { deleteManyCookies } from './lib/services/cookiesServices'
+import { refreshSession } from '@features/auth/credentials/actions/refresh-token.action'
+import { deleteManyCookies } from '@lib/services/cookiesServices'
 import { auth } from '@features/auth/oAuth/auth'
-
 interface Payload {
   id: string
   role: string
@@ -48,14 +47,7 @@ export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const accessToken = request.cookies.get('access_token')?.value
 
-  if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/api') ||
-    pathname.includes('.')
-  ) {
-    return response
-  }
-
+  // Build secure login redirect with callback
   const loginUrl = new URL('/auth/login', request.url)
   let callback = pathname + request.nextUrl.search
   if (!callback.startsWith('/')) callback = '/'
@@ -63,13 +55,13 @@ export async function proxy(request: NextRequest) {
 
   let payload: Payload | null = null
 
-  //Token with credentials
+  //Validate session using manual credentials (JWT)
   if (accessToken) {
     try {
       const decoded = verifyAccessToken(accessToken)
-
       const expiresIn = decoded.exp - Math.floor(Date.now() / 1000)
 
+      // Refresh token 3 minutes before expiration
       if (expiresIn < 3 * 60) {
         const refreshed = await refreshSession(response, request)
         if (refreshed?.ok) return refreshed.response
@@ -82,13 +74,14 @@ export async function proxy(request: NextRequest) {
         email: decoded.email,
       }
     } catch {
+      // Token is invalid → try refresh
       const refreshed = await refreshSession(response, request)
       if (refreshed?.ok) return refreshed.response
       return clearSession(redirectTo(loginUrl))
     }
   }
 
-  // if there's not login with credentials check oAuth (google)
+  //If no manual session, check OAuth session (Google / NextAuth)
   if (!payload) {
     const session = await auth()
     if (session?.user) {
@@ -100,7 +93,7 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  //if has not session
+  //If no session exists, protect private routes
   if (!payload) {
     const isPrivate = isPrivateRoute(pathname)
     const isAtAuth = isAuthRoute(pathname)
@@ -112,19 +105,19 @@ export async function proxy(request: NextRequest) {
     return response
   }
 
-  // Check if is admin
+  //Admin route protection
   if (isAdminRoute(pathname) && payload.role !== 'ADMIN') {
     const redirect = new URL('/', request.url)
     redirect.searchParams.set('error', 'no-admin')
     return redirectTo(redirect)
   }
 
-  //if have session redirect
+  //Prevent authenticated users from accessing auth routes
   if (isAuthRoute(pathname)) {
     return redirectTo(new URL('/', request.url))
   }
 
-  // set headers
+  //Inject global user headers
   setHeaders(response, userHeaders(payload))
 
   return response
