@@ -32,20 +32,20 @@ export async function refreshSession(
       response,
       name: 'access_token',
       value: accessToken,
-      options: { path: '/', maxAge: 60 * 15 },
+      options: { path: '/', maxAge: 15 * 60},
     })
     setCookies({
       response,
       name: 'refresh_token',
       value: refresh!,
-      options: { path: '/', maxAge: 60 * 60 * 24 * 15 },
+      options: { path: '/', maxAge: 30 * 24 * 60 * 60 },
     })
 
     setCookies({
       response,
       name: 'refresh_token_jti',
       value: refreshJti!,
-      options: { path: '/', maxAge: 60 * 60 * 24 * 15 },
+      options: { path: '/', maxAge: 30 * 24 * 60 * 60 },
     })
 
     setHeaders(
