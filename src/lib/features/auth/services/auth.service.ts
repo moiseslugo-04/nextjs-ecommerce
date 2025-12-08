@@ -6,7 +6,7 @@ import {
   UserDTO,
 } from '@features/users/user.repository'
 import { ERROR_MESSAGE } from '@/lib/utils/constants/constants'
-import { generateEmailVerificationToken } from '@features/auth/services/verification.service'
+import { generateEmailVerificationToken } from '@/lib/features/auth/services/verification-token.service'
 import { Prisma } from '@prisma/client'
 import { compareHashText, hashText } from '@lib/utils/utils'
 import { generateRefreshToken } from '@features/auth/services/refresh-token.service'

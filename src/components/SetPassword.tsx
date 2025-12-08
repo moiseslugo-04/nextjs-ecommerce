@@ -5,14 +5,13 @@ import { Controller, useForm } from 'react-hook-form'
 import {
   resetPasswordSchema,
   ResetPasswordSchema,
-} from '@/lib/features/users/user'
+} from '@features/users/user.schema'
 import { Button } from '@components/ui/button'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { setPasswordAction } from '@/lib/features/auth/credentials/actions/reset-password.action'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
-import { redirect } from 'next/navigation'
 export function SetPassword({ userId }: { userId: string }) {
   const { replace } = useRouter()
 

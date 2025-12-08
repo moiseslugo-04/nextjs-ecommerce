@@ -1,5 +1,11 @@
 export const AUTH_ROUTES = ['/auth']
-export const PRIVATE_ROUTES = ['/dashboard', '/payment', '/profile', '/orders']
+export const PRIVATE_ROUTES = [
+  '/dashboard',
+  '/payment',
+  '/profile',
+  '/orders',
+  '/checkout',
+]
 export const ADMIN_ROUTES = ['/dashboard']
 export const ERROR_MESSAGE = {
   USER_NOT_FOUND: { message: 'User not Found', code: 'USER_NOT_FOUND' },

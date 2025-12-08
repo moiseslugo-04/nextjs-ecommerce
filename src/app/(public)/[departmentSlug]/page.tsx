@@ -10,7 +10,6 @@ import { PaginationBar } from '@components/PaginationBar'
 import { ProductList } from '@components/Products/ProductList'
 import { Suspense } from 'react'
 import ProductsSkeleton from '@components/skeletons/ProductListSkeleton'
-
 interface DepartmentPageProps {
   params: Promise<{ departmentSlug: string }>
   searchParams: Promise<Record<string, string>>

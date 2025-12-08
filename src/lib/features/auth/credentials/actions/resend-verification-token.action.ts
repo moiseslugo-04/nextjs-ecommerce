@@ -2,7 +2,7 @@
 import {
   resendVerificationToken,
   VerificationTokenTypes,
-} from '@/lib/features/auth/services/verification.service'
+} from '@/lib/features/auth/services/verification-token.service'
 
 export async function resendVerificationTokenByEmail(
   email: string,

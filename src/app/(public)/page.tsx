@@ -1,6 +1,7 @@
+'use client'
 import { ShoppingBag, Shirt, Sparkles } from 'lucide-react'
 import { DepartmentCard } from '@components/DepartmentCard'
-export default async function Home() {
+export default function Home() {
   const departments = [
     {
       name: 'Market',
@@ -21,7 +22,6 @@ export default async function Home() {
       href: '/beauty',
     },
   ]
-
   return (
     <section className='grow'>
       <div className='relative bg-gechis-blue text-white overflow-hidden'>

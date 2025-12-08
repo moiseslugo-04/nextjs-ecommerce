@@ -3,8 +3,16 @@
 import { verifyAccessToken } from '@/lib/features/auth/services/jwt.service'
 import { cookies } from 'next/headers'
 import { auth } from '../oAuth/auth'
-
-export async function getSession() {
+export type SessionProvider = 'google' | 'credentials'
+export type AppSession = {
+  provider: SessionProvider
+  payload: {
+    id: string
+    email: string
+    role: string
+  }
+} | null
+export async function getSession(): Promise<AppSession> {
   // check if has session with oAuth
   const session = await auth()
 
@@ -13,7 +21,7 @@ export async function getSession() {
       provider: 'google',
       payload: {
         role: session.user.role,
-        email: session.user.email,
+        email: session.user.email!,
         id: session.user.id,
       }, // or can  be more specific => google
     }
@@ -31,6 +39,7 @@ export async function getSession() {
     return { provider: 'credentials', payload: { id, email, role } }
   } catch {
     // invalid or expired accessToken
+    console.warn('Invalid or expired access token')
     return null
   }
 }
