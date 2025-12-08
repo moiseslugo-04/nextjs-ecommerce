@@ -16,14 +16,19 @@ import { CartItem } from './CartItem'
 import { useCartStore } from '@/lib/features/cart/client/useCartStore'
 import Link from 'next/link'
 import Image from 'next/image'
-
+import { useCartActions } from '@/lib/features/cart/client/hooks/useCartActions'
+import { Spinner } from '@components/ui/spinner'
 export function Cart() {
-  const { cart, totalCart } = useCartStore()
+  const { cart, totalCart, isSync } = useCartStore()
+  const actions = useCartActions()
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant='secondary' className='relative'>
+        <Button
+          variant='secondary'
+          className='relative cursor-pointer hover:bg-gechis-accent ease-in-out duration-300'
+        >
           <span className='absolute -top-1 -right-1 size-5 rounded-full bg-gechis-gold text-gechis-blue text-xs font-bold flex items-center justify-center'>
             {cart.length}
           </span>
@@ -50,16 +55,23 @@ export function Cart() {
           </div>
         </SheetHeader>
 
-        {/* ITEMS */}
-        <div className='flex flex-col gap-4 py-4 px-2 overflow-y-auto flex-1'>
-          {cart.length > 0 ? (
-            cart.map((item) => <CartItem key={item.id} item={item} />)
-          ) : (
-            <p className='text-center text-sm text-white/70'>
-              Your cart is empty
-            </p>
-          )}
-        </div>
+        {isSync ? (
+          <div className='flex items-center justify-center h-40'>
+            <Spinner />
+          </div>
+        ) : (
+          <div className='flex flex-col gap-4 py-4 px-2 overflow-y-auto flex-1'>
+            {cart.length > 0 ? (
+              cart.map((item) => (
+                <CartItem key={item.id} item={item} actions={actions} />
+              ))
+            ) : (
+              <p className='text-center text-sm text-white/70'>
+                Your cart is empty
+              </p>
+            )}
+          </div>
+        )}
 
         {/* FOOTER */}
         <SheetFooter className='pt-4 flex flex-col gap-4 bg-gechis-blue border-t border-white/10'>

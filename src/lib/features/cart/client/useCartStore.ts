@@ -9,19 +9,22 @@ type ProductFromDB = {
 }
 type CartStore = {
   cart: CartItemType[]
-  addItem: (item: SerializedProduct, isGust: boolean) => void
+  addItem: (item: CartItemType) => void
   removeItem: (id: number) => void
   totalCart: () => number
   increment: (id: number) => void
   decrement: (id: number) => void
   setCartFromDB: (products: ProductFromDB[]) => void
   clearCart: () => void
+  isSync: boolean
+  setIsSync: (isSync: boolean) => void
 }
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
       cart: [],
-      addItem: (item, isGuest) =>
+      isSync: false,
+      addItem: (item) =>
         set((state) => {
           const isInCart = state.cart.find((i) => i.id === item.id)
           if (isInCart) {
@@ -33,7 +36,7 @@ export const useCartStore = create<CartStore>()(
           }
 
           return {
-            cart: [...state.cart, { ...item, quantity: 1, isGuest }],
+            cart: [...state.cart, { ...item, quantity: 1 }],
           }
         }),
       removeItem: (id) =>
@@ -79,8 +82,8 @@ export const useCartStore = create<CartStore>()(
       clearCart: () => {
         set({ cart: [] })
       },
+      setIsSync: (isSync) => set({ isSync }),
     }),
-
     { name: 'cart_storage' }
   )
 )

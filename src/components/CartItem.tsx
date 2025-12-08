@@ -1,115 +1,31 @@
 'use client'
 
+import type { CartItemType, ActionPayload } from '@features/cart/cart.types'
 import { Plus, Minus, Trash } from 'lucide-react'
 import { Button } from './ui/button'
 import Image from 'next/image'
+
 import {
   Item,
   ItemActions,
   ItemContent,
   ItemDescription,
 } from '@components/ui/item'
-import { useCartStore } from '@/lib/features/cart/client/useCartStore'
-import type { CartItemType } from '@features/cart/cart.types'
-import { useSession } from '@/lib/features/auth/client/hooks/useSession'
-import { useMutation } from '@tanstack/react-query'
-import {
-  incrementQuantityAction,
-  decrementQuantityAction,
-  removeCartItemAction,
-} from '@/lib/features/cart/server/cart.actions'
-import { toast } from 'sonner'
-import { useState } from 'react'
 
-export function CartItem({ item }: { item: CartItemType }) {
-  const { increment, decrement, removeItem, addItem } = useCartStore()
-  const { data: session } = useSession()
-  const [pending, setPending] = useState(false)
-
-  const { mutateAsync: increaseMutation } = useMutation({
-    mutationFn: incrementQuantityAction,
-  })
-
-  const { mutateAsync: decreaseMutation } = useMutation({
-    mutationFn: decrementQuantityAction,
-  })
-
-  const { mutateAsync: removeMutation } = useMutation({
-    mutationFn: removeCartItemAction,
-  })
-
-  if (!item) return null
-
-  const handleIncrease = async () => {
-    if (pending) return
-    setPending(true)
-
-    increment(item.id)
-    toast.success(`${item.name} quantity updated`)
-
-    try {
-      if (session) {
-        const res = await increaseMutation(item.id)
-        if (!res.success) {
-          decrement(item.id)
-          toast.error('Failed to update')
-        }
-      }
-    } catch {
-      decrement(item.id)
-      toast.error('Server error')
-    } finally {
-      setPending(false)
-    }
+export function CartItem({
+  item,
+  actions,
+}: {
+  item: CartItemType
+  actions: {
+    onDecrease: (props: ActionPayload) => void
+    onIncrease: (props: ActionPayload) => void
+    onRemove: (props: CartItemType) => void
+    pendingId: number | null
   }
-
-  const handleDecrease = async () => {
-    if (pending) return
-    setPending(true)
-
-    decrement(item.id)
-    toast.success(`${item.name} quantity updated`)
-
-    try {
-      if (session) {
-        const res = await decreaseMutation(item.id)
-        if (!res.success) {
-          increment(item.id)
-          toast.error('Failed to update')
-        }
-      }
-    } catch {
-      increment(item.id)
-      toast.error('Server error')
-    } finally {
-      setPending(false)
-    }
-  }
-
-  const handleRemove = async () => {
-    if (pending) return
-    setPending(true)
-
-    const backup = item
-    removeItem(item.id)
-    toast.success(`${item.name} removed from cart`)
-
-    try {
-      if (session) {
-        const res = await removeMutation(item.id)
-        if (!res.success) {
-          addItem(backup, false)
-          toast.error('Failed to remove item')
-        }
-      }
-    } catch {
-      addItem(backup, false)
-      toast.error('Server error')
-    } finally {
-      setPending(false)
-    }
-  }
-
+}) {
+  if (!item) return
+  const { onDecrease, onIncrease, onRemove, pendingId } = actions
   return (
     <Item className='flex gap-3 rounded-xl bg-white/5 p-3 shadow-md relative'>
       {/* IMAGE */}
@@ -140,9 +56,9 @@ export function CartItem({ item }: { item: CartItemType }) {
             aria-label={`Remove ${item.name} from cart`}
             title='Remove item'
             variant='ghost'
-            onClick={handleRemove}
-            disabled={pending}
-            aria-disabled={pending}
+            onClick={() => onRemove(item)}
+            disabled={pendingId === item.id}
+            aria-disabled={pendingId === item.id}
             className='absolute top-2 right-2 hover:bg-red-500/10'
           >
             <Trash className='size-5 text-red-400' />
@@ -152,12 +68,12 @@ export function CartItem({ item }: { item: CartItemType }) {
             <Button
               size='icon'
               variant='outline'
-              aria-disabled={pending}
+              aria-disabled={pendingId === item.id}
               title='Decrease quantity'
-              onClick={handleDecrease}
+              onClick={() => onDecrease({ id: item.id, name: item.name })}
               aria-label={`Decrease quantity of ${item.name}`}
-              disabled={pending}
-              className='h-8 w-8 rounded-full cursor-pointer hover:bg-gray-700'
+              disabled={pendingId === item.id}
+              className={`h-8 w-8 rounded-full cursor-pointer hover:bg-gray-700 ${pendingId === item.id ? 'bg-red-600' : ''}`}
             >
               <Minus className='size-3' />
             </Button>
@@ -173,11 +89,11 @@ export function CartItem({ item }: { item: CartItemType }) {
             <Button
               size='icon'
               variant='outline'
-              onClick={handleIncrease}
-              disabled={pending}
+              onClick={() => onIncrease({ id: item.id, name: item.name })}
+              disabled={pendingId === item.id}
               title='Increase quantity'
               aria-label={`Increase quantity of ${item.name}`}
-              aria-disabled={pending}
+              aria-disabled={pendingId === item.id}
               className='h-8 w-8 rounded-full cursor-pointer hover:bg-gray-700'
             >
               <Plus className='size-3' />

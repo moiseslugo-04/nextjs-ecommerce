@@ -10,7 +10,6 @@ import {
   addToCart,
 } from './cart.service'
 import { getSession } from '@features/auth/services/get-session.service'
-
 async function requireUser() {
   const session = await getSession()
   if (!session?.payload) throw new Error('UNAUTHORIZED')
@@ -84,7 +83,7 @@ export async function removeCartItemAction(productId: number) {
 export async function addToCartAction(productId: number) {
   try {
     const userId = await requireUser()
-    return addToCart(userId, productId)
+    return await addToCart(userId, productId)
   } catch (error) {
     console.log(error)
     return { success: false, code: 'UNAUTHORIZED' }

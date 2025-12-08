@@ -1,3 +1,5 @@
+'use client'
+import { useCartActions } from '@/lib/features/cart/client/hooks/useCartActions'
 import { SerializedProduct } from '@/lib/features/products/product.types'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -6,6 +8,7 @@ interface ProductDetailProps {
   product: SerializedProduct
 }
 export function ProductDetails({ product }: ProductDetailProps) {
+  const { onAddToCart } = useCartActions()
   return (
     <div className='w-full px-4  py-5'>
       {/* Back Link */}
@@ -48,7 +51,10 @@ export function ProductDetails({ product }: ProductDetailProps) {
           </p>
 
           {/* Add to Cart Button */}
-          <button className='mt-6 bg-blue-600 text-white font-semibold px-8 py-4 rounded-xl hover:bg-blue-700 transition-colors shadow-md'>
+          <button
+            onClick={() => onAddToCart(product)}
+            className='mt-6 bg-blue-600 text-white font-semibold px-8 py-4 rounded-xl hover:bg-blue-700 transition-colors shadow-md'
+          >
             Add to Cart
           </button>
         </div>
