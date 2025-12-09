@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { loginAction } from '@/lib/features/auth/credentials/actions/login.action'
 import { ACTION_MESSAGES } from '@/lib/utils/constants/actions'
 import { useMutation } from '@tanstack/react-query'
-export function useLogin(email: string) {
+export function useLogin(email?: string) {
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['login'],
     mutationFn: loginAction,

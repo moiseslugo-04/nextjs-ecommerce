@@ -2,7 +2,7 @@
 
 import type { CartItemType, ActionPayload } from '@features/cart/cart.types'
 import { Plus, Minus, Trash } from 'lucide-react'
-import { Button } from './ui/button'
+import { Button } from '@components/ui/button'
 import Image from 'next/image'
 
 import {
@@ -12,10 +12,7 @@ import {
   ItemDescription,
 } from '@components/ui/item'
 
-export function CartItem({
-  item,
-  actions,
-}: {
+interface CartItemProps {
   item: CartItemType
   actions: {
     onDecrease: (props: ActionPayload) => void
@@ -23,7 +20,8 @@ export function CartItem({
     onRemove: (props: CartItemType) => void
     pendingId: number | null
   }
-}) {
+}
+export function CartItem({ item, actions }: CartItemProps) {
   if (!item) return
   const { onDecrease, onIncrease, onRemove, pendingId } = actions
   return (

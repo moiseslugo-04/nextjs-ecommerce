@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { checkEmailAction } from '@/lib/features/auth/credentials/actions/emailCheck.action'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-export function useAuth() {
+export function useIdentify() {
   const { replace } = useRouter()
   const { isPending, mutateAsync } = useMutation({
     mutationFn: checkEmailAction,

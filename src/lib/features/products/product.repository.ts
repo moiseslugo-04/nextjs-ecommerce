@@ -32,3 +32,7 @@ export async function getProductList({
 export async function getTotalPages(where: Prisma.ProductWhereInput) {
   return prisma.product.count({ where })
 }
+
+export function getAllDepartments() {
+  return prisma.department.findMany()
+}

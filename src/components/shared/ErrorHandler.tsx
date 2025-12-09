@@ -12,7 +12,6 @@ export function ErrorHandler() {
   useEffect(() => {
     const error = params.get('error')
     if (!error) return
-    // Mostrar el toast
     if (error === 'no-admin') toast.error('You do not have admin privileges')
     if (error === 'session-expired') toast.warning('Your session has expired')
 

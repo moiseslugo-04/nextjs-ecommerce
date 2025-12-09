@@ -1,8 +1,8 @@
-import Company from '@components/Footer/Company'
-import Products from '@components/Footer/Products'
-import Contact from '@components/Footer/Contact'
-import Media from '@components/Footer/Media'
-import Copyright from '@components/Footer/Copyright'
+import Company from './Company'
+import Products from './Products'
+import Contact from './Contact'
+import Media from './Media'
+import Copyright from './Copyright'
 export default function Footer() {
   return (
     <footer className='bg-gechis-blue text-white py-8 px-6 mb-0'>

@@ -1,16 +1,15 @@
 'use client'
 import { ArrowRight } from 'lucide-react'
-import { CardContent, CardFooter } from '@components/ui/card'
+import { CardContent, CardFooter, CardHeader } from '@components/ui/card'
 import { FieldControl } from '@components/FieldControl'
 import { Controller } from 'react-hook-form'
 import { FieldGroup } from '@components/ui/field'
 import { Button } from '@components/ui/button'
 import { useRegister } from '@/lib/features/auth/client/hooks/useRegister'
-import { PasswordInput } from './PasswordInput'
+import { PasswordInput } from '@components/PasswordInput'
 import EmailConfirmationCard from '@components/EmailConfirmationCard'
-
-import { cn } from '@lib/utils/ui/utils'
-import Link from 'next/link'
+import { cn } from '@lib/ui/utils'
+import { AppLink } from '@/components/shared/AppLink'
 export function RegisterForm({ email }: { email: string }) {
   const { isLoading, onSubmit, control, success } = useRegister(email)
   return (
@@ -19,6 +18,14 @@ export function RegisterForm({ email }: { email: string }) {
         <EmailConfirmationCard email={email} />
       ) : (
         <form onSubmit={onSubmit}>
+          <CardHeader className='text-center my-4'>
+            <h1 className='text-3xl font-bold tracking-tight'>
+              Create Account
+            </h1>
+            <p className='text-sm text-neutral-500 mt-1'>
+              Join the Gechis Community
+            </p>
+          </CardHeader>
           <CardContent>
             <FieldGroup>
               <Controller
@@ -101,12 +108,13 @@ export function RegisterForm({ email }: { email: string }) {
 
             <div className='text-center text-gray-600'>
               Already have an account?
-              <Link
+              <AppLink
+                variant={'link'}
                 href={'/auth/login'}
                 className='ml-2 font-medium text-gechis-gold hover:text-gechis-gold-dark'
               >
                 Login
-              </Link>
+              </AppLink>
             </div>
           </CardFooter>
         </form>

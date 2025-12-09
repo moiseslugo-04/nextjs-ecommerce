@@ -34,7 +34,7 @@ export function useDepartmentSearch() {
 
   return {
     department,
-    searchParams,
+    defaultValue: searchParams.get('query')?.toString() ?? '',
     handleSearch,
   }
 }

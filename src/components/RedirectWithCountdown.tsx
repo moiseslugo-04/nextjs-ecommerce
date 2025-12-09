@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 
 interface RedirectWithCountdownProps {
   to: string
-  seconds?: number // duración del countdown
+  seconds?: number
 }
 
 export default function RedirectWithCountdown({

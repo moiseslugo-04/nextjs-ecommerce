@@ -1,14 +1,10 @@
-import { Suspense } from 'react'
-import { BreadCrumbs } from '@components/Breadcrumbs'
 import { NotFound } from '@components/NotFound'
-import { ProductList } from '@components/Products/ProductList'
+import { ProductList } from '@components/features/products/ProductList'
 import { SearchResultsHeader } from '@components/SearchResultsHeader'
-import { PaginationBar } from '@components/PaginationBar'
-
-import { generateBreadcrumbs } from '@lib/utils/generatedBreadcrumbs'
+import { PaginationBar } from '@/components/shared/PaginationBar'
 import { getAllProducts } from '@features/products/products.service'
 import { Filters } from '@/lib/features/products/product.types'
-import ProductListSkeleton from '@components/skeletons/ProductListSkeleton'
+import { BreadcrumbGenerator } from '@/components/shared/BreadcrumbGenerator'
 
 interface DepartmentPageProps {
   params: Promise<{ departmentSlug: string }>
@@ -19,19 +15,12 @@ export default async function SearchPage({
   params,
   searchParams,
 }: DepartmentPageProps) {
-  const { departmentSlug } = await params
-  if (!departmentSlug) return <NotFound message='Invalid department.' />
+  const { departmentSlug: slug } = await params
+  if (!slug) return <NotFound message='Invalid department.' />
 
   const filters = (await searchParams) as Filters
   const query = filters.query?.trim()
-
-  const [breadcrumbs, result] = await Promise.all([
-    generateBreadcrumbs(departmentSlug),
-    getAllProducts({
-      slug: departmentSlug,
-      filters,
-    }),
-  ])
+  const result = await getAllProducts({ slug, filters })
 
   const { products, totalPages, totalProducts, hasNext, hasPrev, page } = result
   const hasProducts = totalProducts > 0
@@ -40,7 +29,7 @@ export default async function SearchPage({
     <section className='max-w-7xl py-12  w-full mx-auto space-y-6'>
       {/* Header */}
       <header className='space-y-3'>
-        <BreadCrumbs breadCrumbs={breadcrumbs} />
+        <BreadcrumbGenerator slug={slug} />
       </header>
 
       {/* Search summary */}
@@ -57,9 +46,7 @@ export default async function SearchPage({
       {/* Products or Not Found */}
       <section className='flex-1'>
         {hasProducts ? (
-          <Suspense fallback={<ProductListSkeleton />}>
-            <ProductList products={products} />
-          </Suspense>
+          <ProductList products={products} />
         ) : (
           <div className='pt-4 '>
             <NotFound message='No products match your search.' />

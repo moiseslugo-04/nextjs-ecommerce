@@ -1,4 +1,4 @@
-import Logo from '../Logo'
+import Logo from '@/components/shared/Logo'
 import { Facebook, Twitter, GithubIcon, Linkedin } from 'lucide-react'
 
 export default function Media() {

@@ -1,20 +1,18 @@
-import { generateBreadcrumbs } from '@lib/utils/generatedBreadcrumbs'
 import { NotFound } from '@components/NotFound'
 import { getAllProducts } from '@features/products/products.service'
 import type { Filters } from '@/lib/features/products/product.types'
 import { Sparkles } from 'lucide-react'
-import { capitalizeWord } from '@lib/utils/ui/utils'
-import { BreadCrumbs } from '@components/Breadcrumbs'
+import { capitalizeWord } from '@lib/ui/utils'
 import { SearchResultsHeader } from '@components/SearchResultsHeader'
-import { PaginationBar } from '@components/PaginationBar'
-import { ProductList } from '@components/Products/ProductList'
-import { Suspense } from 'react'
-import ProductsSkeleton from '@components/skeletons/ProductListSkeleton'
+import { PaginationBar } from '@components/shared/PaginationBar'
+import { ProductList } from '@components/features/products/ProductList'
+import { BreadcrumbGenerator } from '@/components/shared/BreadcrumbGenerator'
 interface DepartmentPageProps {
   params: Promise<{ departmentSlug: string }>
   searchParams: Promise<Record<string, string>>
 }
 const departments = ['market', 'clothes', 'beauty']
+
 export default async function DepartmentPage({
   params,
   searchParams,
@@ -22,11 +20,7 @@ export default async function DepartmentPage({
   const { departmentSlug: slug } = await params
   if (!slug || !departments.includes(slug)) return <NotFound />
   const filters = (await searchParams) as Filters
-  const [breadcrumbs, data] = await Promise.all([
-    generateBreadcrumbs(slug),
-    getAllProducts({ slug, filters }),
-  ])
-
+  const data = await getAllProducts({ slug, filters })
   const query = filters.query?.trim()
   const { products, totalPages, totalProducts, hasNext, hasPrev, page } = data
   const hasProducts = totalProducts > 0
@@ -45,25 +39,23 @@ export default async function DepartmentPage({
           </p>
         </div>
       </header>
-      <Suspense fallback={<ProductsSkeleton />}>
-        <div className='flex gap-3 flex-col flex-1'>
-          <BreadCrumbs breadCrumbs={breadcrumbs} />
-          {query && (
-            <SearchResultsHeader
-              searchTerm={query}
-              resultsCount={0}
-              entityName='product'
-            />
-          )}
-          {hasProducts && <ProductList products={products} />}
-        </div>
-        <PaginationBar
-          currentPage={page}
-          totalPages={totalPages}
-          hasNext={hasNext}
-          hasPrev={hasPrev}
-        />
-      </Suspense>
+      <div className='flex gap-3 flex-col flex-1'>
+        <BreadcrumbGenerator slug={slug} />
+        {query && (
+          <SearchResultsHeader
+            searchTerm={query}
+            resultsCount={0}
+            entityName='product'
+          />
+        )}
+        {hasProducts && <ProductList products={products} />}
+      </div>
+      <PaginationBar
+        currentPage={page}
+        totalPages={totalPages}
+        hasNext={hasNext}
+        hasPrev={hasPrev}
+      />
     </section>
   )
 }

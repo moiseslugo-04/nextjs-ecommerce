@@ -58,14 +58,13 @@ export const useCartStore = create<CartStore>()(
         })),
       decrement: (id) =>
         set((state) => ({
-          cart: state.cart.map((item) =>
-            item.id === id
-              ? {
-                  ...item,
-                  quantity: item.quantity! > 1 ? item.quantity - 1 : 1,
-                }
-              : item
-          ),
+          cart: state.cart
+            .map((item) => {
+              if (item.id !== id) return item
+              const newQty = (item.quantity ?? 1) - 1
+              return { ...item, quantity: newQty }
+            })
+            .filter((item) => item.quantity! > 0),
         })),
       setCartFromDB: (products) => {
         set((state) => ({

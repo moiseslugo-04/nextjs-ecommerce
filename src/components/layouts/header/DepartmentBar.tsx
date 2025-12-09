@@ -1,9 +1,8 @@
 'use client'
 
-import { cn } from '@lib/utils/ui/utils'
+import { cn } from '@lib/ui/utils'
 import Link from 'next/link'
 import { useSelectedLayoutSegment } from 'next/navigation'
-import { Suspense } from 'react'
 
 export function DepartmentBar({
   department,
