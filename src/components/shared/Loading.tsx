@@ -1,13 +1,7 @@
 import Image from 'next/image'
 import { Spinner } from '@/components/ui/spinner'
 
-export default function Loading({
-  image,
-  text,
-}: {
-  image?: boolean
-  text?: string
-}) {
+export function Loading({ image, text }: { image?: boolean; text?: string }) {
   return (
     <div className='w-screen h-screen flex flex-col items-center justify-center gap-4 bg-background'>
       <div className='flex flex-col items-center gap-2'>

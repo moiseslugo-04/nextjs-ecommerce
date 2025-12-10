@@ -54,6 +54,7 @@ export function ProductCard({ product }: ProductCardProps) {
             <AppLink
               variant={'secondary'}
               size={'sm'}
+              className='p-2'
               href={`/${product.category.department.slug}/${product.slug}`}
             >
               View Details

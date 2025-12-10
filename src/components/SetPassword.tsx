@@ -1,40 +1,11 @@
 'use client'
 import { Card, CardHeader, CardContent, CardFooter } from '@components/ui/card'
-import { PasswordInput } from '@components/PasswordInput'
-import { Controller, useForm } from 'react-hook-form'
-import {
-  resetPasswordSchema,
-  ResetPasswordSchema,
-} from '@features/users/user.schema'
+import { PasswordInput } from '@components/shared/PasswordInput'
+import { Controller } from 'react-hook-form'
 import { Button } from '@components/ui/button'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { setPasswordAction } from '@/lib/features/auth/credentials/actions/reset-password.action'
-import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
-import { useMutation } from '@tanstack/react-query'
+import { useSetPassword } from '@features/auth/client/hooks/useSetPassword'
 export function SetPassword({ userId }: { userId: string }) {
-  const { replace } = useRouter()
-
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: { password: string; userId: string }) =>
-      setPasswordAction(payload.password, payload.userId),
-    mutationKey: ['reset-password'],
-  })
-  const { handleSubmit, control } = useForm<ResetPasswordSchema>({
-    resolver: zodResolver(resetPasswordSchema),
-    mode: 'onChange',
-  })
-  const onSubmit = handleSubmit(async (data: ResetPasswordSchema) => {
-    try {
-      const result = await mutateAsync({ password: data.password, userId })
-      if (result?.success) {
-        toast.success('Password update with success')
-        replace('/auth/login')
-      }
-    } catch (error) {
-      console.log(error, 'unexpected error')
-    }
-  })
+  const { onSubmit, control, isPending } = useSetPassword({ userId })
   return (
     <Card className='max-w-md w-full bg-white rounded-2xl shadow-lg border border-neutral-200'>
       <CardHeader className='text-center my-4'>

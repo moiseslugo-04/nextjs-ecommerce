@@ -16,8 +16,7 @@ export function SearchResultsHeader({
   suggestions = [],
 }: SearchResultsHeaderProps) {
   const hasResults = resultsCount > 0
-  const entityDisplayName = resultsCount === 1 ? entityName : `${entityName}s`
-  console.log(hasResults)
+  const entityDisplayName = resultsCount === 1 ? entityName : `${entityName}`
   return (
     <header className='my-10 text-center'>
       {hasResults ? (

@@ -1,5 +1,4 @@
 'use client'
-import { useFilter } from '@/lib/hooks/useFilter'
 import {
   Pagination,
   PaginationContent,
@@ -10,41 +9,22 @@ import {
   PaginationPrevious,
 } from '@components/ui/pagination'
 import { Suspense } from 'react'
+import { usePagination } from '@/lib/features/products/filters/usePagination'
 interface PaginationProps {
   currentPage: number
   totalPages: number
   hasNext: boolean
   hasPrev: boolean
 }
-export function PaginationBar({
-  currentPage,
-  totalPages,
-  hasNext,
-  hasPrev,
-}: PaginationProps) {
-  const { updateParams } = useFilter()
-  const maxVisible = 3
-  // Ideal centered window
-  let start = currentPage - 1
-  let end = currentPage + 1
-
-  // Clamp left side
-  if (start < 1) {
-    start = 1
-    end = Math.min(maxVisible, totalPages)
-  }
-
-  // Clamp right side
-  if (end > totalPages) {
-    end = totalPages
-    start = Math.max(1, totalPages - maxVisible + 1)
-  }
-
-  const visiblePages = Array.from(
-    { length: end - start + 1 },
-    (_, i) => start + i
-  )
-
+export function PaginationBar(props: PaginationProps) {
+  const {
+    hasNext,
+    hasPrev,
+    visiblePages,
+    updateParams,
+    currentPage,
+    totalPages,
+  } = usePagination(props)
   return (
     <Suspense fallback={<p>Loading pagination...</p>}>
       <Pagination className='flex justify-center mb-4'>

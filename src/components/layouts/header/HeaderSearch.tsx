@@ -3,11 +3,11 @@ import { Search } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import { Input } from '@components/ui/input'
 import {
-  useDepartmentSearch,
-  type DepartmentType,
-} from '@/hooks/useDepartmentSearch'
+  useFilter,
+  DepartmentType,
+} from '@/lib/features/products/filters/useFilters'
 export function HeaderSearch() {
-  const { handleSearch, department, defaultValue } = useDepartmentSearch()
+  const { onSearch, defaultSearchTerm, department } = useFilter()
   if (!department) return null
   const placeholders: Record<DepartmentType, string> = {
     market: 'market,snacks, coca cola, and so on...',
@@ -18,7 +18,7 @@ export function HeaderSearch() {
   return (
     <div className='row-start-2 col-span-2 w-full max-w-lg place-self-center sm:row-auto sm:col-auto'>
       <form
-        onSubmit={handleSearch}
+        onSubmit={onSearch}
         role='search'
         className='flex items-stretch justify-center  overflow-hidden w-full '
       >
@@ -26,11 +26,10 @@ export function HeaderSearch() {
           Search for products or brands
         </label>
         <Input
-          key={department}
           id='site-search'
           type='query'
           name='query'
-          defaultValue={defaultValue}
+          defaultValue={defaultSearchTerm}
           className=' bg-white p-2  rounded-sm rounded-br-none rounded-tr-none placeholder:text-gray-400 border-none  '
           placeholder={placeholders[department ?? 'default']}
         />

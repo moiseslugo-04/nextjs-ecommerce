@@ -7,7 +7,7 @@ import { Controller } from 'react-hook-form'
 import { Button } from '@components/ui/button'
 import { FieldControl } from '@components/FieldControl'
 import Link from 'next/link'
-import { PasswordInput } from '@/components/PasswordInput'
+import { PasswordInput } from '@/components/shared/PasswordInput'
 import { AppLink } from '@/components/shared/AppLink'
 
 export function LoginForm({ email }: { email?: string }) {

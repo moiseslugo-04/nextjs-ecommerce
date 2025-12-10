@@ -24,7 +24,6 @@ export default async function SearchPage({
 
   const { products, totalPages, totalProducts, hasNext, hasPrev, page } = result
   const hasProducts = totalProducts > 0
-
   return (
     <section className='max-w-7xl py-12  w-full mx-auto space-y-6'>
       {/* Header */}
