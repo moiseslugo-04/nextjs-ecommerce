@@ -8,7 +8,7 @@ import {
 } from '@/lib/features/cart/server/cart.actions'
 import { toast } from 'sonner'
 import { useState } from 'react'
-import { useCartStore } from '@/lib/features/cart/client/useCartStore'
+import { useCartStore } from '@/lib/features/cart/client/store/useCartStore'
 import { CartItemType, ActionPayload } from '@features/cart/cart.types'
 import { SerializedProduct } from '@/lib/features/products/product.types'
 export function useCartActions({

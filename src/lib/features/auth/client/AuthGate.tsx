@@ -1,5 +1,5 @@
-import { useSession } from '@/lib/features/auth/client/hooks/useSession'
-import { useCartSync } from '@/lib/features/cart/client/hooks/useCartSync'
+import { useSession } from '@features/auth/server/session/client/useSession'
+import { useCartSync } from '@features/cart/client/useCartSync'
 import { ReactNode } from 'react'
 
 export function AuthGate({ children }: { children: ReactNode }) {

@@ -4,11 +4,11 @@ import { Card } from '@components/ui/card'
 import { SerializedProduct } from '@features/products/product.types'
 import { Sparkle } from 'lucide-react'
 import { Button } from '@components/ui/button'
-import { useCartActions } from '@features/cart/client/hooks/useCartActions'
+import { useCartActions } from '@/lib/features/cart/client/hooks/useCartActions'
 import Image from 'next/image'
 import Link from 'next/link'
 import { AppLink } from '@/components/shared/AppLink'
-import { useSession } from '@/lib/features/auth/client/hooks/useSession'
+import { useSession } from '@features/auth/server/session/client/useSession'
 interface ProductCardProps {
   product: SerializedProduct
 }

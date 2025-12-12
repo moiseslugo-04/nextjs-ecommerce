@@ -1,7 +1,7 @@
 'use client'
 import { CardContent, CardHeader } from '@components/ui/card'
 import { Button } from '@components/ui/button'
-import { FieldControl } from '@/components/FieldControl'
+import { FieldControl } from '@/components/shared/FieldControl'
 import { Controller } from 'react-hook-form'
 import { signIn } from 'next-auth/react'
 import { useState } from 'react'

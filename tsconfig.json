@@ -34,7 +34,8 @@
     ".next/types/**/*.ts",
     "src/types/**/*.d.ts",
     ".next/dev/types/**/*.ts",
-    "src/lib/features/users/user.schemats"
+    "src/lib/features/users/user.schemats",
+    "src/lib/features/profile/client/useSessionStore.ts "
   ],
   "exclude": ["node_modules"]
 }

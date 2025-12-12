@@ -12,8 +12,8 @@ import {
 } from '@components/ui/dropdown-menu'
 import Link from 'next/link'
 import { Button } from '@components/ui/button'
-import { useSession } from '@features/auth/client/hooks/useSession'
 import { useLogout } from '@features/auth/client/hooks/useLogout'
+import { useSession } from '@/lib/features/session/client/useSession'
 export function AccountMenu() {
   const { closeSession, isPending } = useLogout()
   const { data: session } = useSession()
@@ -35,10 +35,13 @@ export function AccountMenu() {
         className='bg-gechis-blue-dark text-white'
       >
         <DropdownMenuItem>
-          <Link href='/orders'>My orders</Link>
+          <Link href='/account/orders'>My orders</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href='/profile'>Profile</Link>
+          <Link href='/account/profile'>Profile</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href='/account'>Account</Link>
         </DropdownMenuItem>
         {isAdmin && (
           <DropdownMenuItem>

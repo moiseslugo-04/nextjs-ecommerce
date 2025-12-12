@@ -3,12 +3,12 @@ import { Sheet, SheetContent, SheetTrigger } from '@components/ui/sheet'
 import { ShoppingCart } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import { CartItem } from '@components/features/cart/CartItem'
-import { useCartStore } from '@/lib/features/cart/client/useCartStore'
+import { useCartStore } from '@/lib/features/cart/client/store/useCartStore'
 import { useCartActions } from '@/lib/features/cart/client/hooks/useCartActions'
 import { Spinner } from '@components/ui/spinner'
 import { CartHeader } from './CartHeader'
 import { CartSummary } from './CartSummary'
-import { useSession } from '@/lib/features/auth/client/hooks/useSession'
+import { useSession } from '@features/auth/server/session/client/useSession'
 export function Cart() {
   const { cart, totalCart, isSync } = useCartStore()
   const { data: session } = useSession()

@@ -1,13 +1,13 @@
-import { useCartStore } from '@features/cart/client/useCartStore'
-import { syncCartAction } from '@features/cart/server/cart.actions'
-import { useSession } from '@features/auth/client/hooks/useSession'
+'use client'
 import { useEffect, useRef } from 'react'
+import { useCartStore } from './store/useCartStore'
+import { syncCartAction } from '@features/cart/server/cart.actions'
+import { useSession } from '@features/auth/server/session/client/useSession'
 
 export function useCartSync({ enabled }: { enabled: boolean }) {
   const { setCartFromDB, setIsSync } = useCartStore()
   const { data: session, isLoading } = useSession()
   const isSyncingRef = useRef(false)
-
   useEffect(() => {
     if (
       isLoading ||
@@ -16,7 +16,6 @@ export function useCartSync({ enabled }: { enabled: boolean }) {
       !enabled
     )
       return
-
     const sync = async () => {
       setIsSync(true)
       isSyncingRef.current = true

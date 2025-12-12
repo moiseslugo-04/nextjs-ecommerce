@@ -1,6 +1,6 @@
 'use client'
 
-import { useCartStore } from '@/lib/features/cart/client/useCartStore'
+import { useCartStore } from '@/lib/features/cart/client/store/useCartStore'
 import { logout } from '@features/auth/server/auth.action'
 import { useTransition } from 'react'
 import { toast } from 'sonner'

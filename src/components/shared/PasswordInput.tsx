@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { type FieldControlProps } from '../FieldControl'
+import { type FieldControlProps } from './FieldControl'
 import { FieldValues } from 'react-hook-form'
 import { Field, FieldLabel, FieldError } from '@components/ui/field'
 import { Input } from '@components/ui/input'

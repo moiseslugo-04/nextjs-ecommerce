@@ -9,12 +9,13 @@ export function useRegister(email: string) {
     mutationKey: ['register'],
     mutationFn: registerAction,
   })
-  const { handleSubmit, control, getValues, setValue } =
-    useForm<RegisterSchema>({
-      resolver: zodResolver(registerSchema),
-      mode: 'onChange',
-      defaultValues: { email: email ?? '' },
-    })
+
+  const methods = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
+    mode: 'onChange',
+    defaultValues: { email: email ?? '' },
+  })
+  const { handleSubmit, setValue } = methods
   const onSubmit = handleSubmit(async (data: RegisterSchema) => {
     //Transform the data into formData Obj
     const formData = new FormData()
@@ -33,10 +34,9 @@ export function useRegister(email: string) {
   })
 
   return {
-    control,
+    methods,
     isLoading: isPending,
     onSubmit,
     success: isSuccess,
-    email: getValues('email'),
   }
 }

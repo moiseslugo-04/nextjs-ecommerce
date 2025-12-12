@@ -1,5 +1,11 @@
 import prisma from '@/lib/client'
-import { RefreshToken, Role, VerificationToken, Account } from '@prisma/client'
+import {
+  RefreshToken,
+  Role,
+  VerificationToken,
+  Account,
+  Profile,
+} from '@prisma/client'
 export type UserDTO = {
   id: string
   email: string
@@ -10,6 +16,7 @@ export type UserDTO = {
   verificationTokens: VerificationToken[]
   refreshTokens: RefreshToken[]
   accounts: Account[]
+  profile: Profile | null
 }
 
 interface SaveUser {
@@ -34,6 +41,7 @@ export function findUserByEmail(email: string): Promise<UserDTO | null> {
       verificationTokens: true,
       id: true,
       accounts: true,
+      profile: true,
     },
   })
 }
@@ -54,6 +62,7 @@ export function findUserByIdentifier(
       accounts: true,
       id: true,
       password: true,
+      profile: true,
     },
   })
 }
@@ -80,6 +89,7 @@ export function saveUser(data: SaveUser): Promise<UserDTO | null> {
       verificationTokens: true,
       accounts: true,
       id: true,
+      profile: true,
     },
   })
 }
@@ -92,5 +102,5 @@ export function deleteUserById(id: string) {
 }
 
 export function findUserById(id: string) {
-  return prisma.user.findFirst({ where: { id } })
+  return prisma.user.findFirst({ where: { id }, include: { profile: true } })
 }

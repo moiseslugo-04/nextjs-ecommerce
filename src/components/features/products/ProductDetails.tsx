@@ -1,8 +1,8 @@
 'use client'
-import { AppLink } from '@/components/shared/AppLink'
-import { Button } from '@/components/ui/button'
-import { useSession } from '@/lib/features/auth/client/hooks/useSession'
-import { useCartActions } from '@features/cart/client/hooks/useCartActions'
+import { AppLink } from '@components/shared/AppLink'
+import { Button } from '@components/ui/button'
+import { useSession } from '@features/auth/server/session/client/useSession'
+import { useCartActions } from '@/lib/features/cart/client/hooks/useCartActions'
 import { SerializedProduct } from '@features/products/product.types'
 import Image from 'next/image'
 

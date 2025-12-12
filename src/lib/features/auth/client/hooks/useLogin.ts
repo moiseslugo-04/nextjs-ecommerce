@@ -15,14 +15,14 @@ export function useLogin(email?: string) {
   })
   const params = useSearchParams()
   const { replace, refresh } = useRouter()
-  const { handleSubmit, control } = useForm<LoginSchema>({
+  const methods = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
     mode: 'onChange',
     defaultValues: {
       identifier: email ?? '',
     },
   })
-  const onSubmit = handleSubmit(async (data: LoginSchema) => {
+  const onSubmit = methods.handleSubmit(async (data: LoginSchema) => {
     try {
       //transform the data into formData Obj
       const formData = new FormData()
@@ -56,7 +56,7 @@ export function useLogin(email?: string) {
 
   return {
     isLoading: isPending,
-    control,
+    methods,
     onSubmit,
   }
 }

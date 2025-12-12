@@ -152,6 +152,9 @@
   h6 {
     @apply font-semibold;
   }
+  button {
+    @apply cursor-pointer;
+  }
 }
 
 /* --------------------------------------------------------- */

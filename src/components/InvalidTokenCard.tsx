@@ -3,7 +3,7 @@
 import { emailSchema, EmailSchema } from '@features/users/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
-import { FieldControl } from './FieldControl'
+import { FieldControl } from './shared/FieldControl'
 import { Button } from '@components/ui/button'
 import { useTransition, useState } from 'react'
 import { VerificationTokenTypes } from '@/lib/features/auth/services/verification-token.service'
