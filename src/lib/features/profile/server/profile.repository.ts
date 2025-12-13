@@ -1,11 +1,11 @@
 import prisma from '@lib/client'
 import { ProfilePayload } from '../types'
 export function getUserProfile(userId: string) {
-  return prisma.profile.findUnique({
+  return prisma.profile.findFirst({
     where: { userId },
     select: {
       userId: true,
-      address: true,
+      addresses: true,
       fullName: true,
       avatar: true,
       phone: true,

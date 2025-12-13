@@ -24,28 +24,28 @@ import {
 const data = {
   navMain: [
     {
-      title: 'Profile',
-      path: '/profile',
+      title: 'Account',
+      path: '/account',
       Icon: User2Icon,
     },
     {
       title: 'Address',
-      path: '/address',
+      path: '/account/address',
       Icon: HousePlus,
     },
     {
       title: 'Cards',
-      path: '/cards',
+      path: '/account/cards',
       Icon: CreditCard,
     },
     {
       title: 'Orders',
-      path: '/orders',
+      path: '/account/orders',
       Icon: Package,
     },
     {
       title: 'Authentication',
-      path: '/auth',
+      path: '/account/auth',
       Icon: UserLock,
     },
   ],

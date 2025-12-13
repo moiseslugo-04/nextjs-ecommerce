@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { FormCard } from '@/components/shared/FormCard'
 import { FormField } from '@/components/shared/FormField'
-import { AppLink } from '@/components/shared/AppLink'
 import { AvatarPreview } from '@/components/shared/AvatarPreview'
 import {
   Dialog,

@@ -2,7 +2,7 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { EditProfileForm } from '@components/features/profile/EditProfileForm'
+import { EditProfileForm } from '@components/features/account/EditProfileForm'
 import { verifySession } from '@/lib/dal/session'
 import { getUserProfile } from '@/lib/features/profile/server/profile.repository'
 

@@ -38,10 +38,7 @@ export function AccountMenu() {
           <Link href='/account/orders'>My orders</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <Link href='/account/profile'>Profile</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Link href='/account'>Account</Link>
+          <Link href='/account'>Profile</Link>
         </DropdownMenuItem>
         {isAdmin && (
           <DropdownMenuItem>

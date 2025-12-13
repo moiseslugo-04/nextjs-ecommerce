@@ -35,10 +35,13 @@ export function NavMain({ items }: { items: ItemType[] }) {
           </SidebarMenuButton>
         </Link>
         {items.map(({ title, path, Icon }) => {
-          const isActive = pathname.includes(path)
+          const isRootAccount = path === '/account'
+          const isActive = isRootAccount
+            ? pathname === '/account'
+            : pathname.startsWith(path)
           return (
             <Link
-              href={`/account/${path}`}
+              href={path}
               key={title}
               className={cn(isActive && 'bg-gray-200 rounded-md')}
             >

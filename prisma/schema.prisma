@@ -44,7 +44,7 @@ model Category {
   parentId     Int?        
   parent       Category?    @relation("CategoryHierarchy", fields: [parentId], references: [id],onDelete: Cascade)
   children     Category[]   @relation("CategoryHierarchy")
-  departmentId Int
+  departmentId Int          @map("department_id")
   department   Department   @relation(fields: [departmentId], references: [id],onDelete: Cascade)
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt       @map("updated_at")
@@ -60,8 +60,8 @@ model Product {
   slug        String      @unique
   price       Decimal     @db.Decimal(10, 2)
   description String
-  imageUrl    String
-  imageAlt    String?
+  imageUrl    String      @map("image_url")
+  imageAlt    String?     @map("image_alt")
   stock       Int         @default(0)
   createdAt   DateTime    @default(now()) @map("created_at")
   updatedAt   DateTime    @updatedAt       @map("updated_at")
@@ -86,14 +86,13 @@ model Cart {
   userId  String    @unique @map("user_id")
   user    User      @relation(fields: [userId], references: [id],onDelete: Cascade)
   items   CartItem[]
-
   @@map("carts")
 }
 
 model CartItem {
   id         Int      @id @default(autoincrement())
   product    Product  @relation(fields: [productId], references: [id])
-  productId  Int      @map("product_id")
+  productId  Int      @map("product_id") 
   cart       Cart     @relation(fields: [cartId], references: [id])
   cartId     Int      @map("cart_id")
   quantity   Int      @default(1)
@@ -112,18 +111,17 @@ model Order {
   items          OrderItem[]
 
   subtotal       Decimal @db.Decimal(10,2)
-  shippingPrice  Decimal @db.Decimal(10,2)
+  shippingPrice  Decimal @db.Decimal(10,2)    @map("shipping_price")
   total     Decimal   @db.Decimal(10,2) @map("total")
   
   status         OrderStatus    @default(PENDING)
-  paymentStatus  PaymentStatus   @default(PENDING)
+  paymentStatus  PaymentStatus   @default(PENDING) @map("payment_status")
 
-  shippingName    String
-  shippingAddress String
-  shippingCity    String
-  shippingCountry String
-  shippingPhone   String
-
+  shippingName    String  @map("shipping_name")
+  shippingAddress String  @map("shipping_address")
+  shippingCity    String  @map("shipping_city")
+  shippingCountry String  @map("shipping_country")
+  shippingPhone   String  @map("shipping_phone")
   payment     Payment?
 
   createdAt  DateTime  @default(now()) @map("created_at")
@@ -171,7 +169,7 @@ model User {
   password  String?
   profile  Profile?
   role      Role     @default(USER)
-  refreshTokens RefreshToken[]
+  refreshTokens RefreshToken[] 
   verificationTokens VerificationToken[]
   cart      Cart?
   orders    Order[]
@@ -189,9 +187,9 @@ model Profile{
   userId String @unique @map("user_id")
   user  User  @relation(fields: [userId],references: [id],onDelete: Cascade)
   avatar      String?
-  fullName    String?
+  fullName    String?  @map("full_name")
   phone       String? 
-  address     String?
+  addresses      Address[]
   country     String?
   city        String?
   postalCode  String? @map("postal_code")
@@ -202,14 +200,29 @@ model Profile{
 }
 
 // Authentication models
+model Address {
+  id Int @id @default(autoincrement())
+  profileId String @map("profile_id")
+  profile Profile @relation(fields: [profileId],references: [id],onDelete: Cascade)
 
+  country String
+  addressLine String @map("address_line")
+  postalCode String? @map("postal_code")
+  isDefault Boolean @map("is_default")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt  @map("updated_at")
+
+
+  @@map("address")
+}
 model Account {
   id                     String  @id @default(cuid())
   userId                 String       @map("user_id")
   type                   String
   provider               String
   providerAccountId      String    @map("provider_account_id")
-  refresh_token          String?   @db.Text 
+  refresh_token          String?   @db.Text  
   access_token           String?   @db.Text 
   token_type             String?   
   expires_at             Int?      
@@ -230,7 +243,7 @@ model Account {
 model VerificationToken {
   id  String  @id @default(cuid())
   identifier String? 
-  userId String
+  userId String     @map("user_id")
   user User @relation(fields: [userId], references: [id])
   type  String 
   token String   @unique  
@@ -245,7 +258,7 @@ model RefreshToken {
   token     String   @unique
   jti       String      @unique
   revoked   Boolean  @default(false)
-  userId    String
+  userId    String   @map("user_id")
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   expiresAt DateTime @map("expires_at")
   createdAt DateTime @default(now()) @map("created_at")
