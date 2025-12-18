@@ -1,5 +1,4 @@
 'use client'
-
 import { CardContent, CardHeader } from '@components/ui/card'
 import { Button } from '@components/ui/button'
 import { FieldControl } from '@/components/FieldControl'
@@ -9,12 +8,14 @@ import { useState } from 'react'
 import { GoogleButton } from '@/components/features/auth/identify/GoogleButton'
 import { AuthLegalFooter } from '../components/ AuthLegalFooter'
 import { useIdentify } from '@/lib/features/auth/client/hooks/useIdentify'
+import { useSearchParams } from 'next/navigation'
 export default function IdentifyForm() {
+  const params = useSearchParams()
   const { onSubmit, control, isPending } = useIdentify()
   const [googleLoading, setGoogleLoading] = useState(false)
   const handleGoogleLogin = async () => {
     setGoogleLoading(true)
-    await signIn('google', { redirectTo: '/' })
+    await signIn('google', { redirectTo: params.get('callback') ?? '/' })
   }
   return (
     <>

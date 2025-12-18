@@ -4,13 +4,24 @@ import { CustomAdapter } from '@/lib/custom-adapter'
 import prisma from '@/lib/client'
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: CustomAdapter(),
-  providers: [Google],
-  session: { strategy: 'jwt', maxAge: 15 * 24 * 60 * 60 },
+  providers: [
+    Google({
+      authorization: {
+        params: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      },
+    }),
+  ],
+  session: { strategy: 'jwt', maxAge: 7 * 24 * 60 * 60 },
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, account }) {
       if (user) {
         token.role = user.role!
         token.id = user.id!
+        token.email = user.email
+        token.refresh_token = account?.refresh_token
       }
       return token
     },
@@ -52,6 +63,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     async session({ token, session }) {
       session.user.id = token.id as string
       session.user.role = token.role as 'ADMIN' | 'USER'
+      session.user.email = token.email ?? ''
       return session
     },
   },

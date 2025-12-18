@@ -1,15 +1,17 @@
+'use client'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import { loginSchema, LoginSchema } from '@features/users/user.schema'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { loginAction } from '@/lib/features/auth/credentials/actions/login.action'
+import { signup } from '@features/auth/server/auth.action'
 import { ACTION_MESSAGES } from '@/lib/utils/constants/actions'
 import { useMutation } from '@tanstack/react-query'
 export function useLogin(email?: string) {
   const { mutateAsync, isPending } = useMutation({
     mutationKey: ['login'],
-    mutationFn: loginAction,
+    mutationFn: signup,
   })
   const params = useSearchParams()
   const { replace, refresh } = useRouter()
@@ -26,7 +28,6 @@ export function useLogin(email?: string) {
       const formData = new FormData()
       Object.entries(data).forEach(([k, v]) => formData.set(k, v))
       const res = await mutateAsync(formData)
-
       if (!res.success) {
         const action = res.action && ACTION_MESSAGES[res.action]
         toast.error(res.error, {

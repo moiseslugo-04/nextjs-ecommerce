@@ -1,12 +1,12 @@
 'use client'
 
 import { useQuery } from '@tanstack/react-query'
-import { getSession } from '@/lib/features/auth/services/get-session.service'
+import { getSessionAction } from '../../server/auth.action'
 
 export function useSession() {
   return useQuery({
     queryKey: ['session'],
-    queryFn: getSession,
+    queryFn: getSessionAction,
     refetchInterval: 13 * 60 * 1000,
   })
 }

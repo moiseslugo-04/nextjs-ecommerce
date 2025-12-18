@@ -1,9 +1,11 @@
 import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
+
 import { Toaster } from 'sonner'
 import { ErrorHandler } from '@/components/shared/ErrorHandler'
 import { SessionSynchronizer } from '@/components/SessionSyncer'
+import { Suspense } from 'react'
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
@@ -33,7 +35,9 @@ export default async function RootLayout({
         suppressHydrationWarning
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ErrorHandler />
+        <Suspense>
+          <ErrorHandler />
+        </Suspense>
         <Toaster />
         <SessionSynchronizer>{children}</SessionSynchronizer>
       </body>

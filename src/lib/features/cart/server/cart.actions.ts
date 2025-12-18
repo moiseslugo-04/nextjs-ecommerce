@@ -9,10 +9,10 @@ import {
   removeItemFromCart,
   addToCart,
 } from './cart.service'
-import { getSession } from '@features/auth/services/get-session.service'
+import { getSession } from '@lib/features/auth/server/session/session.service'
 async function requireUser() {
   const session = await getSession()
-  if (!session?.payload) throw new Error('UNAUTHORIZED')
+  if (!session?.isAuthenticated) throw new Error('UNAUTHORIZED')
   return session.payload.id
 }
 

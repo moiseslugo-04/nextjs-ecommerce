@@ -1,4 +1,9 @@
 import IdentifyForm from '@/components/features/auth/identify/IdentifyForm'
+import { Suspense } from 'react'
 export default function IdentifyPage() {
-  return <IdentifyForm />
+  return (
+    <Suspense>
+      <IdentifyForm />
+    </Suspense>
+  )
 }

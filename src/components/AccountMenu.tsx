@@ -15,10 +15,10 @@ import { Button } from '@components/ui/button'
 import { useSession } from '@features/auth/client/hooks/useSession'
 import { useLogout } from '@features/auth/client/hooks/useLogout'
 export function AccountMenu() {
-  const { data: session } = useSession()
   const { closeSession, isPending } = useLogout()
-  const isAdmin = session?.payload.role === 'ADMIN'
-  const isLoggedIn = session?.payload.id ? true : false
+  const { data: session } = useSession()
+  const isLoggedIn = session?.isAuthenticated
+  const isAdmin = isLoggedIn && session.payload.role === 'ADMIN'
 
   const [open, setOpen] = useState(false)
   return (

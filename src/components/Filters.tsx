@@ -1,12 +1,12 @@
 'use client'
-import { useFilter } from '@/lib/hooks/useFilter'
+import { useFilter } from '@lib/features/products/filters/useFilters'
 import { ArrowBigDown } from 'lucide-react'
 import { Suspense } from 'react'
 interface FiltersProps {
   categories?: { name: string; slug: string }[]
 }
 export function Filters({ categories }: FiltersProps) {
-  const { handleChangeFilter, handleChangeSort, searchParams } = useFilter()
+  const { searchParams } = useFilter()
 
   return (
     <Suspense fallback={<p>Loading Filters page</p>}>
@@ -19,7 +19,6 @@ export function Filters({ categories }: FiltersProps) {
                 defaultValue={searchParams?.get('filter') ?? ''}
                 className='w-full border relative border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-gechis-gold focus:border-transparent
               max-w-sm '
-                onChange={(e) => handleChangeFilter(e.target.value)}
               >
                 <option value=''>All</option>
                 {categories.map(({ name, slug }) => (
@@ -34,7 +33,6 @@ export function Filters({ categories }: FiltersProps) {
                 aria-label='hidden'
                 type='checkbox'
                 className='hidden peer'
-                onChange={(e) => handleChangeSort(e.target.checked)}
               />
               <div
                 className='btn-outline flex items-center justify-center gap-2 px-4 py-2 rounded-md 

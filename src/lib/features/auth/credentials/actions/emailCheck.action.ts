@@ -7,11 +7,17 @@ export async function checkEmailAction(email: string) {
     const user = await findUserByEmail(email)
 
     if (user) {
-      return { exists: true }
+      return { success: true, exists: true }
     }
 
-    return { exists: false }
-  } catch {
-    throw { exists: false, error: 'Internal error' }
+    return { success: true, exists: false }
+  } catch (error) {
+    console.error('checkEmailAction error:', error)
+
+    return {
+      success: false,
+      exists: false,
+      message: 'Internal error',
+    }
   }
 }

@@ -9,16 +9,11 @@ import { ERROR_MESSAGE } from '@/lib/utils/constants/constants'
 import { generateEmailVerificationToken } from '@/lib/features/auth/services/verification-token.service'
 import { Prisma } from '@prisma/client'
 import { compareHashText, hashText } from '@lib/utils/utils'
-import { generateRefreshToken } from '@features/auth/services/refresh-token.service'
-import { createAccessToken } from '@features/auth/services/jwt.service'
 import { ActionsResponse, ServicesResponsePromise } from '@/types'
 
-export async function login(formData: FormData): ServicesResponsePromise<{
-  refreshToken: string
-  accessToken: string
-  refreshTokenJti: string
-  user: UserDTO
-} | null> {
+export async function login(
+  formData: FormData
+): ServicesResponsePromise<UserDTO | null> {
   const data = Object.fromEntries(formData)
   //check and validated data
   const result = loginSchema.safeParse(data)
@@ -66,20 +61,11 @@ export async function login(formData: FormData): ServicesResponsePromise<{
     }
   }
 
-  //Create access and refresh token
-  const { id, email, role } = user
-  const accessToken = createAccessToken({ id, email, role })
-  const { payload } = await generateRefreshToken(id)
   //Return user without password
   const { password: _password, ...userData } = user
   return {
     success: true,
-    data: {
-      refreshToken: payload.refresh,
-      refreshTokenJti: payload.refreshJti,
-      accessToken,
-      user: userData,
-    },
+    data: userData,
   }
 }
 

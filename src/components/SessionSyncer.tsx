@@ -1,5 +1,6 @@
 'use client'
-import { useCartSync } from '@/lib/features/cart/client/hooks/useCartSync'
+
+import { AuthGate } from '@/lib/features/auth/client/AuthGate'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactNode } from 'react'
 const queryClient = new QueryClient({
@@ -13,11 +14,7 @@ const queryClient = new QueryClient({
 export function SessionSynchronizer({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <CartSyncGate>{children}</CartSyncGate>
+      <AuthGate>{children}</AuthGate>
     </QueryClientProvider>
   )
-}
-function CartSyncGate({ children }: { children: ReactNode }) {
-  useCartSync()
-  return <>{children}</>
 }

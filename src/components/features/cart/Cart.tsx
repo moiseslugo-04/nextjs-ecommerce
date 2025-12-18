@@ -8,9 +8,13 @@ import { useCartActions } from '@/lib/features/cart/client/hooks/useCartActions'
 import { Spinner } from '@components/ui/spinner'
 import { CartHeader } from './CartHeader'
 import { CartSummary } from './CartSummary'
+import { useSession } from '@/lib/features/auth/client/hooks/useSession'
 export function Cart() {
   const { cart, totalCart, isSync } = useCartStore()
-  const actions = useCartActions()
+  const { data: session } = useSession()
+  const actions = useCartActions({
+    isAuthenticated: !!session?.isAuthenticated,
+  })
   const total = Number(totalCart().toFixed(2))
   return (
     <Sheet>

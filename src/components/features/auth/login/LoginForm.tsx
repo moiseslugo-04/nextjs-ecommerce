@@ -6,7 +6,6 @@ import { useLogin } from '@/lib/features/auth/client/hooks/useLogin'
 import { Controller } from 'react-hook-form'
 import { Button } from '@components/ui/button'
 import { FieldControl } from '@components/FieldControl'
-import Link from 'next/link'
 import { PasswordInput } from '@/components/shared/PasswordInput'
 import { AppLink } from '@/components/shared/AppLink'
 

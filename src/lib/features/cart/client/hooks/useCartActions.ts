@@ -11,22 +11,53 @@ import { useState } from 'react'
 import { useCartStore } from '@/lib/features/cart/client/useCartStore'
 import { CartItemType, ActionPayload } from '@features/cart/cart.types'
 import { SerializedProduct } from '@/lib/features/products/product.types'
-import { useSession } from '@features/auth/client/hooks/useSession'
-export function useCartActions() {
-  const isAuthenticated = !!useSession().data?.payload.role
+export function useCartActions({
+  isAuthenticated,
+}: {
+  isAuthenticated: boolean
+}) {
   const { increment, decrement, removeItem, addItem } = useCartStore()
   const [pendingId, setPendingId] = useState<number | null>(null)
 
   const { mutateAsync: increaseMutation } = useMutation({
     mutationFn: incrementQuantityAction,
+
+    onMutate: (productId) => {
+      increment(productId)
+      setPendingId(productId)
+    },
+    onError: (_err, productId) => {
+      decrement(productId)
+      toast.error('Failed to update')
+    },
+    onSuccess: () => {
+      setPendingId(null)
+    },
   })
 
   const { mutateAsync: decreaseMutation } = useMutation({
     mutationFn: decrementQuantityAction,
+    onSuccess: () => {
+      setPendingId(null)
+    },
+    onError: (_err, productId) => {
+      increment(productId)
+      toast.error('Failed to update')
+    },
+    onMutate: (productId) => {
+      decrement(productId)
+      setPendingId(productId)
+    },
   })
 
   const { mutateAsync: removeMutation } = useMutation({
     mutationFn: removeCartItemAction,
+    onSuccess: () => {
+      setPendingId(null)
+    },
+    onMutate: (productId) => {
+      setPendingId(productId)
+    },
   })
   const { mutateAsync: addToCartMutation } = useMutation({
     mutationFn: addToCartAction,
@@ -57,54 +88,31 @@ export function useCartActions() {
 
   const onIncrease = async (item: ActionPayload) => {
     if (pendingId === item.id) return
-    increment(item.id)
     toast.success(`${item.name} quantity updated`)
-    if (isAuthenticated) {
-      setPendingId(item.id)
-      try {
-        const res = await increaseMutation(item.id)
-        if (!res.success) {
-          decrement(item.id)
-          toast.error('Failed to update')
-        }
-      } catch {
-        decrement(item.id)
-        toast.error('Server error')
-      } finally {
-        setPendingId(null)
-      }
+    if (!isAuthenticated) {
+      increment(item.id)
+      return
     }
+    await increaseMutation(item.id)
   }
 
   const onDecrease = async (item: ActionPayload) => {
     if (pendingId === item.id) return
     decrement(item.id)
     toast.success(`${item.name} quantity updated`)
-    if (isAuthenticated) {
-      setPendingId(item.id)
-      try {
-        const res = await decreaseMutation(item.id)
-        if (!res.success) {
-          increment(item.id)
-          toast.error('Failed to update')
-        }
-      } catch {
-        increment(item.id)
-        toast.error('Server error')
-      } finally {
-        setPendingId(null)
-      }
+    if (!isAuthenticated) {
+      decrement(item.id)
+      return
     }
+    await decreaseMutation(item.id)
   }
 
   const onRemove = async (item: CartItemType) => {
     if (pendingId === item.id) return
-
     const backup = item
     removeItem(item.id)
     toast.success(`${item.name} removed from cart`)
     if (isAuthenticated) {
-      setPendingId(item.id)
       try {
         const res = await removeMutation(item.id)
         if (!res.success) {
@@ -114,8 +122,6 @@ export function useCartActions() {
       } catch {
         addItem(backup)
         toast.error('Server error')
-      } finally {
-        setPendingId(null)
       }
     }
   }

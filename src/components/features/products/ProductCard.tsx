@@ -8,12 +8,16 @@ import { useCartActions } from '@features/cart/client/hooks/useCartActions'
 import Image from 'next/image'
 import Link from 'next/link'
 import { AppLink } from '@/components/shared/AppLink'
+import { useSession } from '@/lib/features/auth/client/hooks/useSession'
 interface ProductCardProps {
   product: SerializedProduct
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { onAddToCart } = useCartActions()
+  const { data: session } = useSession()
+  const { onAddToCart } = useCartActions({
+    isAuthenticated: !!session?.isAuthenticated,
+  })
   const parsedPrice = product.price?.toFixed(2)
   return (
     <Card className='flex flex-col card overflow-hidden group w-full max-w-sm mx-auto border-none'>
