@@ -9,7 +9,7 @@ import {
 import { Button } from '../button'
 import { Suspense } from 'react'
 
-export async function NavUser() {
+export function NavUser() {
   return (
     <Suspense>
       <SidebarMenu>

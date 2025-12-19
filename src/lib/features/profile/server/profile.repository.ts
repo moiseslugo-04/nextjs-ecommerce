@@ -11,8 +11,7 @@ export function getUserProfile(userId: string) {
       city: true,
       postalCode: true,
       birthdate: true,
-      addresses: true,
-      avatar: true,
+      address: true,
       user: {
         select: {
           name: true,

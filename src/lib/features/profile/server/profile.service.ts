@@ -6,7 +6,5 @@ import { ProfilePayload } from '../types'
 
 export async function createProfile(profile: ProfilePayload) {
   const existingProfile = await getUserProfile(profile.userId)
-  if (!existingProfile) {
-    await saveProfile(profile)
-  }
+  if (!existingProfile) await saveProfile(profile)
 }

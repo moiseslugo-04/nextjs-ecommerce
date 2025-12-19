@@ -21,13 +21,10 @@ export default async function ProfilePage() {
         {/* Header */}
         <CardHeader className='flex flex-col items-center text-center gap-4 mb-10'>
           <Avatar className='h-28 w-28 ring-2 ring-neutral-200 shadow-md'>
-            {profile?.avatar ? (
-              <AvatarImage src={profile.avatar} alt='profile avatar' />
-            ) : (
-              <AvatarFallback className='text-3xl'>
-                {profile?.fullName?.slice(2)}
-              </AvatarFallback>
-            )}
+            <AvatarImage src={profile?.avatar ?? ''} alt='profile avatar' />
+            <AvatarFallback className='text-3xl'>
+              {profile?.fullName?.slice(2)}
+            </AvatarFallback>
           </Avatar>
 
           <div className='space-y-1'>
@@ -70,7 +67,14 @@ export default async function ProfilePage() {
                 label='Date of birth'
                 value={String(profile?.birthdate)}
               />
+<<<<<<< HEAD
               <InfoItem label='Address' value={String(profile.address) ?? ''} />
+=======
+              <InfoItem
+                label='Address'
+                value={String(profile?.address) ?? ''}
+              />
+>>>>>>> a82c48f (WIP:Account page)
             </div>
           </Section>
 
