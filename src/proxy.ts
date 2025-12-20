@@ -52,11 +52,13 @@ export async function proxy(request: NextRequest) {
 
   if (!payload && isPrivate && !isAuth) return redirectTo(loginUrl)
 
+  // Admin access permission check
   if (isAdmin && payload?.role !== 'ADMIN') {
     const redirect = new URL('/', request.url)
     redirect.searchParams.set('error', 'no-admin')
     return redirectTo(redirect)
   }
+
   if (!payload && isAuth) {
     const refresh = await refreshSession()
     if (!refresh.isAuthenticated) return response

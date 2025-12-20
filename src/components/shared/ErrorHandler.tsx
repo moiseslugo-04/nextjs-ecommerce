@@ -13,8 +13,6 @@ export function ErrorHandler() {
     const error = params.get('error')
     if (!error) return
     if (error === 'no-admin') toast.error('You do not have admin privileges')
-    if (error === 'session-expired') toast.warning('Your session has expired')
-
     setTimeout(() => {
       const newParams = new URLSearchParams(params.toString())
       newParams.delete('error')
