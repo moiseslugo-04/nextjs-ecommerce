@@ -1,19 +1,16 @@
 import { verifySession } from '@/lib/dal/session'
-import { AppSidebar } from '@components/ui/components/app-sidebar'
+import { AppSidebar } from '@/components/ui/components/AppSidebar'
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from '@components/ui/sidebar'
 import { ReactNode } from 'react'
-
-export default async function Page({ children }: { children: ReactNode }) {
-  const session = await verifySession()
-  console.log(session)
+export default async function Layout({ children }: { children: ReactNode }) {
+  await verifySession()
   return (
     <SidebarProvider className='overflow-hidden'>
       <AppSidebar />
-
       <SidebarInset className='flex-1'>
         <section className='min-h-full flex flex-col  bg-neutral-50'>
           {/* Header */}

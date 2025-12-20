@@ -67,6 +67,10 @@ export async function proxy(request: NextRequest) {
   }
 
   if (isAuth && payload) {
+    if (payload.role === 'ADMIN') {
+      return redirectTo(new URL('/dashboard', request.url))
+    }
+
     return redirectTo(new URL('/', request.url))
   }
 

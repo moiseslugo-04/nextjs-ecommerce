@@ -5,6 +5,7 @@ export function getUserProfile(userId: string) {
     where: { userId },
     select: {
       userId: true,
+      avatar: true,
       fullName: true,
       phone: true,
       country: true,

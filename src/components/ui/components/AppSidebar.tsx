@@ -1,13 +1,6 @@
 'use client'
-
 import * as React from 'react'
-import {
-  User2Icon,
-  HousePlus,
-  CreditCard,
-  Package,
-  UserLock,
-} from 'lucide-react'
+import { data } from '@lib/utils/constants/navbar-data'
 
 import { NavMain } from './nav-main'
 import { NavUser } from './nav-user'
@@ -19,37 +12,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from '@components/ui/sidebar'
-
-// This is sample data.
-const data = {
-  navMain: [
-    {
-      title: 'Account',
-      path: '/account',
-      Icon: User2Icon,
-    },
-    {
-      title: 'Address',
-      path: '/account/address',
-      Icon: HousePlus,
-    },
-    {
-      title: 'Cards',
-      path: '/account/cards',
-      Icon: CreditCard,
-    },
-    {
-      title: 'Orders',
-      path: '/account/orders',
-      Icon: Package,
-    },
-    {
-      title: 'Authentication',
-      path: '/account/auth',
-      Icon: UserLock,
-    },
-  ],
-}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
