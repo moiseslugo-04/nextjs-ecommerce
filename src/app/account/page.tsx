@@ -67,14 +67,7 @@ export default async function ProfilePage() {
                 label='Date of birth'
                 value={String(profile?.birthdate)}
               />
-<<<<<<< HEAD
               <InfoItem label='Address' value={String(profile.address) ?? ''} />
-=======
-              <InfoItem
-                label='Address'
-                value={String(profile?.address) ?? ''}
-              />
->>>>>>> a82c48f (WIP:Account page)
             </div>
           </Section>
 

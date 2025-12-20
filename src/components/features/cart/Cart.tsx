@@ -8,11 +8,7 @@ import { useCartActions } from '@/lib/features/cart/client/hooks/useCartActions'
 import { Spinner } from '@components/ui/spinner'
 import { CartHeader } from './CartHeader'
 import { CartSummary } from './CartSummary'
-<<<<<<< HEAD
-import { useSession } from '@features/auth/server/session/client/useSession'
-=======
 import { useSession } from '@/lib/features/auth/server/session/client/useSession'
->>>>>>> 3113f24 (WIP:Account page)
 export function Cart() {
   const { cart, totalCart, isSync } = useCartStore()
   const { data: session } = useSession()

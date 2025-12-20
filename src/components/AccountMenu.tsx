@@ -13,11 +13,7 @@ import {
 import Link from 'next/link'
 import { Button } from '@components/ui/button'
 import { useLogout } from '@features/auth/client/hooks/useLogout'
-<<<<<<< HEAD
-import { useSession } from '@/lib/features/session/client/useSession'
-=======
-import { useSession } from '@/lib/features/auth/server/session/client/useSession'
->>>>>>> 3113f24 (WIP:Account page)
+import { useSession } from '@features/auth/server/session/client/useSession'
 export function AccountMenu() {
   const { closeSession, isPending } = useLogout()
   const { data: session } = useSession()
