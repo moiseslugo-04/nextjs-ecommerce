@@ -6,16 +6,7 @@ import { connectGoogleAccount } from '@features/account/account.service'
 import { createProfile } from '../../profile/server/profile.service'
 export const { auth, handlers, signIn, signOut } = NextAuth({
   adapter: CustomAdapter(),
-  providers: [
-    Google({
-      authorization: {
-        params: {
-          access_type: 'offline',
-          prompt: 'consent',
-        },
-      },
-    }),
-  ],
+  providers: [Google],
   session: { strategy: 'jwt', maxAge: 7 * 24 * 60 * 60 },
   callbacks: {
     async signIn({ user, account }) {

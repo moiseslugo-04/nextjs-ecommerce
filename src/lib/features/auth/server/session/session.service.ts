@@ -12,7 +12,7 @@ import {
   createRefreshToken,
   refreshToken,
 } from '@features/auth/server/refresh/refresh.service'
-import { auth } from '../../oAuth/auth'
+import { auth } from '@features/auth/oAuth/auth'
 import { findUserById } from '@/lib/features/users/user.repository'
 const JWT_ACCESS_SECRET = process.env.JWT_ACCESS_SECRET
 const ACCESS_TOKEN_EXPIRY = 15 * 60

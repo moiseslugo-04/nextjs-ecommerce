@@ -1,7 +1,6 @@
 import 'server-only'
 import { getCookies } from '@lib/utils/cookies'
 import { decrypt } from '@features/auth/server/session/session.service'
-import { refreshSession } from '@features/auth/server/session/session.service'
 import { auth } from '@features/auth/oAuth/auth'
 import { redirect } from 'next/navigation'
 import { SessionPayload } from '@/lib/features/auth/server/session/types'
@@ -30,14 +29,6 @@ export const verifySession = cache(async (): Promise<SessionPayload> => {
       payload: { provider: 'credentials', ...payload },
     }
   } catch {
-    const refreshed = await refreshSession()
-    if (!refreshed.isAuthenticated) redirect('/auth/identify')
-    const newAccessToken = await getCookies('access_token')
-    if (!newAccessToken) redirect('/auth/identify')
-    const payload = decrypt(newAccessToken)
-    return {
-      isAuthenticated: true,
-      payload: { provider: 'credentials', ...payload },
-    }
+    redirect('/auth/identify')
   }
 })

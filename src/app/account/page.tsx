@@ -24,7 +24,9 @@ export default async function ProfilePage() {
             {profile?.avatar ? (
               <AvatarImage src={profile.avatar} alt='profile avatar' />
             ) : (
-              <AvatarFallback className='text-3xl'>JD</AvatarFallback>
+              <AvatarFallback className='text-3xl'>
+                {profile?.fullName?.slice(2)}
+              </AvatarFallback>
             )}
           </Avatar>
 
@@ -68,7 +70,7 @@ export default async function ProfilePage() {
                 label='Date of birth'
                 value={String(profile?.birthdate)}
               />
-              <InfoItem label='Address' value={profile?.address} />
+              <InfoItem label='Address' value={String(profile.address) ?? ''} />
             </div>
           </Section>
 

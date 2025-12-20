@@ -1,3 +1,4 @@
+import { verifySession } from '@/lib/dal/session'
 import { AppSidebar } from '@components/ui/components/app-sidebar'
 import {
   SidebarInset,
@@ -6,7 +7,9 @@ import {
 } from '@components/ui/sidebar'
 import { ReactNode } from 'react'
 
-export default function Page({ children }: { children: ReactNode }) {
+export default async function Page({ children }: { children: ReactNode }) {
+  const session = await verifySession()
+  console.log(session)
   return (
     <SidebarProvider className='overflow-hidden'>
       <AppSidebar />
