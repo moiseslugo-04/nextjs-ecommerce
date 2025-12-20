@@ -12,7 +12,6 @@ export function getUserProfile(userId: string) {
       city: true,
       postalCode: true,
       birthdate: true,
-      address: true,
       user: {
         select: {
           name: true,
@@ -20,6 +19,7 @@ export function getUserProfile(userId: string) {
           username: true,
           email: true,
           role: true,
+          addresses: true,
         },
       },
     },
