@@ -170,6 +170,7 @@ model User {
   username  String?
   password  String?
   profile  Profile?
+  addresses Address[]
   role      Role     @default(USER)
   refreshTokens RefreshToken[]
   verificationTokens VerificationToken[]
@@ -191,7 +192,6 @@ model Profile{
   avatar      String?
   fullName    String?
   phone       String? 
-  address     String?
   country     String?
   city        String?
   postalCode  String? @map("postal_code")
@@ -200,7 +200,20 @@ model Profile{
   updatedAt DateTime @updatedAt       @map("updated_at")
   @@map("profile")
 }
-
+model Address{
+  id   String @id @default(cuid())
+  userId String @map("user_id")
+  user  User  @relation(fields: [userId],references: [id],onDelete: Cascade)
+  country     String?
+  city        String?
+  address     String?
+  postalCode  String? @map("postal_code")
+  label      String?
+  type        String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt       @map("updated_at")
+  @@map("address")
+}
 // Authentication models
 
 model Account {
