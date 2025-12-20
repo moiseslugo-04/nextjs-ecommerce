@@ -165,6 +165,7 @@ model User {
   id        String    @id @default(cuid())
   name      String
   email     String   @unique
+  image     String?
   emailVerified DateTime?  @map("email_verified")
   username  String?
   password  String?
