@@ -1,5 +1,6 @@
 import prisma from '@lib/client'
-import { ProfilePayload } from '../types'
+import { ProfileData, ProfilePayload } from '../types'
+import { ProfileInput, ProfileOutput } from '../schemas'
 export function getUserProfile(userId: string) {
   return prisma.profile.findUnique({
     where: { userId },
@@ -20,6 +21,7 @@ export function getUserProfile(userId: string) {
           email: true,
           role: true,
           addresses: true,
+          image: true,
         },
       },
     },
@@ -28,4 +30,29 @@ export function getUserProfile(userId: string) {
 
 export function saveProfile(profile: ProfilePayload) {
   return prisma.profile.create({ data: profile })
+}
+
+export async function updateUserProfile(userId: string, data: ProfileData) {
+  return prisma.$transaction(async (tx) => {
+    const profile = await tx.profile.update({
+      where: { userId },
+      data: {
+        fullName: data.fullname,
+        phone: data.phone,
+        birthdate: data.birthdate as Date,
+        avatar: data.avatar,
+      },
+    })
+
+    const user = await tx.user.update({
+      where: { id: userId },
+      data: {
+        name: data.fullname,
+        image: data.avatar,
+        username: data.username,
+      },
+    })
+
+    return { profile, user }
+  })
 }

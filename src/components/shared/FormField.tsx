@@ -2,22 +2,19 @@
 import { Controller, useFormContext } from 'react-hook-form'
 import { FieldControl } from './FieldControl'
 import { PasswordInput } from './PasswordInput'
-interface FormFieldProps {
-  name: string
+import { InputHTMLAttributes } from 'react'
+
+interface FormFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   label: string
-  placeholder?: string
-  disabled?: boolean
-  type?: 'text' | 'password' | 'email' | 'number' | 'file'
-  className?: string
+  name: string
 }
 
 export function FormField({
   name,
   label,
-  placeholder,
-  disabled,
   type,
-  className,
+  disabled,
+  ...props
 }: FormFieldProps) {
   const { control } = useFormContext()
   return (
@@ -31,10 +28,9 @@ export function FormField({
           <FieldControl
             field={{ ...field, disabled }}
             fieldState={fieldState}
-            placeholder={placeholder}
             label={label}
             type={type}
-            className={className}
+            {...props}
           />
         )
       }

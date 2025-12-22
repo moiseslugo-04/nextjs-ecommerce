@@ -1,4 +1,4 @@
-import { RegisterForm } from '@components/features/auth/register/RegisterForm'
+import { RegisterForm } from '@/components/features/auth/register/RegisterForm'
 interface RegisterProps {
   searchParams: Promise<{ email: string }>
 }

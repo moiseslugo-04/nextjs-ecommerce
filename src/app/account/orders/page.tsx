@@ -1,4 +1,3 @@
-import { AccountSection } from '@/components/features/account/AccountSection'
 import { OrderItem } from '@/components/features/account/OrderItem'
 import type { OrderItemType } from '@/lib/features/account/types/types'
 const orders = [
@@ -37,15 +36,27 @@ const orders = [
 ] as OrderItemType[]
 export default function OrderList() {
   // ! HERE CALL THE SERVICE  TO GET ALL ORDERS
+
+  const isEmpty = orders.length === 0
   return (
-    <AccountSection
-      title={'My Orders'}
-      isEmpty={orders.length < 0}
-      emptyMessage=' You don’t have any orders yet.'
-    >
-      {orders.map((order) => (
-        <OrderItem key={order.id} {...order} />
-      ))}
-    </AccountSection>
+    <section className='space-y-6 p-4'>
+      <header className='flex items-center justify-between gap-3'>
+        <h2 className='text-lg font-semibold'>My Orders</h2>
+        <button className='rounded-md border px-4 py-2 text-sm'>
+          Add card
+        </button>
+      </header>
+
+      {isEmpty && (
+        <div className='rounded-md border p-6 text-sm text-gray-500'>
+          You don’t have any orders yet.
+        </div>
+      )}
+      <ul className='space-y-4'>
+        {orders.map((order) => (
+          <OrderItem key={order.id} {...order} />
+        ))}
+      </ul>
+    </section>
   )
 }

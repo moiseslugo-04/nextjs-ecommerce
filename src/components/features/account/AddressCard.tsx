@@ -1,18 +1,21 @@
 'use client'
 
+import { Loading } from '@/components/shared/Loading'
 import { Button } from '@/components/ui/button'
-interface AddressCardProps {
-  address: {
-    id: number
-    isDefault: boolean
-    addressLine: string
-    city: string
-    country: string
-    postalCode?: string
-  }
-}
-export function AddressCard({ address }: AddressCardProps) {
-  const { id, isDefault, addressLine, postalCode, city, country } = address
+import { useAddressMutations } from '@/lib/features/address/client/useAddressMutation'
+import { Address } from '@prisma/client'
+import { EditAddressModal } from './EditAddressModal'
+import { Badge } from '@components/ui/badge'
+
+export function AddressCard({
+  data,
+}: {
+  data: Address & { isDefault: boolean }
+}) {
+  const { id, isDefault, address, postalCode, city, country, label } = data
+  const { removeAddress, setAsDefault } = useAddressMutations()
+  const { mutate, isPending } = removeAddress
+  if (isPending) return <Loading text='Deleting address...' />
   return (
     <li
       key={id}
@@ -20,7 +23,9 @@ export function AddressCard({ address }: AddressCardProps) {
         isDefault ? 'border-green-500' : 'border-gray-200'
       }`}
     >
-      <div className='flex items-start justify-between gap-4'>
+      <div className='flex flex-col  items-start justify-between gap-4'>
+        <Badge className='w-fit text-gray-600 shadow-black/70'>{label}</Badge>
+
         <div>
           {isDefault && (
             <span className='mb-2 inline-block rounded-full bg-green-100 px-2 py-1 text-xs font-medium text-green-700'>
@@ -28,7 +33,7 @@ export function AddressCard({ address }: AddressCardProps) {
             </span>
           )}
 
-          <p className='font-medium'>{addressLine}</p>
+          <p className='font-medium'>{address}</p>
 
           <p className='text-sm text-gray-600'>
             {city}, {country}
@@ -37,15 +42,17 @@ export function AddressCard({ address }: AddressCardProps) {
         </div>
 
         <div className='flex gap-2'>
-          <Button
-            onClick={() => console.log(`update address ${id}`)}
-            className='text-sm text-blue-600 hover:underline'
-          >
-            Edit
-          </Button>
+          <EditAddressModal
+            label={data.label!}
+            id={data.id}
+            city={data.city!}
+            country={data.country!}
+            address={data.address!}
+            postalCode={data.postalCode!}
+          />
 
           <Button
-            onClick={() => console.log(`delete address ${id}`)}
+            onClick={() => mutate(id)}
             className='text-sm text-red-600 hover:underline'
           >
             Delete
@@ -56,7 +63,7 @@ export function AddressCard({ address }: AddressCardProps) {
       {!isDefault && (
         <div className='mt-3'>
           <Button
-            onClick={() => console.log(`set address ${id} as default`)}
+            onClick={() => setAsDefault.mutate(id)}
             className='text-sm text-gray-700 hover:underline'
           >
             Set as default

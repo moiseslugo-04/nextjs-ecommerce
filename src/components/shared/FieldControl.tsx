@@ -38,7 +38,7 @@ export function FieldControl<T extends FieldValues>({
                 name: field.name,
                 type: 'file',
               }
-            : field)}
+            : { ...field })}
           type={type}
           className='input-field'
           {...props}

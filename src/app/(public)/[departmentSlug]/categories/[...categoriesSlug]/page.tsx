@@ -2,7 +2,7 @@ import { NotFound } from '@components/NotFound'
 import { getAllProducts } from '@features/products/products.service'
 import { Filters } from '@/lib/features/products/product.types'
 import { PaginationBar } from '@/components/shared/PaginationBar'
-import { ProductList } from '@components/features/products/ProductList'
+import { ProductList } from '@/components/features/products/ProductList'
 import { BreadcrumbGenerator } from '@/components/shared/BreadcrumbGenerator'
 
 interface DepartmentPageProps {

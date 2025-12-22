@@ -24,7 +24,7 @@ export default async function Layout({ children }: { children: ReactNode }) {
             <div className='flex items-center gap-3'>
               <SidebarTrigger className='rounded-lg p-2 hover:bg-neutral-100 transition' />
               <h1 className='text-lg font-semibold text-neutral-800'>
-                Profile
+                Account
               </h1>
             </div>
           </header>

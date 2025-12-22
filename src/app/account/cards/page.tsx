@@ -1,4 +1,3 @@
-import { AccountSection } from '@/components/features/account/AccountSection'
 import { CardItem } from '@/components/features/account/CardItem'
 export default function CreditCardList() {
   const cards = [
@@ -21,20 +20,27 @@ export default function CreditCardList() {
       isDefault: false,
     },
   ]
+
+  const isEmpty = cards.length === 0
   return (
-    <AccountSection
-      title='Payment Methods'
-      emptyMessage=' You don’t have any saved cards yet.'
-      isEmpty={cards.length === 0}
-      Action={() => (
+    <section className='space-y-6 p-4'>
+      <header className='flex items-center justify-between gap-3'>
+        <h2 className='text-lg font-semibold'>Payment Methods</h2>
         <button className='rounded-md border px-4 py-2 text-sm'>
           Add card
         </button>
+      </header>
+
+      {isEmpty && (
+        <div className='rounded-md border p-6 text-sm text-gray-500'>
+          You don’t have any saved cards yet.
+        </div>
       )}
-    >
-      {cards.map((card) => (
-        <CardItem key={card.id} {...card} />
-      ))}
-    </AccountSection>
+      <ul className='space-y-4'>
+        {cards.map((card) => (
+          <CardItem key={card.id} {...card} />
+        ))}
+      </ul>
+    </section>
   )
 }

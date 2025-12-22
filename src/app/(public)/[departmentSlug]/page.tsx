@@ -5,7 +5,7 @@ import { Sparkles } from 'lucide-react'
 import { capitalizeWord } from '@lib/ui/utils'
 import { SearchResultsHeader } from '@components/SearchResultsHeader'
 import { PaginationBar } from '@components/shared/PaginationBar'
-import { ProductList } from '@components/features/products/ProductList'
+import { ProductList } from '@/components/features/products/ProductList'
 import { BreadcrumbGenerator } from '@/components/shared/BreadcrumbGenerator'
 interface DepartmentPageProps {
   params: Promise<{ departmentSlug: string }>

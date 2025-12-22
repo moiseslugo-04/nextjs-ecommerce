@@ -1,7 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
+import { Controller, FormProvider } from 'react-hook-form'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -14,37 +13,27 @@ import {
   DialogContent,
   DialogTrigger,
 } from '@components/ui/dialog'
-// ===== Types =====
-type ProfileFormValues = {
-  name: string
-  username: string
-  email: string
-  phone?: string
-  address?: string
-  avatar?: FileList
-}
+import { FieldControl } from '@/components/shared/FieldControl'
+import { ProfileDTO } from '@/lib/features/profile/types'
+import { useProfileForm } from '@/lib/features/profile/client/useProfileFrom'
+import { useProfileMutations } from '@/lib/features/profile/client/useProfileMutation'
+import { useState } from 'react'
 
-// ===== Component =====
-export function EditProfileForm() {
-  const methods = useForm<ProfileFormValues>()
-  const {
-    formState: { isSubmitting },
-    register,
-  } = methods
-
-  const [avatarPreview, setAvatarPreview] = useState<string | null>(null)
-
-  function onFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const files = e.target.files
-    if (!files?.length) return
-    const url = URL.createObjectURL(files[0])
-    setAvatarPreview(url)
-  }
-
-  function onSubmit() {}
-
+export function EditProfileForm({ profile }: { profile: ProfileDTO }) {
+  const [open, setOpen] = useState(false)
+  const { update } = useProfileMutations()
+  const { form, onFileChange, avatarPreview } = useProfileForm({
+    defaultValues: {
+      fullname: profile?.fullName ?? '',
+      username: profile?.username ?? '',
+      phone: profile?.phone ?? '',
+    },
+  })
+  const onSubmit = form.handleSubmit(async (result) =>
+    update.mutate(result, { onSuccess: () => setOpen(false) })
+  )
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button
           variant='outline'
@@ -54,7 +43,7 @@ export function EditProfileForm() {
         </Button>
       </DialogTrigger>
       <DialogContent className='max-w-2xl border-none shadow-none'>
-        <FormProvider {...methods}>
+        <FormProvider {...form}>
           <FormCard
             title='Profile Settings'
             description='Manage your personal information'
@@ -64,6 +53,7 @@ export function EditProfileForm() {
               <div className='flex w-full justify-between gap-3 '>
                 <DialogClose asChild>
                   <Button
+                    onClick={() => form.reset()}
                     type='button'
                     variant='ghost'
                     className='rounded-lg bg-red-400 '
@@ -74,7 +64,7 @@ export function EditProfileForm() {
 
                 <Button
                   type='submit'
-                  disabled={isSubmitting}
+                  disabled={update.isPending}
                   className='bg-blue-500 rounded-lg text-white font-bold'
                 >
                   Save changes
@@ -84,30 +74,53 @@ export function EditProfileForm() {
           >
             {/* Avatar Section */}
             <div className='flex flex-col sm:flex-row items-center justify-between sm:items-start gap-6  '>
-              <AvatarPreview url={avatarPreview} />
+              <AvatarPreview
+                url={
+                  !avatarPreview
+                    ? (profile?.avatar ?? avatarPreview)
+                    : avatarPreview
+                }
+              />
               <div className=' flex flex-col gap-2 justify-between flex-1'>
                 <h4 className='font-medium'>Profile Photo</h4>
-                <p className='text-sm text-muted-foreground'>
-                  Upload a professional photo for your account
-                </p>
-                <div className='flex items-center gap-3 pt-2'>
-                  <input
-                    type='file'
-                    accept='image/*'
-                    {...register('avatar')}
-                    onChange={onFileChange}
-                    className='hidden'
-                    id='avatar'
-                  />
+
+                {form.formState.errors.avatar ? (
+                  <span className='text-red-600/80 text-sm'>
+                    {form.formState.errors.avatar?.message}
+                  </span>
+                ) : (
+                  <p className='text-sm text-muted-foreground'>
+                    Upload a professional photo for your account
+                  </p>
+                )}
+
+                <div className='flex pt-3 items-center justify-between  '>
+                  <div className='hidden'>
+                    <Controller
+                      name={'avatar'}
+                      control={form.control}
+                      render={({ field, fieldState }) => (
+                        <FieldControl
+                          field={{ ...field }}
+                          fieldState={fieldState}
+                          onChange={onFileChange}
+                          type={'file'}
+                          id='avatar'
+                          accept='image/*'
+                          className=' hidden w-0!  h-0!'
+                        />
+                      )}
+                    />
+                  </div>
                   <Label
                     htmlFor='avatar'
-                    className='cursor-pointer rounded-xl border px-4 py-2 text-sm hover:bg-muted transition'
+                    className=' cursor-pointer rounded-xl border px-4 py-2 text-sm hover:bg-muted transition'
                   >
                     Change photo
                   </Label>
-                  <span className='text-xs text-muted-foreground'>
+                  <p className='text-xs text-muted-foreground'>
                     PNG, JPG, max 5MB
-                  </span>
+                  </p>
                 </div>
               </div>
             </div>
@@ -126,22 +139,16 @@ export function EditProfileForm() {
                 placeholder='johndoe'
               />
               <FormField
-                name='username'
-                label='Email'
-                placeholder='you@email.com'
-                type='email'
-              />
-              <FormField
                 name='phone'
                 label='Phone'
                 placeholder='+55 11 99999-9999'
                 type='number'
               />
               <FormField
-                name='address'
-                label='Address'
-                placeholder='Street, City, Country'
-                type='text'
+                name='birthdate'
+                label='Birthdate'
+                placeholder='Select your birthdate'
+                type='date'
               />
             </div>
           </FormCard>

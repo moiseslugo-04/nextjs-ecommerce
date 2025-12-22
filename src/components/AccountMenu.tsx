@@ -34,18 +34,18 @@ export function AccountMenu() {
         onMouseLeave={() => setOpen(false)}
         className='bg-gechis-blue-dark text-white'
       >
-        <DropdownMenuItem>
-          <Link href='/account/orders'>My orders</Link>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Link href='/account'>Profile</Link>
-        </DropdownMenuItem>
-        {isAdmin && (
+        {isAdmin ? (
           <DropdownMenuItem>
             <Link href='/dashboard'>Dashboard</Link>
           </DropdownMenuItem>
+        ) : (
+          <DropdownMenuItem>
+            <Link href='/account'>Account</Link>
+          </DropdownMenuItem>
         )}
-
+        <DropdownMenuItem>
+          <Link href='/account/orders'>Orders</Link>
+        </DropdownMenuItem>
         <DropdownMenuLabel>
           {isLoggedIn ? (
             <Button

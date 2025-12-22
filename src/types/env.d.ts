@@ -6,7 +6,9 @@ declare namespace NodeJS {
     AUTH_SECRET: string
     NEXT_AUTH_URL: string
     RESEND_API_KEY: string
-
+    CLOUDINARY_CLOUD_NAME: string
+    CLOUDINARY_API_KEY: string
+    CLOUDINARY_API_SECRET: string
     //Frontend safe
     NEXT_PUBLIC_APP_URL: string
   }

@@ -1,5 +1,5 @@
 import { NotFound } from '@components/NotFound'
-import { ProductList } from '@components/features/products/ProductList'
+import { ProductList } from '@/components/features/products/ProductList'
 import { SearchResultsHeader } from '@components/SearchResultsHeader'
 import { PaginationBar } from '@/components/shared/PaginationBar'
 import { getAllProducts } from '@features/products/products.service'

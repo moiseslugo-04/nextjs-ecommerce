@@ -1,32 +1,6 @@
 import prisma from '@/lib/client'
-import {
-  RefreshToken,
-  Role,
-  VerificationToken,
-  Account,
-  Profile,
-} from '@prisma/client'
-export type UserDTO = {
-  id: string
-  email: string
-  emailVerified: Date | null
-  role: Role
-  username: string | null
-  name?: string
-  verificationTokens: VerificationToken[]
-  refreshTokens: RefreshToken[]
-  accounts: Account[]
-  profile: Profile | null
-}
+import { UserDTO, SaveUser } from './types'
 
-interface SaveUser {
-  name: string
-  email: string
-  username?: string
-  password?: string
-  image?: string
-  emailVerified?: Date
-}
 export type UserDTOWithPassword = UserDTO & { password: string | null }
 export function findUserByEmail(email: string): Promise<UserDTO | null> {
   return prisma.user.findFirst({
