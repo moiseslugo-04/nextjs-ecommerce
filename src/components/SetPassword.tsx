@@ -7,7 +7,7 @@ import { useSetPassword } from '@features/auth/client/hooks/useSetPassword'
 export function SetPassword({ userId }: { userId: string }) {
   const { onSubmit, control, isPending } = useSetPassword({ userId })
   return (
-    <Card className='max-w-md w-full bg-white rounded-2xl shadow-lg border border-neutral-200'>
+    <Card className='max-w-md w-full bg-red-600 rounded-2xl shadow-lg border border-neutral-200'>
       <CardHeader className='text-center my-4'>
         <h1 className='text-2xl font-bold tracking-tight'>
           Create new password

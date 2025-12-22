@@ -45,7 +45,7 @@ export default function InvalidTokenCard({
     })
   })
   return (
-    <div className='max-w-md mx-auto mt-20 bg-white shadow-lg p-8 rounded-xl border'>
+    <div className='max-w-md mx-auto  bg-white shadow-lg p-8 rounded-xl border-none'>
       <Link href={'/'} className='text-blue-500'>
         {'<-'} Go home
       </Link>

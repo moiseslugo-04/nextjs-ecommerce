@@ -3,8 +3,8 @@ import {
   saveUser,
   findUserByIdentifier,
   updateUserPassword,
-  UserDTO,
 } from '@features/users/user.repository'
+import { UserDTO } from '@features/users/types'
 import { ERROR_MESSAGE } from '@/lib/utils/constants/constants'
 import { generateEmailVerificationToken } from '@/lib/features/auth/services/verification-token.service'
 import { Prisma } from '@prisma/client'

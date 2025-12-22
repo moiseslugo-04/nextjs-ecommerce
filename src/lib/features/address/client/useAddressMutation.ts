@@ -9,6 +9,7 @@ import { toast } from 'sonner'
 export function useAddressMutations() {
   const create = useMutation({
     mutationFn: createAddressAction,
+    mutationKey: ['create-address'],
     onError: (err) => {
       console.error('Error creating address:', err)
       toast.error('Failed to create address')

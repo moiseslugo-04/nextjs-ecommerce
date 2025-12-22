@@ -41,6 +41,7 @@ export function PaginationBar(props: PaginationProps) {
           {/* Previous button */}
           <PaginationItem>
             <PaginationPrevious
+              size={'default'}
               aria-disabled={!hasPrev}
               className={`rounded-lg p-2text-sm font-medium transition-colors  ${
                 hasPrev
@@ -60,6 +61,7 @@ export function PaginationBar(props: PaginationProps) {
           {visiblePages.map((page) => (
             <PaginationItem key={page}>
               <PaginationLink
+                size={'default'}
                 className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors cursor-pointer ${
                   page == currentPage
                     ? 'bg-blue-600 text-white shadow-sm'
@@ -82,6 +84,7 @@ export function PaginationBar(props: PaginationProps) {
           {/* Next button */}
           <PaginationItem>
             <PaginationNext
+              size={'default'}
               aria-disabled={!hasNext}
               className={`rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                 hasNext

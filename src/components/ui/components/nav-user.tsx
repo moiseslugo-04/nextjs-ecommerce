@@ -8,6 +8,7 @@ import {
 } from '@components/ui/sidebar'
 import { Button } from '../button'
 import { Suspense } from 'react'
+import { logout } from '@/lib/features/auth/server/auth.action'
 
 export function NavUser() {
   return (
@@ -15,8 +16,8 @@ export function NavUser() {
       <SidebarMenu>
         <SidebarMenuItem className=' flex flex-col gap-4 '>
           <SidebarMenuButton asChild>
-            <Button>
-              <LogOut className='-ml-3' />
+            <Button className='flex items-start justify-start' onClick={logout}>
+              <LogOut className='-ml-1' />
               <p className='leading-tight text-sm truncate'>Log out</p>
             </Button>
           </SidebarMenuButton>

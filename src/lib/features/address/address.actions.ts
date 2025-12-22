@@ -49,9 +49,8 @@ export async function updateAddressAction({
   } catch (error) {
     console.error('Error updating address:', error)
     revalidatePath('/account/address')
-
-    throw new Error('Failed to update address')
   }
+  throw new Error('Failed to update address')
 }
 
 export async function setDefaultAddressAction(addressId: string) {
@@ -59,11 +58,9 @@ export async function setDefaultAddressAction(addressId: string) {
   if (!session.isAuthenticated) throw new Error('Unauthorized')
   try {
     await setDefaultAddress(addressId, session.payload.id)
-    revalidatePath('/account/address')
   } catch (error) {
     console.error('Error updating address:', error)
-    revalidatePath('/account/address')
-
     throw new Error('Failed to update address')
   }
+  revalidatePath('/account/address')
 }

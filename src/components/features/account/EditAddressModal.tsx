@@ -45,6 +45,7 @@ export function EditAddressModal({
       }
     )
   )
+  const isPending = updateAddress.isPending
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTitle className='sr-only'>Edit Address</DialogTitle>
@@ -77,10 +78,10 @@ export function EditAddressModal({
 
                 <Button
                   type='submit'
-                  disabled={updateAddress.isPending}
+                  disabled={isPending}
                   className='bg-blue-500 rounded-lg text-white font-bold'
                 >
-                  Update Address
+                  {isPending ? 'Updating Address...' : 'Update Address'}
                 </Button>
               </div>
             }

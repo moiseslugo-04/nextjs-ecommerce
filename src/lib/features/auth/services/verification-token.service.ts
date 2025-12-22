@@ -14,7 +14,8 @@ import {
   sendEmailSetPassword,
   sendEmailVerificationEmail,
 } from '@lib/features/email/email.service'
-import { findUserByEmail, UserDTO } from '@lib/features/users/user.repository'
+import { findUserByEmail } from '@lib/features/users/user.repository'
+import { UserDTO } from '@features/users/types'
 
 interface CreateToken {
   type: 'email_verification' | 'reset_password' | 'set_password'

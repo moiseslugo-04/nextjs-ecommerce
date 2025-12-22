@@ -18,10 +18,7 @@ export default async function AddressPage() {
       )}
       <ul className='space-y-4'>
         {addresses.map((address) => (
-          <AddressCard
-            key={address.id}
-            data={{ ...address, isDefault: false }}
-          />
+          <AddressCard key={address.id} data={{ ...address }} />
         ))}
       </ul>
     </section>

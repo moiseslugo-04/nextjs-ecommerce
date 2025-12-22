@@ -5,7 +5,7 @@ import {
   createSession,
   deleteSession,
 } from '@/lib/features/auth/server/session/session.service'
-import { UserDTO } from '@features/users/user.repository'
+import { UserDTO } from '@features/users/types'
 import { redirect } from 'next/navigation'
 import { signOut } from '../oAuth/auth'
 import { verifySession } from '@/lib/dal/session'

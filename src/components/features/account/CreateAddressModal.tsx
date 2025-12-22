@@ -14,7 +14,6 @@ import {
 import { DialogTitle } from '@radix-ui/react-dialog'
 import { useAddressFrom } from '@/lib/features/address/client/useAddressFrom'
 import { useAddressMutations } from '@/lib/features/address/client/useAddressMutation'
-import { Loading } from '@/components/shared/Loading'
 import { useState } from 'react'
 
 export function CreateAddressModal() {
@@ -30,7 +29,6 @@ export function CreateAddressModal() {
     })
   )
   const isPending = create.isPending
-  if (isPending) return <Loading text='Creating new address' />
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTitle className='sr-only'>Add New Address</DialogTitle>
@@ -42,7 +40,7 @@ export function CreateAddressModal() {
           Add address
         </Button>
       </DialogTrigger>
-      <DialogContent className='max-w-2xl border-none shadow-none'>
+      <DialogContent className='max-w-2xl border-none shadow-none '>
         <FormProvider {...form}>
           <FormCard
             title='Add New Address'
@@ -66,7 +64,7 @@ export function CreateAddressModal() {
                   disabled={isPending}
                   className='bg-blue-500 rounded-lg text-white font-bold'
                 >
-                  Add new Address
+                  {isPending ? 'Adding new address...' : 'Add new Address'}
                 </Button>
               </div>
             }
@@ -78,33 +76,20 @@ export function CreateAddressModal() {
                 name='label'
                 label='Label'
                 placeholder='Home, Work, etc.'
-                defaultValue={''}
               />
 
               <FormField
                 name='postalCode'
                 label='Postal Code or ZIP'
                 placeholder='78900'
-                defaultValue={''}
               />
               <FormField
                 name='address'
                 label='Address Line'
                 placeholder='new street, building, apartment, etc.'
-                defaultValue={''}
               />
-              <FormField
-                name='country'
-                label='Country'
-                placeholder='Brazil'
-                defaultValue={''}
-              />
-              <FormField
-                name='city'
-                label='City'
-                placeholder='City'
-                defaultValue={''}
-              />
+              <FormField name='country' label='Country' placeholder='Brazil' />
+              <FormField name='city' label='City' placeholder='City' />
             </div>
           </FormCard>
         </FormProvider>

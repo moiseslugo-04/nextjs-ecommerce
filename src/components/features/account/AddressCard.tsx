@@ -1,11 +1,11 @@
 'use client'
 
-import { Loading } from '@/components/shared/Loading'
 import { Button } from '@/components/ui/button'
 import { useAddressMutations } from '@/lib/features/address/client/useAddressMutation'
 import { Address } from '@prisma/client'
 import { EditAddressModal } from './EditAddressModal'
 import { Badge } from '@components/ui/badge'
+import { Spinner } from '@/components/ui/spinner'
 
 export function AddressCard({
   data,
@@ -15,7 +15,6 @@ export function AddressCard({
   const { id, isDefault, address, postalCode, city, country, label } = data
   const { removeAddress, setAsDefault } = useAddressMutations()
   const { mutate, isPending } = removeAddress
-  if (isPending) return <Loading text='Deleting address...' />
   return (
     <li
       key={id}
@@ -55,7 +54,7 @@ export function AddressCard({
             onClick={() => mutate(id)}
             className='text-sm text-red-600 hover:underline'
           >
-            Delete
+            {isPending ? 'Deleting...' : 'Delete'}
           </Button>
         </div>
       </div>
@@ -66,7 +65,13 @@ export function AddressCard({
             onClick={() => setAsDefault.mutate(id)}
             className='text-sm text-gray-700 hover:underline'
           >
-            Set as default
+            {setAsDefault.isPending ? (
+              <p className='flex text-sm gap-2 items-center'>
+                Setting as default <Spinner />
+              </p>
+            ) : (
+              'Set as default'
+            )}
           </Button>
         </div>
       )}

@@ -1,6 +1,5 @@
 import prisma from '@lib/client'
 import { ProfileData, ProfilePayload } from '../types'
-import { ProfileInput, ProfileOutput } from '../schemas'
 export function getUserProfile(userId: string) {
   return prisma.profile.findUnique({
     where: { userId },
