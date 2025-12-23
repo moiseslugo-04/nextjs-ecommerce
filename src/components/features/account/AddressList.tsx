@@ -1,0 +1,23 @@
+'use client'
+
+import { useAddressStore } from '@/lib/features/address/client/useAddressStore'
+import { AddressCard } from './AddressCard'
+
+export function AddressList() {
+  const addresses = useAddressStore((state) => state.addresses)
+  const isEmpty = addresses.length === 0
+  return (
+    <>
+      {isEmpty && (
+        <div className='rounded-md border p-6 text-sm text-gray-500'>
+          You don’t have any addresses yet.
+        </div>
+      )}
+      <ul className='space-y-4'>
+        {addresses.map((address) => (
+          <AddressCard key={address.id} data={{ ...address }} />
+        ))}
+      </ul>
+    </>
+  )
+}

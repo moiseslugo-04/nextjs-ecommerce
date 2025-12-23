@@ -3,7 +3,6 @@
 import { verifySession } from '@/lib/dal/session'
 import { AddressSchema } from './schema'
 import { addUserAddress } from './address.service'
-import { revalidatePath } from 'next/cache'
 import {
   deleteAddress,
   setDefaultAddress,
@@ -14,8 +13,7 @@ export async function createAddressAction(data: AddressSchema) {
   const session = await verifySession()
   if (!session.isAuthenticated) throw new Error('Unauthorized')
   try {
-    await addUserAddress(session.payload.id, data)
-    revalidatePath('/account/address')
+    return await addUserAddress(session.payload.id, data)
   } catch (error) {
     console.error('Error creating address:', error)
     throw new Error('Failed to create address')
@@ -31,7 +29,6 @@ export async function deleteAddressAction(id: string) {
     console.error('Error deleting address:', error)
     throw new Error('Failed to delete address')
   }
-  revalidatePath('/account/address')
 }
 
 export async function updateAddressAction({
@@ -45,12 +42,10 @@ export async function updateAddressAction({
   if (!session.isAuthenticated) throw new Error('Unauthorized')
   try {
     await updateAddress(addressId, session.payload.id, data)
-    revalidatePath('/account/address')
   } catch (error) {
     console.error('Error updating address:', error)
-    revalidatePath('/account/address')
+    throw new Error('Failed to update address')
   }
-  throw new Error('Failed to update address')
 }
 
 export async function setDefaultAddressAction(addressId: string) {
@@ -62,5 +57,4 @@ export async function setDefaultAddressAction(addressId: string) {
     console.error('Error updating address:', error)
     throw new Error('Failed to update address')
   }
-  revalidatePath('/account/address')
 }

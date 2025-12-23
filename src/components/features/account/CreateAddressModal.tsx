@@ -15,19 +15,21 @@ import { DialogTitle } from '@radix-ui/react-dialog'
 import { useAddressFrom } from '@/lib/features/address/client/useAddressFrom'
 import { useAddressMutations } from '@/lib/features/address/client/useAddressMutation'
 import { useState } from 'react'
+import { toast } from 'sonner'
 
 export function CreateAddressModal() {
   const [open, setOpen] = useState(false)
   const form = useAddressFrom()
   const { create } = useAddressMutations()
-  const onSubmit = form.handleSubmit(async (data) =>
-    create.mutate(data, {
-      onSuccess: () => {
-        setOpen(false)
-        form.reset()
-      },
+  const onSubmit = form.handleSubmit(async (data) => {
+    setOpen(false)
+    form.reset()
+    toast.promise(create.mutateAsync(data), {
+      loading: 'Creating  address...',
+      success: 'Address create successfully',
+      error: 'Failed to create address',
     })
-  )
+  })
   const isPending = create.isPending
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -64,7 +66,7 @@ export function CreateAddressModal() {
                   disabled={isPending}
                   className='bg-blue-500 rounded-lg text-white font-bold'
                 >
-                  {isPending ? 'Adding new address...' : 'Add new Address'}
+                  Add new Address
                 </Button>
               </div>
             }

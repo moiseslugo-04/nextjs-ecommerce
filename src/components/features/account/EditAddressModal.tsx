@@ -15,6 +15,7 @@ import { DialogTitle } from '@radix-ui/react-dialog'
 import { useAddressFrom } from '@/lib/features/address/client/useAddressFrom'
 import { useAddressMutations } from '@/lib/features/address/client/useAddressMutation'
 import { useState } from 'react'
+import { toast } from 'sonner'
 interface EditAddressModalProps {
   label: string
   postalCode: string
@@ -34,17 +35,15 @@ export function EditAddressModal({
   const [open, setOpen] = useState(false)
   const form = useAddressFrom({ label, postalCode, address, country, city })
   const { updateAddress } = useAddressMutations()
-  const onSubmit = form.handleSubmit(async (data) =>
-    updateAddress.mutate(
-      { addressId: id, data },
-      {
-        onSuccess: () => {
-          setOpen(false)
-          form.reset()
-        },
-      }
-    )
-  )
+  const onSubmit = form.handleSubmit(async (data) => {
+    form.reset()
+    setOpen(false)
+    toast.promise(updateAddress.mutateAsync({ addressId: id, data }), {
+      loading: 'Updating address...',
+      success: 'Address updated  successfully',
+      error: 'Failed to update address ',
+    })
+  })
   const isPending = updateAddress.isPending
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -81,7 +80,7 @@ export function EditAddressModal({
                   disabled={isPending}
                   className='bg-blue-500 rounded-lg text-white font-bold'
                 >
-                  {isPending ? 'Updating Address...' : 'Update Address'}
+                  Update Address
                 </Button>
               </div>
             }

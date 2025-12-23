@@ -1,54 +1,89 @@
 import { useMutation } from '@tanstack/react-query'
+import { nanoid } from 'nanoid'
 import {
   createAddressAction,
   deleteAddressAction,
   setDefaultAddressAction,
   updateAddressAction,
 } from '../address.actions'
-import { toast } from 'sonner'
+import { useAddressStore } from '@lib/features/address/client/useAddressStore'
+import { AddressDTO } from '../types'
 export function useAddressMutations() {
   const create = useMutation({
     mutationFn: createAddressAction,
     mutationKey: ['create-address'],
-    onError: (err) => {
-      console.error('Error creating address:', err)
-      toast.error('Failed to create address')
+    onMutate: (data) => {
+      const tempId = `temp-${nanoid()}`
+      const optimisticAddress: AddressDTO = {
+        ...data,
+        id: tempId,
+        isDefault: false,
+      }
+      //Snapshot the previous value
+      const rollback = useAddressStore.getState().addresses
+      useAddressStore.getState().addOptimistic(optimisticAddress)
+      return { tempId, rollback }
     },
-    onSuccess: () => {
-      toast.success('Address created successfully')
+
+    onError: (err, __, context) => {
+      if (context?.rollback) {
+        useAddressStore.getState().rollback(context.rollback)
+      }
+    },
+    onSuccess: (addressRes, __, context) => {
+      useAddressStore.getState().replaceTemp(context.tempId, addressRes)
     },
   })
   const setAsDefault = useMutation({
     mutationFn: setDefaultAddressAction,
     mutationKey: ['set-as-default-address'],
-    onSuccess: () => {
-      toast.success('Address set as default successfully')
+    onMutate: (addressId) => {
+      //Snapshot the previous value
+      const rollback = useAddressStore.getState().addresses
+      useAddressStore.getState().setAsDefault(addressId)
+      return { rollback }
     },
-    onError: (err) => {
+
+    onError: (err, _, context) => {
+      if (context?.rollback) {
+        useAddressStore.getState().rollback(context.rollback)
+      }
       console.error('Error setting address as default:', err)
-      toast.error('Failed to set address as default')
     },
   })
   const updateAddress = useMutation({
     mutationFn: updateAddressAction,
     mutationKey: ['update-address'],
-    onSuccess: () => {
-      toast.success('Address updated successfully')
+    onMutate: ({ addressId, data }) => {
+      //Snapshot the previous value
+      const rollback = useAddressStore.getState().addresses
+      //optimistic update
+
+      useAddressStore.getState().updateOptimistic(addressId, data)
+      return { rollback }
     },
-    onError: (err) => {
+    onError: (err, _, context) => {
+      if (context?.rollback) {
+        useAddressStore.getState().rollback(context.rollback)
+      }
       console.error('Error updating address:', err)
-      toast.error('Failed to update address')
     },
   })
   const removeAddress = useMutation({
     mutationFn: deleteAddressAction,
     mutationKey: ['remove-address'],
-    onSuccess: () => {
-      toast.success('Address removed successfully')
+    onMutate: (addressId) => {
+      //Snapshot the previous value
+      const rollback = useAddressStore.getState().addresses
+      //optimistic Update
+      useAddressStore.getState().removeOptimistic(addressId)
+      return { rollback }
     },
-    onError: (err) => {
+    onError: (err, _, context) => {
+      if (context?.rollback) {
+        useAddressStore.getState().rollback(context.rollback)
+      }
       console.error('Error removing address:', err)
-      toast.error('Failed to remove address')
     },
   })
   return { create, setAsDefault, updateAddress, removeAddress }

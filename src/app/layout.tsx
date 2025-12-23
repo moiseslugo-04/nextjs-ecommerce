@@ -38,7 +38,7 @@ export default async function RootLayout({
         <Suspense>
           <ErrorHandler />
         </Suspense>
-        <Toaster />
+        <Toaster richColors />
         <SessionSynchronizer>{children}</SessionSynchronizer>
       </body>
     </html>

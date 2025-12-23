@@ -2,11 +2,33 @@ import prisma from '@lib/client'
 import { AddressSchema } from './schema'
 // Address related functions
 export async function getAllAddresses(userId: string) {
-  return prisma.address.findMany({ where: { userId } })
+  return prisma.address.findMany({
+    where: { userId },
+    select: {
+      address: true,
+      id: true,
+      country: true,
+      city: true,
+      postalCode: true,
+      label: true,
+      isDefault: true,
+    },
+  })
 }
 
 export async function addAddress(userId: string, data: AddressSchema) {
-  return prisma.address.create({ data: { ...data, userId } })
+  return prisma.address.create({
+    data: { ...data, userId },
+    select: {
+      address: true,
+      id: true,
+      country: true,
+      city: true,
+      postalCode: true,
+      label: true,
+      isDefault: true,
+    },
+  })
 }
 
 export async function deleteAddress(addressId: string, userId: string) {

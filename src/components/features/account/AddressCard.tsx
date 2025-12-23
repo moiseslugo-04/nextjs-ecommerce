@@ -2,19 +2,29 @@
 
 import { Button } from '@/components/ui/button'
 import { useAddressMutations } from '@/lib/features/address/client/useAddressMutation'
-import { Address } from '@prisma/client'
 import { EditAddressModal } from './EditAddressModal'
 import { Badge } from '@components/ui/badge'
 import { Spinner } from '@/components/ui/spinner'
+import { AddressDTO } from '@/lib/features/address/types'
+import { toast } from 'sonner'
 
-export function AddressCard({
-  data,
-}: {
-  data: Address & { isDefault: boolean }
-}) {
+export function AddressCard({ data }: { data: AddressDTO }) {
   const { id, isDefault, address, postalCode, city, country, label } = data
   const { removeAddress, setAsDefault } = useAddressMutations()
-  const { mutate, isPending } = removeAddress
+  const handleSetAsDefault = () => {
+    toast.promise(setAsDefault.mutateAsync(data.id), {
+      loading: 'Setting as default address...',
+      success: 'Address set as default successfully',
+      error: 'Failed to set address as default',
+    })
+  }
+  const handleRemove = () => {
+    toast.promise(removeAddress.mutateAsync(data.id), {
+      loading: 'Removing address...',
+      success: 'Address remove successfully',
+      error: 'Failed to remove address',
+    })
+  }
   return (
     <li
       key={id}
@@ -51,10 +61,10 @@ export function AddressCard({
           />
 
           <Button
-            onClick={() => mutate(id)}
+            onClick={handleRemove}
             className='text-sm text-red-600 hover:underline'
           >
-            {isPending ? 'Deleting...' : 'Delete'}
+            Delete
           </Button>
         </div>
       </div>
@@ -62,7 +72,7 @@ export function AddressCard({
       {!isDefault && (
         <div className='mt-3'>
           <Button
-            onClick={() => setAsDefault.mutate(id)}
+            onClick={handleSetAsDefault}
             className='text-sm text-gray-700 hover:underline'
           >
             {setAsDefault.isPending ? (
