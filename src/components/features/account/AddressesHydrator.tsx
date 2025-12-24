@@ -8,8 +8,9 @@ type AddressesHydratorProps = {
   initialAddress: AddressDTO[]
 }
 export function AddressesHydrator({ initialAddress }: AddressesHydratorProps) {
+  const { hydrate } = useAddressStore()
   useEffect(() => {
-    useAddressStore.getState().syncAddress(initialAddress)
+    hydrate(initialAddress)
   }, [])
   return null
 }

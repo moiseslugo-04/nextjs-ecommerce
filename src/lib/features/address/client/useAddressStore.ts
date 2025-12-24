@@ -4,6 +4,7 @@ import { AddressDTO } from '../types'
 
 type AddressState = {
   addresses: AddressDTO[]
+  hydrated: boolean
 }
 type AddressActions = {
   addOptimistic: (data: AddressDTO) => void
@@ -11,13 +12,14 @@ type AddressActions = {
   updateOptimistic: (addressId: string, updates: AddressSchema) => void
   replaceTemp: (tempId: string, addressRes: AddressDTO) => void
   setAsDefault: (addressId: string) => void
-  syncAddress: (data: AddressDTO[]) => void
+  hydrate: (address: AddressDTO[]) => void
   rollback: (address: AddressDTO[]) => void
 }
 type AddressStore = AddressState & AddressActions
 export const useAddressStore = create<AddressStore>()((set) => ({
   addresses: [],
-  syncAddress: (data) => set({ addresses: data }),
+  hydrated: false,
+  hydrate: (data) => set({ addresses: data, hydrated: true }),
   addOptimistic: (newAddress) =>
     set((state) => ({ addresses: [newAddress, ...state.addresses] })),
   removeOptimistic: (addressId) =>

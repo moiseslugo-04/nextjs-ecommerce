@@ -2,9 +2,11 @@
 
 import { useAddressStore } from '@/lib/features/address/client/useAddressStore'
 import { AddressCard } from './AddressCard'
+import { AddressSkeleton } from './AddressSkeleton'
 
 export function AddressList() {
-  const addresses = useAddressStore((state) => state.addresses)
+  const { addresses, hydrated } = useAddressStore()
+  if (!hydrated) return <AddressSkeleton />
   const isEmpty = addresses.length === 0
   return (
     <>
