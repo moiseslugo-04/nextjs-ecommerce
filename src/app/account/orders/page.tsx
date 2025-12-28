@@ -1,5 +1,5 @@
-import { OrderItem } from '@/components/features/account/OrderItem'
-import type { OrderItemType } from '@/lib/features/account/types/types'
+import { OrderItem } from '@/features/orders/components/OrderItem'
+import type { OrderItemType } from '@/features/account/types/types'
 const orders = [
   {
     id: 'ord_1',

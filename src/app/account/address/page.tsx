@@ -1,7 +1,7 @@
-import { AddressesHydrator } from '@/components/features/account/AddressesHydrator'
-import { AddressList } from '@/components/features/account/AddressList'
-import { CreateAddressModal } from '@/components/features/account/CreateAddressModal'
-import { getAllUserAddresses } from '@/lib/features/address/address.service'
+import { AddressesHydrator } from '@/features/address/components/AddressesHydrator'
+import { AddressList } from '@/features/address/components/AddressList'
+import { CreateAddressModal } from '@/features/address/components/CreateAddressModal'
+import { getAllUserAddresses } from '@/features/address/address.service'
 export default async function AddressPage() {
   const addresses = await getAllUserAddresses()
   return (

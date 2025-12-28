@@ -1,16 +1,16 @@
-import { verifySession } from '@/lib/dal/session'
-import { AppSidebar } from '@/components/ui/components/AppSidebar'
+import { AccountSidebarLayout } from '@/features/account/components/AccountSidebarLayout'
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from '@components/ui/sidebar'
 import { ReactNode } from 'react'
+import { getProfile } from '@/features/profile/server/profile.service'
 export default async function Layout({ children }: { children: ReactNode }) {
-  await verifySession()
+  const profile = await getProfile()
   return (
     <SidebarProvider className='overflow-hidden'>
-      <AppSidebar />
+      <AccountSidebarLayout profile={profile} />
       <SidebarInset className='flex-1'>
         <section className='min-h-full flex flex-col  bg-neutral-50'>
           {/* Header */}

@@ -2,10 +2,10 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
-import { EditProfileForm } from '@/components/features/account/EditProfileForm'
-import { getProfile } from '@/lib/features/profile/server/profile.service'
-import { InfoItem } from '@/components/features/account/InfoItem'
-import { InfoSection } from '@/components/features/account/InfoSession'
+import { EditProfileForm } from '@/features/profile/components/EditProfileForm'
+import { getProfile } from '@/features/profile/server/profile.service'
+import { InfoItem } from '@/components/shared/InfoItem'
+import { InfoSection } from '@/components/shared/InfoSession'
 
 export default async function ProfilePage() {
   const profile = await getProfile()

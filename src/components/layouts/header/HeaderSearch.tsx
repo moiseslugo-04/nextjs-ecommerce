@@ -5,7 +5,7 @@ import { Input } from '@components/ui/input'
 import {
   useFilter,
   DepartmentType,
-} from '@/lib/features/products/filters/useFilters'
+} from '@features/products/filters/useFilters'
 export function HeaderSearch() {
   const { onSearch, defaultSearchTerm, department } = useFilter()
   const placeholders: Record<DepartmentType, string> = {

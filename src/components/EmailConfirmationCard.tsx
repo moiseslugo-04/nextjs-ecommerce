@@ -1,6 +1,6 @@
 'use client'
 import { useState, useTransition } from 'react'
-import { resendVerificationTokenByEmail } from '@/lib/features/auth/credentials/actions/resend-verification-token.action'
+import { resendVerificationTokenByEmail } from '@/features/auth/credentials/actions'
 import {
   Card,
   CardHeader,

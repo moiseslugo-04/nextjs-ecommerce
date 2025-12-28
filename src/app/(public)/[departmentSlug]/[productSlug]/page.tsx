@@ -1,5 +1,5 @@
 import { NotFound } from '@components/NotFound'
-import { ProductDetails } from '@/components/features/products/ProductDetails'
+import { ProductDetails } from '@/features/products/components/ProductDetails'
 import { getProduct } from '@features/products/product.repository'
 import { serializedProduct } from '@/lib/utils/dataSerialize'
 import { BreadcrumbGenerator } from '@/components/shared/BreadcrumbGenerator'

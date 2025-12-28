@@ -1,5 +1,5 @@
 'use client'
-import { useFilter } from '@lib/features/products/filters/useFilters'
+import { useFilter } from '@features/products/filters/useFilters'
 import { ArrowBigDown } from 'lucide-react'
 import { Suspense } from 'react'
 interface FiltersProps {

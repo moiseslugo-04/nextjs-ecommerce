@@ -1,7 +1,7 @@
 import {
   ProductWithRelations,
   SerializedProduct,
-} from '@/lib/features/products/product.types'
+} from '@features/products/types'
 
 export function serializedProduct(
   product: ProductWithRelations | null

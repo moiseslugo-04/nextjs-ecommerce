@@ -3,7 +3,7 @@ import { Card, CardHeader, CardContent, CardFooter } from '@components/ui/card'
 import { PasswordInput } from '@components/shared/PasswordInput'
 import { Controller } from 'react-hook-form'
 import { Button } from '@components/ui/button'
-import { useSetPassword } from '@features/auth/client/hooks/useSetPassword'
+import { useSetPassword } from '@/features/auth/hooks/useSetPassword'
 export function SetPassword({ userId }: { userId: string }) {
   const { onSubmit, control, isPending } = useSetPassword({ userId })
   return (

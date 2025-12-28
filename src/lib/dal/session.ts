@@ -1,9 +1,9 @@
 import 'server-only'
 import { getCookies } from '@lib/utils/cookies'
-import { decrypt } from '@features/auth/server/session/session.service'
-import { auth } from '@features/auth/oAuth/auth'
+import { decrypt } from '@/features/auth/server/session/session.service'
+import { auth } from '@/features/auth/oAuth/auth'
 import { redirect } from 'next/navigation'
-import { SessionPayload } from '@/lib/features/auth/server/session/types'
+import { SessionPayload } from '@/features/auth/server/session/types'
 import { cache } from 'react'
 
 export const verifySession = cache(async (): Promise<SessionPayload> => {

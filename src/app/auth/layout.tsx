@@ -1,5 +1,5 @@
-import { AuthCard } from '@/components/features/auth/components/AuthCard'
-import { AuthHeader } from '@/components/features/auth/components/AuthHeader'
+import { AuthCard } from '@/features/auth/components/AuthCard'
+import { AuthHeader } from '@/features/auth/components/AuthHeader'
 import { ReactNode } from 'react'
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (

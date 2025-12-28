@@ -9,7 +9,7 @@ import {
   PaginationPrevious,
 } from '@components/ui/pagination'
 import { Suspense } from 'react'
-import { usePagination } from '@/lib/features/products/filters/usePagination'
+import { usePagination } from '@features/products/filters/usePagination'
 interface PaginationProps {
   currentPage: number
   totalPages: number

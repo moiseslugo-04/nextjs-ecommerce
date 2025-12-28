@@ -1,11 +1,11 @@
 import { NotFound } from '@components/NotFound'
 import { getAllProducts } from '@features/products/products.service'
-import type { Filters } from '@/lib/features/products/product.types'
+import type { Filters } from '@features/products/types'
 import { Sparkles } from 'lucide-react'
 import { capitalizeWord } from '@lib/ui/utils'
 import { SearchResultsHeader } from '@components/SearchResultsHeader'
 import { PaginationBar } from '@components/shared/PaginationBar'
-import { ProductList } from '@/components/features/products/ProductList'
+import { ProductList } from '@/features/products/components/ProductList'
 import { BreadcrumbGenerator } from '@/components/shared/BreadcrumbGenerator'
 interface DepartmentPageProps {
   params: Promise<{ departmentSlug: string }>

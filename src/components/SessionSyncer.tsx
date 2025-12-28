@@ -1,6 +1,6 @@
 'use client'
 
-import { AuthGate } from '@features/auth/client/AuthGate'
+import { AuthGate } from '@/features/auth/components/AuthGate'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactNode } from 'react'
 export const queryClient = new QueryClient({

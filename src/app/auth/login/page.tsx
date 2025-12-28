@@ -1,4 +1,4 @@
-import { LoginForm } from '@/components/features/auth/login/LoginForm'
+import { LoginForm } from '@/features/auth/components/LoginForm'
 interface LoginProps {
   searchParams: Promise<{ email: string }>
 }

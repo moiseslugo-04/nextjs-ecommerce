@@ -2,14 +2,14 @@ import { NextRequest, NextResponse } from 'next/server'
 import {
   decrypt,
   refreshSession,
-} from '@/lib/features/auth/server/session/session.service'
+} from '@/features/auth/server/session/session.service'
 
 import {
   isPrivateRoute,
   isAuthRoute,
   isAdminRoute,
 } from './lib/utils/server.utils'
-import { auth } from '@features/auth/oAuth/auth'
+import { auth } from '@/features/auth/oAuth/auth'
 interface Payload {
   id: string
   role: string
