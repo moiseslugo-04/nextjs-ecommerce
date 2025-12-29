@@ -16,10 +16,8 @@ import { useLogout } from '@/features/auth/hooks/useLogout'
 import { useSession } from '@/features/auth/server/session/hooks/useSession'
 export function AccountMenu() {
   const { closeSession, isPending } = useLogout()
-  const { data: session } = useSession()
-  const isLoggedIn = session?.isAuthenticated
-  const isAdmin = isLoggedIn && session.payload.role === 'ADMIN'
-
+  const { session } = useSession()
+  const isAdmin = session.isAuthenticated && session.payload?.role === 'ADMIN'
   const [open, setOpen] = useState(false)
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
@@ -47,7 +45,7 @@ export function AccountMenu() {
           <Link href='/account/orders'>Orders</Link>
         </DropdownMenuItem>
         <DropdownMenuLabel>
-          {isLoggedIn ? (
+          {session.isAuthenticated ? (
             <Button
               className='cursor-pointer text-red-300 text-start hover:text-red-500 ease-in'
               onClick={closeSession}

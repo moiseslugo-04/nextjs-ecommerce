@@ -7,6 +7,7 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
+  useSidebar,
 } from '@components/ui/sidebar'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -19,6 +20,7 @@ type ItemType = {
 }
 export function Navbar({ items }: { items: ItemType[] }) {
   const pathname = usePathname()
+  const { isMobile, setOpenMobile } = useSidebar()
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Account settings</SidebarGroupLabel>
@@ -43,6 +45,11 @@ export function Navbar({ items }: { items: ItemType[] }) {
             <Link
               href={path}
               key={title}
+              onClick={() => {
+                if (isMobile) {
+                  setOpenMobile(false)
+                }
+              }}
               className={cn(isActive && 'bg-gray-200 rounded-md')}
             >
               <SidebarMenuButton tooltip={title}>

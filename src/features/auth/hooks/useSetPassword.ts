@@ -1,10 +1,10 @@
-import { setPasswordAction } from '@/features/auth/credentials/actions'
+import { setPasswordAction } from '@features/auth/credentials/actions'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
   resetPasswordSchema,
   ResetPasswordSchema,
-} from '@features/users/user.schema'
+} from '@/features/users/user.schema'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'

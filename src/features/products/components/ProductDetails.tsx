@@ -1,8 +1,7 @@
 'use client'
 import { AppLink } from '@components/shared/AppLink'
 import { Button } from '@components/ui/button'
-import { useSession } from '@/features/auth/server/session/hooks/useSession'
-import { useCartMutation } from '@/features/cart/hooks/useCartMutation'
+import { useCartActions } from '@/features/cart/hooks/useCartActions'
 import { SerializedProduct } from '../types'
 import Image from 'next/image'
 
@@ -10,10 +9,7 @@ interface ProductDetailProps {
   product: SerializedProduct
 }
 export function ProductDetails({ product }: ProductDetailProps) {
-  const { data: session } = useSession()
-  const { onAddToCart } = useCartMutation({
-    isAuthenticated: !!session?.isAuthenticated,
-  })
+  const { onAddToCart } = useCartActions()
   return (
     <div className='w-full px-4  py-5'>
       {/* Back Link */}

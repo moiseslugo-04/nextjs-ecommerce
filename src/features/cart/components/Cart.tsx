@@ -4,17 +4,13 @@ import { ShoppingCart } from 'lucide-react'
 import { Button } from '@components/ui/button'
 import { CartItem } from '@/features/cart/components/CartItem'
 import { useCartStore } from '../hooks/useCartStore'
-import { useCartMutation } from '../hooks/useCartMutation'
+import { useCartActions } from '../hooks/useCartActions'
 import { Spinner } from '@components/ui/spinner'
 import { CartHeader } from './CartHeader'
 import { CartSummary } from './CartSummary'
-import { useSession } from '@/features/auth/server/session/hooks/useSession'
 export function Cart() {
   const { cart, totalCart, isSync } = useCartStore()
-  const { data: session } = useSession()
-  const actions = useCartMutation({
-    isAuthenticated: !!session?.isAuthenticated,
-  })
+  const actions = useCartActions()
   const total = Number(totalCart().toFixed(2))
   return (
     <Sheet>

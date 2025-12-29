@@ -3,7 +3,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import { loginSchema, LoginSchema } from '@features/users/user.schema'
+import { loginSchema, LoginSchema } from '@/features/users/user.schema'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signup } from '@/features/auth/server/auth.action'
 import { ACTION_MESSAGES } from '@/lib/utils/constants/actions'

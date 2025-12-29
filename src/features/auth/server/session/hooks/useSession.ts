@@ -1,11 +1,21 @@
 'use client'
-
-import { useQuery } from '@tanstack/react-query'
 import { getSessionAction } from '@/features/auth/server/auth.action'
-export function useSession() {
-  return useQuery({
-    queryKey: ['session'],
-    queryFn: getSessionAction,
-    refetchInterval: 13 * 60 * 1000,
+import { useEffect, useState } from 'react'
+import { SessionPayload } from '../types'
+export function useSession(): { session: SessionPayload; isLoading: boolean } {
+  const [session, setSession] = useState<SessionPayload>({
+    isAuthenticated: false,
   })
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    getSessionAction()
+      .then(setSession)
+      .finally(() => setIsLoading(false))
+  }, [])
+
+  return {
+    session,
+    isLoading,
+  }
 }

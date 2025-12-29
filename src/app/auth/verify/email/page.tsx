@@ -1,5 +1,5 @@
 import { validateVerificationToken } from '@/features/auth/services/verification-token.service'
-import { updateVerifiedEmail } from '@features/users/user.repository'
+import { updateVerifiedEmail } from '@/features/users/user.repository'
 import RedirectWithCountdown from '@/components/RedirectWithCountdown'
 import InvalidTokenCard from '@/components/InvalidTokenCard'
 export default async function VerifyEmailPage({

@@ -1,6 +1,6 @@
 'use client'
 
-import { emailSchema, EmailSchema } from '@features/users/user.schema'
+import { emailSchema, EmailSchema } from '@/features/users/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { FieldControl } from './shared/FieldControl'

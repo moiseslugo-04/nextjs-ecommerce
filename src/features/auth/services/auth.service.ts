@@ -1,10 +1,10 @@
-import { loginSchema, registerSchema } from '@features/users/user.schema'
+import { loginSchema, registerSchema } from '@/features/users/user.schema'
 import {
   saveUser,
   findUserByIdentifier,
   updateUserPassword,
-} from '@features/users/user.repository'
-import { UserDTO } from '@features/users/types'
+} from '@/features/users/user.repository'
+import { UserDTO } from '@/features/users/types'
 import { ERROR_MESSAGE } from '@/lib/utils/constants/constants'
 import { generateEmailVerificationToken } from '@/features/auth/services/verification-token.service'
 import { Prisma } from '@prisma/client'

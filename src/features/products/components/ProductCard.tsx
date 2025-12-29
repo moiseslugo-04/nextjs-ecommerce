@@ -4,20 +4,16 @@ import { Card } from '@components/ui/card'
 import { SerializedProduct } from '../types'
 import { Sparkle } from 'lucide-react'
 import { Button } from '@components/ui/button'
-import { useCartMutation } from '@/features/cart/hooks/useCartMutation'
+import { useCartActions } from '@/features/cart/hooks/useCartActions'
 import Image from 'next/image'
 import Link from 'next/link'
 import { AppLink } from '@/components/shared/AppLink'
-import { useSession } from '@/features/auth/server/session/hooks/useSession'
 interface ProductCardProps {
   product: SerializedProduct
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const { data: session } = useSession()
-  const { onAddToCart } = useCartMutation({
-    isAuthenticated: !!session?.isAuthenticated,
-  })
+  const { onAddToCart } = useCartActions()
   const parsedPrice = product.price?.toFixed(2)
   return (
     <Card className='flex flex-col card overflow-hidden group w-full max-w-sm mx-auto border-none'>
