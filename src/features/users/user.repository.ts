@@ -1,6 +1,5 @@
 import prisma from '@/lib/client'
 import { UserDTO, SaveUser } from './types'
-import { Profile } from '@prisma/client'
 export type UserDTOWithPassword = UserDTO & { password: string | null }
 export function findUserByEmail(email: string): Promise<UserDTO | null> {
   return prisma.user.findFirst({
@@ -41,13 +40,6 @@ export function findUserByIdentifier(
   })
 }
 
-export function updateVerifiedEmail(id: string) {
-  return prisma.user.update({
-    where: { id },
-    data: { emailVerified: new Date() },
-  })
-}
-
 export function saveUser(data: SaveUser): Promise<UserDTO | null> {
   return prisma.user.create({
     data: {
@@ -82,4 +74,11 @@ export function deleteUserById(id: string) {
 
 export function findUserById(id: string) {
   return prisma.user.findFirst({ where: { id }, include: { profile: true } })
+}
+
+export function markEmailAsVerified(userId: string) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: { emailVerified: new Date() },
+  })
 }

@@ -43,7 +43,6 @@ export function useLogin(email?: string) {
         })
         return
       }
-      toast.success('Login successful')
       const callback = params.get('callback')
       const safe = callback?.startsWith('/') ? callback : '/'
       refresh()

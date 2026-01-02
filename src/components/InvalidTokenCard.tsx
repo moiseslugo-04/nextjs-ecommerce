@@ -6,9 +6,9 @@ import { Controller, useForm } from 'react-hook-form'
 import { FieldControl } from './shared/FieldControl'
 import { Button } from '@components/ui/button'
 import { useTransition, useState } from 'react'
-import { VerificationTokenTypes } from '@/features/auth/services/verification-token.service'
 import { resendVerificationTokenByEmail } from '@/features/auth/credentials/actions'
 import Link from 'next/link'
+import { VerificationTokenTypes } from '@/features/auth/types'
 interface InvalidCardProps {
   type: VerificationTokenTypes
   title?: string

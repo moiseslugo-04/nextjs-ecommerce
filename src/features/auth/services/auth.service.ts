@@ -3,14 +3,15 @@ import {
   saveUser,
   findUserByIdentifier,
   updateUserPassword,
+  markEmailAsVerified,
 } from '@/features/users/user.repository'
 import { UserDTO } from '@/features/users/types'
 import { ERROR_MESSAGE } from '@/lib/utils/constants/constants'
-import { generateEmailVerificationToken } from '@/features/auth/services/verification-token.service'
+import { validateVerificationToken } from '@/features/auth/services/verification-token.service'
 import { Prisma } from '@prisma/client'
 import { compareHashText, hashText } from '@lib/utils/utils'
 import { ActionsResponse, ServicesResponsePromise } from '@/types'
-
+import { sendEmailVerificationEmail } from '@/features/email/email.service'
 export async function login(
   formData: FormData
 ): ServicesResponsePromise<UserDTO | null> {
@@ -84,7 +85,7 @@ export async function registerUser(data: FormData) {
   try {
     //save user
     const user = await saveUser({ ...userData, password: hashedPassword })
-    if (user) await generateEmailVerificationToken(user.email)
+    if (user) await sendEmailVerificationEmail(user)
     return { success: true, data: user }
   } catch (error: unknown) {
     //if the email is already exists
@@ -108,4 +109,15 @@ export async function setPassword(userId: string, password: string) {
   return {
     success: true,
   }
+}
+
+export async function verifyEmail(token: string) {
+  //validate token
+  const record = await validateVerificationToken(token)
+  if (!record.success || !record.token)
+    return { success: false, error: record.error }
+
+  // If the token is valid mark has verified
+  await markEmailAsVerified(record.token?.userId)
+  return { success: true }
 }
