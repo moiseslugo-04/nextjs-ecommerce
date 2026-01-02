@@ -44,7 +44,7 @@ export function LoginForm({ email }: { email?: string }) {
                 </AppLink>
               </p>
               <AppLink
-                href={'/auth/verify/reset-password'}
+                href={'/auth/reset-password/invalid-token'}
                 variant={'link'}
                 size={'sm'}
                 className='text-center text-sm underline font-normal text-blue-700'

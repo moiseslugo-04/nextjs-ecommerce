@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation'
 import { signOut } from '../oAuth/auth'
 import { verifySession } from '@/lib/dal/session'
 import { getSession } from '@features/auth/server/session/session.service'
+
 export async function signup(
   formData: FormData
 ): Promise<ServicesResponsePromise<UserDTO | null>> {

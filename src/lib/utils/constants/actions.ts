@@ -9,7 +9,7 @@ export const ACTION_MESSAGES = {
   SET_PASSWORD: {
     title: 'Password missing',
     description: 'Please set one to continue.',
-    route: '/auth/verify/set-password',
+    route: '/auth/set-password/invalid-token',
   },
   VERIFY_EMAIL: {
     title: 'Verify your email',

@@ -25,8 +25,7 @@ export async function saveVerificationToken({
     },
   })
 }
-
-export async function findVerificationTokenByToken(token: string) {
+export async function getVerificationToken(token: string) {
   return prisma.verificationToken.findFirst({ where: { token } })
 }
 export async function getUserTokenByIdentifier(
@@ -45,9 +44,6 @@ export async function deleteExistingTokes(userId: string, type: string) {
     },
   })
 }
-export async function deleteVerificationTokenById(id: string) {
-  return prisma.verificationToken.delete({ where: { id } })
-}
 export async function deleteExpired() {
   return prisma.verificationToken.deleteMany({
     where: {
@@ -55,7 +51,6 @@ export async function deleteExpired() {
     },
   })
 }
-export async function deleteVerificationTokenByToken(token: string) {
-  // INFO: to solve the error P2025 from prisma
+export async function deleteVerificationToken(token: string) {
   return prisma.verificationToken.deleteMany({ where: { token } })
 }

@@ -2,11 +2,9 @@
 
 import { findUserByEmail } from '@features/users/user.repository'
 import { setPassword } from '@features/auth/services/auth.service'
-import {
-  resendVerificationToken,
-  VerificationTokenTypes,
-} from '@features/auth/services/verification-token.service'
 import { registerUser } from '@features/auth/services/auth.service'
+import { resendVerificationToken } from '@/features/email/email.service'
+import { VerificationTokenTypes } from '../types'
 
 export async function checkEmailAction(email: string) {
   try {
