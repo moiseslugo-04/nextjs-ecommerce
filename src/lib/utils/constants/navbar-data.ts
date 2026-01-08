@@ -29,7 +29,7 @@ export const data = {
     },
     {
       title: 'Authentication',
-      path: '/account/auth',
+      path: '/account/security',
       Icon: UserLock,
     },
   ],

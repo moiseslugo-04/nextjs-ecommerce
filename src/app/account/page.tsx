@@ -69,10 +69,6 @@ export default async function ProfilePage() {
                 label='Date of birth'
                 value={profile?.birthdate?.toDateString() ?? 'Not Set'}
               />
-              <InfoItem
-                label='Address'
-                value={String(profile.addresses[0]) ?? 'Not Added'}
-              />
             </div>
           </InfoSection>
 

@@ -18,12 +18,14 @@ interface CartItemProps {
     onDecrease: (props: ActionPayload) => void
     onIncrease: (props: ActionPayload) => void
     onRemove: (props: CartItemType) => void
-    pendingId: number | null
+    loadingItemId: number | null
   }
 }
 export function CartItem({ item, actions }: CartItemProps) {
   if (!item) return
-  const { onDecrease, onIncrease, onRemove, pendingId } = actions
+  const { onDecrease, onIncrease, onRemove, loadingItemId } = actions
+
+  console.log(loadingItemId)
   return (
     <Item className='flex gap-3 rounded-xl bg-white/5 p-3 shadow-md relative'>
       {/* IMAGE */}
@@ -55,8 +57,8 @@ export function CartItem({ item, actions }: CartItemProps) {
             title='Remove item'
             variant='ghost'
             onClick={() => onRemove(item)}
-            disabled={pendingId === item.id}
-            aria-disabled={pendingId === item.id}
+            disabled={loadingItemId === item.id}
+            aria-disabled={loadingItemId === item.id}
             className='absolute top-2 right-2 hover:bg-red-500/10'
           >
             <Trash className='size-5 text-red-400' />
@@ -66,12 +68,12 @@ export function CartItem({ item, actions }: CartItemProps) {
             <Button
               size='icon'
               variant='outline'
-              aria-disabled={pendingId === item.id}
+              aria-disabled={loadingItemId === item.id}
               title='Decrease quantity'
               onClick={() => onDecrease({ id: item.id, name: item.name })}
               aria-label={`Decrease quantity of ${item.name}`}
-              disabled={pendingId === item.id}
-              className={`h-8 w-8 rounded-full cursor-pointer hover:bg-gray-700 ${pendingId === item.id ? 'bg-red-600' : ''}`}
+              disabled={loadingItemId === item.id}
+              className={`h-8 w-8 rounded-full cursor-pointer hover:bg-gray-700 ${loadingItemId === item.id ? 'bg-red-600' : ''}`}
             >
               <Minus className='size-3' />
             </Button>
@@ -88,10 +90,10 @@ export function CartItem({ item, actions }: CartItemProps) {
               size='icon'
               variant='outline'
               onClick={() => onIncrease({ id: item.id, name: item.name })}
-              disabled={pendingId === item.id}
+              disabled={loadingItemId === item.id}
               title='Increase quantity'
               aria-label={`Increase quantity of ${item.name}`}
-              aria-disabled={pendingId === item.id}
+              aria-disabled={loadingItemId === item.id}
               className='h-8 w-8 rounded-full cursor-pointer hover:bg-gray-700'
             >
               <Plus className='size-3' />

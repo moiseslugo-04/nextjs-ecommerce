@@ -6,9 +6,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@components/ui/sidebar'
-import { Button } from '../../../components/ui/button'
-import { logout } from '@/features/auth/server/auth.action'
-import { ProfileDTO } from '@/features/profile/types'
+import { Button } from '@components/ui/button'
+import { logout } from '@features/auth/server/auth.action'
+import { ProfileDTO } from '@features/profile/types'
 export function UserNavbar({ profile }: { profile: ProfileDTO }) {
   return (
     <SidebarMenu>
