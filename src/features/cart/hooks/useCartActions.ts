@@ -60,6 +60,7 @@ export function useCartActions() {
     } else {
       increment(item.id)
       toast.success(`Increased quantity of ${item.name}`)
+      setLoadingItemId(null)
     }
   }
   //Decrease Quantity
@@ -82,6 +83,7 @@ export function useCartActions() {
     } else {
       decrement(item.id)
       toast.success(`Decreased quantity of ${item.name}`)
+      setLoadingItemId(null)
     }
   }
   //Remove  Item
@@ -104,6 +106,7 @@ export function useCartActions() {
     } else {
       removeItem(item.id)
       toast.success(`${item.name} removed from your cart`)
+     setLoadingItemId(null)
     }
   }
 
